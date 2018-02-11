@@ -1,0 +1,22 @@
+{
+  "name": "foxbat",
+  "private": true,
+  "dependencies": {
+    "@rails/webpacker": "^3.2.1",
+    "axios": "^0.17.1",
+    "babel-preset-react": "^6.24.1",
+    "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.4",
+    "npm-run-all": "^4.1.2",
+    "numeral": "^2.0.6",
+    "prop-types": "^15.6.0",
+    "query-string": "^5.0.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.17"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^2.11.1"
+  }
+}

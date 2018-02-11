@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico?v={1}">
+    <title>Foxbat configurator</title>
+  </head>
+
+  <body>
+    <noscript>
+      <h1><a href="http://foxbat.com.au/">Foxbat</a> Configurator</h1>
+      <h3>You've come to the site of the foxbat configurator!</h3>
+      <p>Being an interactive site requires that javascript is enabled on your browser</p>
+      <p> Please either enable javascript for this site or try viewing with a different device.</p>
+      <p>If you need help to do this please see the information contained at <a href="https://www.enable-javascript.com/">enable-javascript.com</a></p>
+    </noscript>
+    <%= yield %>
+    <!--
+      This React/Rails App was created by
+
+      Simon Dwyer      (https://github.com/piratechicken/)
+      Glenn Marks      (https://github.com/isnology/)
+      Nathanial Mether (https://github.com/NathanielMether/)
+      Alex Palma       (https://github.com/developingAlex/)
+
+      2018
+    -->
+  </body>
+</html>

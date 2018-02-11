@@ -1,0 +1,252 @@
+.configurator {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.configurator-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 9rem;
+}
+
+// LEFT SIDE
+.panel-container {
+  display: flex;
+  margin-top: 9rem;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  width: 75vw;
+  .running-cost {
+    align-self: flex-start;
+    padding: 0 0 2rem 2rem;
+    font-size: 2rem;
+    text-align: left;
+    p {
+      margin: 0;
+    }
+  }
+}
+
+// INSTRUMENT PANEL
+#svgbox{
+  /* border: black solid 1px; */
+  position: relative;
+  width: 75%;
+}
+
+.panel-svg .svg-line {
+stroke:#6f7174;
+stroke-width: 1px;
+fill: #ACB3B8;
+}
+
+#a22svg {
+width: 100%;
+height: auto;
+}
+
+#a32svg {
+width: 100%;
+height: auto;
+}
+
+.slot {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid #6f7174 1px;
+  background-color: #ACB3B8;
+  overflow: hidden;
+  box-shadow: inset -1px -1px 1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px 1px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+.slot img {
+  z-index: 1;
+  margin-bottom: 100px;
+  margin-right: 100px
+}
+
+.slot-label {
+  position: absolute;
+  font-size: 1rem;
+  z-index: 1;
+}
+
+.selected-slot, .slot:hover {
+  border-color: #23547c;
+  box-shadow: 0px 0px 5px 5px #23547c, inset 0px 0px 5px 5px #23547c;
+}
+
+.panel-button-group button {
+  margin: 1rem 0.5rem;
+  width: 20rem;
+}
+
+.panel-button-low-group {
+  margin: 0 auto;
+  button {
+    width: 10rem;
+    margin: auto;
+    background: $foxbat-light-blue;
+    height: 3.5rem;
+  }
+}
+.panel-button-low-group button .button-text {
+  font-size: 1.2rem;
+  margin: auto;
+  color: white;
+}
+
+
+
+// SIDEBAR
+.sidebar {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 25vw;
+  overflow-y: scroll;
+}
+
+.sidebar-top {
+  position: relative;
+  margin: 0;
+  padding: 10px;
+  width: 100%;
+  min-height: 100px;
+  background: $foxbat-blue;
+  color: #F5F5F5;
+}
+
+.sidebar-top-buttons {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  top: 0;
+  height: 30px;
+  padding: 5px 10px;
+}
+
+.sidebar-top h3 {
+  width: 100%;
+  margin: 2rem auto 1rem auto;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: 0.1rem;
+  color: #F2F2F2;
+}
+
+.sidebar-lower {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 5px;
+  height: calc(100% - 100px);
+  background: $grey;
+  overflow-y: auto;
+}
+
+.sidebar-text {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: calc(100% - 100px);
+  margin: 0;
+  color: #1b1b1b;
+  text-align: left;
+  line-height: 150%;
+}
+
+.sidebar-text p {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+}
+
+.instrument-list {
+  padding: 0 5px;
+}
+
+.instrument-list .main-button {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+  padding: 5px;
+  width: 100%;
+  height: fit-content;
+  cursor: pointer;
+}
+
+.instrument-list .btnimg {
+  margin: 5px auto;
+}
+
+.instrument-list .button-text{
+  margin: auto;
+  font-size: 1.6rem;
+}
+
+.sidebar .exit-button-X {
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.instrument-details {
+  padding: 5px;
+  width: 100%;
+  background: $white-background;
+}
+
+.instrument-details p {
+  font-size: 1.5rem;
+  text-align: left;
+  line-height: 125%;
+}
+
+.instrument-preview {
+  margin: 3rem auto;
+}
+
+.instrument-preview p {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.instrument-preview img {
+  display: block;
+}
+
+.inactive .main-button {
+  background: grey;
+}
+
+/*  MEDIA QUEEEEEEERIES */
+@media screen and (min-width: 1000px) {
+  .sidebar-lower {
+    padding: 10px;
+  }
+  .instrument-list {
+    padding: 0 20px;
+  }
+  .instrument-list .main-button {
+    width: 100%;
+    height: fit-content;
+    margin-top: 10px;
+  }
+  .instrument-list .button-text{
+    font-size: 1.6rem;
+  }
+}
