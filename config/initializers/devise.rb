@@ -8,7 +8,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = '8d4579eb9d9ba994864452a86d43008cc4f077f02b2ae4993d3a4f9dbded2cb16ab5f23e4c1f5a9cf4d1a13f984c6c0ba0b912a2ba15c104cf640269b5cf1015'
+  # config.secret_key = 'dc6a2e9d81f31670c24fac0cc5f4d93c2c0378f376537e52c4764cf5b61414ac45ceb9b5537a723f749a8ea1dbfc2db94b3d66cdfa7d1a0cb6e1e8ca741dd5cc'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -84,7 +84,7 @@ Devise.setup do |config|
   # Notice that if you are skipping storage for all authentication paths, you
   # may want to disable generating routes to Devise's sessions controller by
   # passing skip: :sessions to `devise_for` in your config/routes.rb
-  config.skip_session_storage = [:http_auth]
+  config.skip_session_storage = [:http_auth, :params_auth]
 
   # By default, Devise cleans up the CSRF token on authentication to
   # avoid CSRF token fixation attacks. This means that, when using AJAX
@@ -110,7 +110,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 11
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = 'ea35aeb08c7f5eaf9e09714de04efc8260d23e0e9e2cd722e910dd352e1b6a0c343b72524d42ce584fac09a8b12904be15093c0250a75d1446c641eb13c32571'
+  # config.pepper = 'd6c1c9f216c4e1e4f803f993243e278d2b0453d94c89864e483c71dbac65dc66966de54359369062186f1f8a8c68d30e20cb5cb618a8dc58aaee3f14b20fdb2e'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -276,4 +276,9 @@ Devise.setup do |config|
   # When using OmniAuth, Devise cannot automatically set OmniAuth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
+  
+  config.jwt do |jwt|
+    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY']
+    jwt.expiration_time = 604800      # 7 days
+  end
 end

@@ -29,5 +29,8 @@ module Foxbat
     config.generators.system_tests = nil
 
     config.autoload_paths << Rails.root.join('lib')
+    config.to_prepare do
+      DeviseController.respond_to :html, :json
+    end
   end
 end

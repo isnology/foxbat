@@ -1,7 +1,7 @@
 class Api::InstrumentsController < ApplicationController
   before_action :authenticate_request!, only: [:create, :update]
   
-  
+   
   def index
     @instruments = Instrument.all
   end

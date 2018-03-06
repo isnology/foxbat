@@ -5,6 +5,7 @@
     "@rails/webpacker": "^3.2.1",
     "axios": "^0.17.1",
     "babel-preset-react": "^6.24.1",
+    "js-cookie": "^2.2.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "npm-run-all": "^4.1.2",

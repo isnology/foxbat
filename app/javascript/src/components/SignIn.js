@@ -12,7 +12,6 @@ function SignIn({ onExit, onSubmit, errMsg }) {
             onSubmit={ (event) => {
               // Prevent old-school form submission
               event.preventDefault()
-
               const elements = event.target.elements // Allows looking up fields using their 'name' attributes
               // Get entered values from fields
               const email = elements.email.value
@@ -27,7 +26,7 @@ function SignIn({ onExit, onSubmit, errMsg }) {
             <input
                 type='email'
                 name='email'
-                defaultValue={ " " }
+                defaultValue={ "" }
             />
           </label>
 

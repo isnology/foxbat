@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { signIn, signUp, signOutNow } from './api/auth'
+import { signIn, signUp, signOut } from './api/auth'
 import { getDecodedToken } from './api/token'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import WelcomePage from './components/WelcomePage'
@@ -39,7 +39,13 @@ class App extends Component {
 
   onSignIn = ({ email, password }) => {
     this.setState({ error: null })
-    signIn({ email, password })
+    const data = {
+      user: {
+        email: email,
+        password: password
+      }
+    }
+    signIn({data})
     .then((decodedToken) => {
       this.setState({ decodedToken, modalWindow: "selectPanel"})
     })
@@ -61,16 +67,23 @@ class App extends Component {
   onSaveRegister = ({ name, email, password }) => {
     const signedIn = !!this.state.decodedToken
     this.setState({ error: null })
+    const data = {
+      user: {
+        email: email,
+        password: password,
+        password_confirmation: password
+      }
+    }
     if (!signedIn) {
-      signUp({ email, password })
+      signUp(data)
       .then((decodedToken) => {
         this.setState({ decodedToken, panelName: name })
         this.doSave({name})
       })
       .catch((error) => {
-        // User already exists
-        if (/ 403/.test(error.message)) {
-          return signIn({ email, password })
+        // User has already been taken
+        if (/ 422/.test(error.message)) {
+          return signIn(data)
           .then((decodedToken) => {
             this.setState({ decodedToken })
             this.doSave({ name })
@@ -104,7 +117,7 @@ class App extends Component {
     }
     if (!!this.state.panelId){
       const id=this.state.panelId
-      updatePanel(id, {data})
+      updatePanel(id, data)
       .then((panel) => {
         this.onExitModal()
         this.setState({ panelSaved: true })
@@ -113,7 +126,7 @@ class App extends Component {
         this.setState({ error })
       })
     } else {
-      createPanel({data})
+      createPanel(data)
       .then((panel) => {
         this.setState({
           panelId: panel.id,
@@ -149,7 +162,7 @@ class App extends Component {
   }
 
   onSignOut = () => {
-    signOutNow()
+    signOut()
     this.setState({ decodedToken: null, error: null, templateName: null, panelName: null, panelId: null })
     const key = "paneldata"
     //localStorage.removeItem(key)
@@ -381,7 +394,6 @@ class App extends Component {
         <Router>
           <div className="App">
             <Switch>
-
               <Route path='/' exact render={ () => (
                   !templateName ? (
                       <WelcomePage

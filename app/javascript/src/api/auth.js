@@ -1,10 +1,15 @@
-import api, { setToken } from './init'
-import { getDecodedToken } from './token'
+import api, { setHeaders } from './init'
+import { getDecodedToken, getValidToken, rememberToken } from './token'
 
-export function signIn({ email, password }) {
-  return api.post('/auth', { email, password })
+function extractToken(res) {
+  return res.headers.authorization.substring(7)
+}
+
+export function signIn(data) {
+  setHeaders(getValidToken())
+  return api.post('/users/sign_in', data)
   .then((res) => {
-    setToken(res.data.token)
+    rememberToken(extractToken(res))
     return getDecodedToken()
   })
   .catch((error) => {
@@ -15,14 +20,20 @@ export function signIn({ email, password }) {
   })
 }
 
-export function signUp({ email, password }) {
-  return api.post('/auth/register', { email, password })
+export function signUp(data) {
+  setHeaders(getValidToken())
+  return api.post('/users', data)
   .then((res) => {
-    setToken(res.data.token)
+    rememberToken(extractToken(res))
     return getDecodedToken()
   })
 }
 
-export function signOutNow() {
-  setToken(null)
+export function signOut() {
+  setHeaders(getValidToken())
+  return api.delete('/users/sign_out')
+  .then((res) => {
+    rememberToken(null)
+    return null
+  })
 }
