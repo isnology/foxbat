@@ -5,18 +5,9 @@ Rails.application.routes.draw do
   devise_for :users, defaults: { format: :json }
 
   namespace :api, defaults: { format: :json } do
-    #resource :instruments, only: [:index, :show, :create, :update]
-    get 'instrument/:id' => 'instruments#show' #
-    get 'instruments' => 'instruments#index'
-    put 'instruments/:id' => 'instruments#update'
-    post 'instruments' => 'instruments#create'
+    resources :instruments, only: [:index, :show, :create, :update]
     
-    #resource :panels, only: [:index, :show, :create, :update, :delete]
-    get 'panel/:id' => 'panels#show'
-    get 'panels' => 'panels#index' #
-    put 'panels/:id' => 'panels#update'
-    post 'panels' => 'panels#create'
-    delete 'panels/:id' => 'panels#delete'
+    resources :panels, only: [:index, :show, :create, :update, :destroy]
   end
 
   get '*path', to: 'init#index'

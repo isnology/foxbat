@@ -11,7 +11,7 @@ import _toArray from 'lodash/toArray'
 
 export function validSize(slotSize, instSize) {
   const size = { L: 3, M: 2, S: 1 }
-  return (size[slotSize] >= size[instSize])
+  return (size[slotSize] > size[instSize] || slotSize === instSize)
 }
 
 function Sidebar({
