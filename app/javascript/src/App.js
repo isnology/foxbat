@@ -34,7 +34,13 @@ class App extends Component {
     error: null, //for displaying any errors recieved from the server
     panelSaved: null,
     windowWidth: 0, //for adaptive sizing of configurator panel
-    windowHeight: 0 //for adaptive sizing of configurator panel
+    windowHeight: 0, //for adaptive sizing of configurator panel
+    pxwFactor: 0.0  // for adaptive sizing of instruments
+  }
+
+  // converts screen width % to pixels
+  pxWidth = (screenWidthPercent) => {
+    return Math.round(this.state.pxwFactor * screenWidthPercent)
   }
 
   onSignIn = ({ email, password }) => {
@@ -437,6 +443,7 @@ class App extends Component {
                           onBackClick={ this.onBackClick }
                           onRefreshApp={ this.onRefreshApp }
                           onDeletePanel={ this.onDeletePanel }
+                          pxWidth={ this.pxWidth }
                       />
                   ):(
                       <Redirect to='/' />
@@ -495,20 +502,33 @@ class App extends Component {
     )
   }
 
-  constructor(props) {// code necessary for window size detection
+  // code necessary for window size detection and there for instrument re-sizing
+  constructor(props) {
     super(props);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-  }// (necessary for correct sizing of Panel component)
+  }
+
+  // When this App first appears on screen
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions)
+    this.doLoadInstruments()
+    //this.restoreFromLocalStorage()
+  }
 
   componentWillUnmount() {// code necessary for window size detection
     window.removeEventListener('resize', this.updateWindowDimensions)
   }// (necessary for correct sizing of Panel component)
 
   updateWindowDimensions() {// code necessary for window size detection
+    const width = window.innerWidth
+    const pxw = width / 100
     this.setState({
-      windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight })
-  }// (necessary for correct sizing of Panel component)
+      windowWidth: width,
+      windowHeight: window.innerHeight,
+      pxwFactor: pxw
+    })
+  }
 
 
   doLoadInstruments() {
@@ -539,13 +559,6 @@ class App extends Component {
   //  }
   //}
 
-  // When this App first appears on screen
-  componentDidMount() {
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions)
-    this.doLoadInstruments()
-    //this.restoreFromLocalStorage()
-  }
 }
 
 export default App

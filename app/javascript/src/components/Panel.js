@@ -36,7 +36,8 @@ function Panel({
   selectedSlot,
   slots,
   onSelectSlot,
-  instruments
+  instruments,
+  pxWidth
 }) {
   let optimalDimensions
   if (templateName === 'a22' || templateName === 'a22Digital'){
@@ -49,8 +50,8 @@ function Panel({
   const height = optimalDimensions.height
   const width = optimalDimensions.width
   const svgContainerStyle = {
-    height: height + 'px',
-    width: width + 'px'
+    height: height,
+    width: width
   }
   return (
     <div
@@ -65,17 +66,18 @@ function Panel({
         slots={ slots }
         instruments={ instruments }
         onSelectSlot={onSelectSlot}
+        pxWidth={pxWidth}
       />
 
       {(templateName === 'a22' || templateName === 'a22Digital') ?
       <A22outline
-      height = {height + 'px'}
-      width= {width + 'px'}
+      height = {height}
+      width= {width}
       />
       :
       <A32outline
-      height = {height + 'px'}
-      width= {width + 'px'}
+      height = {height}
+      width= {width}
       />
       }
 

@@ -3,7 +3,7 @@ class Api::PanelsController < ApplicationController
   before_action :set_panel, only: [:show, :update, :destroy]
   
   def index
-    render json: formats(Panel.all), status: :ok
+    render json: format_many(Panel.all), status: :ok
   end
   
   def show

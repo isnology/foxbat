@@ -6,12 +6,13 @@ class CreateInstruments < ActiveRecord::Migration[5.1]
       t.string :model
       t.string :part_no
       t.string :text
-      t.string :picture_url
       t.integer :price
       t.string :size
-      t.integer :horizontal_multiplier
-      t.integer :vertical_multiplier
-      t.integer :size_multiplier
+      t.string :picture_url
+      t.decimal :picture_width, precision: 5, scale: 2
+      t.decimal :picture_height, precision: 5, scale: 2
+      t.decimal :picture_h_offset, precision: 5, scale: 2
+      t.decimal :picture_v_offset, precision: 5, scale: 2
       t.references :instrument_class, foreign_key: true
 
       t.timestamps

@@ -34,7 +34,8 @@ function Configurator({
   sidebarClose,
   onBackClick,
   onRefreshApp,
-  onDeletePanel
+  onDeletePanel,
+  pxWidth
 }) {
 
   function totalCost() {
@@ -73,6 +74,7 @@ function Configurator({
           slots={ slots }
           onSelectSlot={ onSelectSlot } // This is the function
           instruments={ instruments }
+          pxWidth={ pxWidth }
         />
         <div className="panel-button-group">
           <Button

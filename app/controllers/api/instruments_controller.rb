@@ -2,7 +2,7 @@ class Api::InstrumentsController < ApplicationController
   before_action :authenticate_request!, only: [:create, :update]
   
   def index
-    render json: formats(Instrument.all), status: :ok
+    render json: format_many(Instrument.all), status: :ok
   end
 
   def create
@@ -36,17 +36,18 @@ class Api::InstrumentsController < ApplicationController
         :picture_url,
         :price,
         :size,
-        :horizontal_multiplier,
-        :vertical_multiplier,
-        :size_multiplier,
+        :picture_h_offset,
+        :picture_v_offset,
+        :picture_width,
+        :picture_height,
         :instrument_class_id)
     end
 
     def format(data)
       {id: data.id, name: data.name, brand: data.brand, model: data.model, partNo: data.part_no, text: data.text,
-       pictureUrl: data.picture_url, price: data.price, size: data.size,
-       horizontalMultiplier: data.horizontal_multiplier, verticalMultiplier: data.vertical_multiplier,
-       sizeMultiplier: data.size_multiplier,
+       price: data.price, size: data.size, pictureUrl: data.picture_url,
+       pictureWidth: data.picture_width, pictureHeight: data.picture_height,
+       pictureHOffset: data.picture_h_offset, pictureVOffset: data.picture_v_offset,
        instrumentClass: {id: data.instrument_class.id, name: data.instrument_class.name}
       }
     end

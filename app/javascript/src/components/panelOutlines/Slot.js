@@ -1,9 +1,8 @@
 import React from 'react'
-import _toString from 'lodash/toString'
 
 function Slot({
   instruments, // all instruments
-  slotObject, //object representing the instrument occupying this slot (or null)
+  slotObject, //object representing the instrument occupying this slot eg "L01" (or null)
   panelHeight, //necessary to readjust size and slotNumber appropriately
   slotNumber, //assigned and tracked by the caller
   leftRatio, //the left slotNumber of this slot as a ratio of the panel height
@@ -13,7 +12,8 @@ function Slot({
   widthRatio,
   selectedSlot,
   slots,
-  onSelectSlot //callback function to pass back which slot was clicked
+  onSelectSlot, //callback function to pass back which slot was clicked
+  pxWidth
 }){
   let slotWidth
   let slotHeight
@@ -28,10 +28,10 @@ function Slot({
   let slotStyle={
     // Variable styles only. Other styles in css
     zIndex: 2,
-    width: slotWidth + 'px',
-    height: slotHeight + 'px',
-    left: (panelHeight * leftRatio) + 'px',
-    top: (panelHeight * (1-bottomRatio)) + 'px'
+    width: slotWidth,
+    height: slotHeight,
+    left: (panelHeight * leftRatio),
+    top: (panelHeight * (1-bottomRatio))
   }
   if (!!diameterRatio) {
     slotStyle.borderRadius = '50%'
@@ -45,22 +45,23 @@ function Slot({
     classForSlot = classForSlot + " selected-slot"
   }
 
-  let slotInstrument
-  let picWidth = 100
-  let picHorizontal = 100
-  let picVertical = 100
+  let slotInstrument = null
+  let picWidth = 11
+  let picHeight = 11
+  let picHOffset = 0
+  let picVOffset = 0
   if (!!slotObject) {
     slotInstrument = instruments[slotObject]
-    let multiplier = slotInstrument.sizeMultiplier / 100
-    picWidth *= multiplier
-    multiplier = slotInstrument.horizontalMultiplier / 100
-    picHorizontal *= multiplier
-    multiplier = slotInstrument.verticalMultiplier / 100
-    picVertical *= multiplier
+    picWidth = pxWidth(slotInstrument.pictureWidth)
+    picHeight = pxWidth(slotInstrument.pictureHeight)
+    picHOffset = pxWidth(slotInstrument.pictureHOffset)
+    picVOffset = pxWidth(slotInstrument.pictureVOffset)
   }
   let picStyle = {
-    marginLeft: picHorizontal,
-    marginTop: picVertical
+    width: picWidth,
+    height: picHeight,
+    marginLeft: picHOffset,
+    marginTop: picVOffset
   }
 
   return(
@@ -69,7 +70,7 @@ function Slot({
           <div className="slot-label">
             {`${slotInstrument.name} (${slotInstrument.brand})`}
           </div> : '' }
-        { !!slotObject ? <img src={slotInstrument.pictureUrl} width={ _toString(picWidth)+'%' } alt={slotInstrument.name} style={picStyle}/> : '' }
+        { !!slotObject ? <img src={slotInstrument.pictureUrl} alt={slotInstrument.name} style={picStyle}/> : '' }
       </div>
   )}
 

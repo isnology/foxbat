@@ -27,12 +27,13 @@ ActiveRecord::Schema.define(version: 20180225010403) do
     t.string "model"
     t.string "part_no"
     t.string "text"
-    t.string "picture_url"
     t.integer "price"
     t.string "size"
-    t.integer "horizontal_multiplier"
-    t.integer "vertical_multiplier"
-    t.integer "size_multiplier"
+    t.string "picture_url"
+    t.decimal "picture_width", precision: 5, scale: 2
+    t.decimal "picture_height", precision: 5, scale: 2
+    t.decimal "picture_h_offset", precision: 5, scale: 2
+    t.decimal "picture_v_offset", precision: 5, scale: 2
     t.bigint "instrument_class_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

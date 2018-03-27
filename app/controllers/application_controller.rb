@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   
   protected
 
-    def formats(data)
+    def format_many(data)
       data.map { |dta| format(dta) }
     end
 end

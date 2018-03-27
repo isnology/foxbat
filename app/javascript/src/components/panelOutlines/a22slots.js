@@ -9,7 +9,8 @@ function A22Slots({
   templateName, //a22, a32, a22Digital, a32Digital
   selectedSlot, // for conditional formatting
   slots,
-  instruments   // all instruments
+  instruments,   // all instruments
+  pxWidth
 }){
 
   const a32SlotRatios = [
@@ -219,9 +220,10 @@ function A22Slots({
             diameterRatio = {slot.diameterRatio} //the diameter of the slot as a ratio of the panel height
             heightRatio = {slot.height}
             widthRatio = {slot.width}
-            onSelectSlot = {()=>{onSelectSlot(slotList[index])}} //pass the slot name (eg "L01")
+            onSelectSlot = {() => {onSelectSlot(slotList[index])}} //pass the slot name (eg "L01")
             slots = { slots }
             selectedSlot={selectedSlot}
+            pxWidth={pxWidth}
           />
         ))
       }
