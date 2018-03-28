@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20180225010403) do
     t.bigint "instrument_class_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["brand", "model", "part_no"], name: "index_instruments_on_brand_and_model_and_part_no", unique: true
     t.index ["instrument_class_id"], name: "index_instruments_on_instrument_class_id"
   end
 
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(version: 20180225010403) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "name"], name: "index_panels_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_panels_on_user_id"
   end
 

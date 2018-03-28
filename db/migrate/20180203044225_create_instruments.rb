@@ -17,5 +17,6 @@ class CreateInstruments < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+    add_index :instruments, [:brand, :model, :part_no], unique: true
   end
 end
