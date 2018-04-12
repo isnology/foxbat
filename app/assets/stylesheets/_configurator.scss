@@ -1,26 +1,15 @@
 .configurator {
   display: flex;
-  position: relative;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
 }
-
-.configurator-logo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 9rem;
-}
-
-// LEFT SIDE
 .panel-container {
   display: flex;
-  margin-top: 9rem;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  width: 75vw;
+  margin-top: 18.7vw;
+  padding-left: 8.1vw;
+  /*background: blue;*/
+  width: 66.4vw;
+  height: 28vw;
   .running-cost {
     align-self: flex-start;
     padding: 0 0 2rem 2rem;
@@ -31,12 +20,118 @@
     }
   }
 }
+.sidebar {
+  display: flex;
+  width: 25vw;
+  height: 100vh;
+  background: red;
+}
+.panel-svg {
+  position: absolute;
+  top: 14vw;
+  left: .2vw;
+  z-index: -1;
+}
+
+.slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: #9b9b9b;
+  cursor: pointer;
+}
+.slot:hover {
+  box-shadow: 0 0 .5vw .5vw lightgray, inset 0 0 .5vw .5vw lightgray;
+}
+
+.size-l {
+  width: 10.46vw;
+  height: 10.46vw;
+  border-radius: 50%;
+  margin: 0 0 1.1vw 1vw;
+}
+.size-m {
+  width: 7.47vw;
+  height: 7.47vw;
+  border-radius: 50%;
+  margin: 0 0 1.1vw 1.1vw;
+}
+.size-s {
+  width: 6.73vw;
+  height: 6.73vw;
+  border-radius: 50%;
+  margin: .3vw 0 1.6vw 1vw;
+}
+.size-d {
+  width: 40vw;
+  height: 30vw;
+  margin: .5vw;
+}
+.size-r {
+  width: 7vw;
+  height: 14vw;
+  margin: 1vw;
+}
+.l-container {
+  display: flex;
+  width: 11.55vw;
+  height: 38vw;
+  flex-direction: column;
+}
+.m-container {
+  display: flex;
+  width: 9vw;
+  height: 38vw;
+  flex-direction: column;
+}
+.s-container {
+  display: flex;
+  width: 7vw;
+  height: 38vw;
+  flex-direction: column;
+}
+.d-container {
+  /*display: flex;*/
+  display: none;
+  width: 42vw;
+  height: 38vw;
+  flex-direction: column;
+}
+.r-container {
+  /*display: flex;*/
+  display: none;
+  width: 9vw;
+  height: 38vw;
+  flex-direction: column;
+}
+img {
+  height: auto;
+}
+svg {
+  fill: #424242;
+  width: 74.8vw;
+  height: 35.5vw;
+}
+
+.configurator-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 9rem;
+}
+
+
+
+
+
 
 // INSTRUMENT PANEL
 #svgbox{
-  /* border: black solid 1px; */
-  position: relative;
-  width: 75%;
+  position: absolute;
+  top: 14vw;
+  left: .2vw;
+  z-index: -1;
 }
 
 .panel-svg .svg-line {
@@ -108,14 +203,10 @@ height: auto;
 
 // SIDEBAR
 .sidebar {
-  position: absolute;
-  z-index: 3;
   display: flex;
-  flex-direction: column;
-  right: 0;
-  top: 0;
-  height: 100%;
   width: 25vw;
+  height: 100vh;
+  background: red;
   overflow-y: scroll;
 }
 

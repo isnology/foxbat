@@ -1,88 +1,110 @@
-import React from 'react'
+import React, { Component } from 'react'
 import A22outline from './panelOutlines/a22'
 import A32outline from './panelOutlines/a32'
-import A22Slots from './panelOutlines/a22slots'
+import Slot from './panelOutlines/Slot'
 
-const A22_SVG_HEIGHT_RATIO = 2.1318
-const A32_SVG_HEIGHT_RATIO = 2.1228
+class Panel extends Component {
+  state = {
+    panelName: null, //title user gave their panel
+    panelId: null, // db id of users retrieved/saved panel
+    panelList: null,  // list of all saved panels by this user
+    selectedSlot: null,
+    templateSlots: null,  // list of slot names in template (array of strings)
+    error: null, //for displaying any errors recieved from the server
+    pxwFactor: 0.0  // for adaptive sizing of instruments
+  }
 
-function optimalPanelDimensions(winWidth, winHeight, heightRatio){
-  //sidebar width set at 25%, so we need to ensure the panel doesn't get hidden by that.
-  //the height ratio that is passed in is the ratio in the formula:
-  // width = height * heightRatio.
+  // converts screen width % to pixels
+  pxWidth = (screenWidthPercent) => {
+    return Math.round(this.state.pxwFactor * screenWidthPercent)
+  }
 
-  // using the ratio, figures out if the windows width or the height is the constraining factor, and then sizes appropriately taking into account that you only have 75% of the width available.
-  let width
-  let height
-  if (winWidth/winHeight < heightRatio){//then the width is the constraining factor.
-    width = 0.75 * winWidth
-    height = width / heightRatio
-  }else{//the height is the constraining factor
-    width = winHeight * heightRatio
-    height = winHeight
-    if (width > 0.75 * winWidth){
-      width = 0.75 * winWidth
-      height = width / heightRatio
+  onSelectSlot = (slot) => {
+    const newSlot = !!this.state.selectedSlot ? null : slot
+    this.setState({
+      selectedSlot: newSlot,
+      // selectedInstrumentClass: null,
+      // selectedInstrumentBrand: null,
+      // selectedInstrument: null
+    })
+  }
+
+
+  render () {
+    const {
+      selectedSlot
+    } = this.state
+
+    const {
+      instruments,
+      templateName,
+      slots
+    } = this.props
+
+    const slotLayout = {
+      a22: [["L01", "L04"], ["L02", "L05"], ["L03", "L06"], ["M01", "M02", "M03"], ["S01", "S02", "S03"]],
+      a32: [["L01", "L04"], ["L02", "L05"], ["L03", "L06"], ["M01", "M02", "M03"], ["S01", "S02", "S03"]],
+      a22Digital: [["M01", "M02"], ["D01"], ["R01", "R02"]],
+      a32Digital: [["D01"], ["R01", "R02"], ["M01", "M02"]]
     }
-  }
-  return {width, height}
-}
 
-function Panel({
-  templateName, //determine which panel to render A22 or A32 (Digital or Analog)
-  slotClicked, //tell the parent which slot was clicked
-  windowHeight,
-  windowWidth,
-  selectedSlot,
-  slots,
-  onSelectSlot,
-  instruments,
-  pxWidth
-}) {
-  let optimalDimensions
-  if (templateName === 'a22' || templateName === 'a22Digital'){
-    optimalDimensions = optimalPanelDimensions(windowWidth, windowHeight, A22_SVG_HEIGHT_RATIO)
-  } else {
-    optimalDimensions = optimalPanelDimensions(windowWidth, windowHeight, A32_SVG_HEIGHT_RATIO)
+    return (
+      <div className="panel">
+        { templateName === 'a22' || templateName === 'a22Digital' ? <A22outline/> : <A32outline/> }
+        { slotLayout[templateName].map((slotArray, index) => (
+            <div key={index} className={ slotArray[0].substring(0,1).toLowerCase() + "-container"}>
+              { slotArray.map((slot, index2) => (
+                  <Slot
+                    key={index2}
+                    instruments={ instruments }
+                    slot={ slot }
+                    selectedSlot={ selectedSlot }
+                    slots={ slots }
+                    onSelectSlot={onSelectSlot}
+                    pxWidth={pxWidth}
+                  />
+                ))
+              }
+            </div>
+          ))
+        }
+      </div>
+    )
   }
-  // const width = (panelName === 'a22' || panelName === 'a22Digital') ? height*A22_SVG_HEIGHT_RATIO : height*A32_SVG_HEIGHT_RATIO
-  // const imagePath = (panelName === 'a22') ? 'images/a22.svg' : 'images/a32.svg'
-  const height = optimalDimensions.height
-  const width = optimalDimensions.width
-  const svgContainerStyle = {
-    height: height,
-    width: width
+
+
+  constructor(props) {
+    super(props)
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
   }
-  return (
-    <div
-      id = "svgbox"
-      style = {svgContainerStyle}
-    >
 
-      <A22Slots
-        height={height}
-        templateName={templateName}
-        selectedSlot={selectedSlot}
-        slots={ slots }
-        instruments={ instruments }
-        onSelectSlot={onSelectSlot}
-        pxWidth={pxWidth}
-      />
+  // When this App first appears on screen
+  componentDidMount() {
+    this.updateWindowDimensions()
+    window.addEventListener('resize', this.updateWindowDimensions)
 
-      {(templateName === 'a22' || templateName === 'a22Digital') ?
-      <A22outline
-      height = {height}
-      width= {width}
-      />
-      :
-      <A32outline
-      height = {height}
-      width= {width}
-      />
+    window.addEventListener("beforeunload", function (e) {
+      if (panelSaved === false) {
+        e.returnValue = "You may have unsaved changes. Are you sure you want to leave?"
       }
+    })
+  }
 
-    </div>
-  )
+  // code necessary for window size detection
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions)
+    //window.removeEventListener('beforeunload')
+  }
+
+  // code necessary for window size detection
+  updateWindowDimensions() {
+    const pxw = window.innerWidth / 100
+    this.setState({
+      //windowWidth: window.innerWidth,
+      //windowHeight: window.innerHeight,
+      pxwFactor: pxw
+    })
+  }
 }
 
 export default Panel
