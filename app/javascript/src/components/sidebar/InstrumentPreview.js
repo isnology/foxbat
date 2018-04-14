@@ -15,54 +15,43 @@ function turnTextToAnkor(text) {
 }
 
 const InstrumentPreview = ({
+  instruments,
   slots,
   selectedSlot,
   selectedInstrument,
-  instruments,
-  toggleInstrumentToSlot
+  onUpdateSlots,
+  onSidebarClose,
+  onSelectInstrument
 }) => {
-
-  let activeSlot
-  let activeSlotSize
-  let buttonLabel
-
-  if (!!selectedSlot) {
-
-    slotSize = selectedSlot.substring(0,1)
-    if (!!activeSlot) {
-      buttonLabel = "Remove"
-      selectedInstrument = instruments[activeSlot]
-    }
-    else {
-      buttonLabel = "Add"
-    }
+  
+  const instrument = instruments[selectedInstrument]
+  
+  const onRemove = () => {
+    onUpdateSlots(null)
+    onSidebarClose()
+    onSelectInstrument(null)
   }
-
+  
   return (
     <div className="previewClass">
       <div className="instrument-details">
-        <p><strong>Type:</strong> { selectedInstrument.instrumentClass.name }</p>
-        <p><strong>Model:</strong> { selectedInstrument.model }</p>
-        <p><strong>Part no:</strong> { selectedInstrument.partNo }</p>
-        <p><strong>Size:</strong> { selectedInstrument.size }</p>
-        <p>{ turnTextToAnkor(selectedInstrument.text) }</p>
+        <p><strong>Type:</strong> { instrument.instrumentClass.name }</p>
+        <p><strong>Model:</strong> { instrument.model }</p>
+        <p><strong>Part no:</strong> { instrument.partNo }</p>
+        <p><strong>Size:</strong> { instrument.size }</p>
+        <p>{ turnTextToAnkor(instrument.text) }</p>
       </div>
       <div className="instrument-preview">
-        <p>{ numeral(selectedInstrument.price/100).format('$0,0.00') } USD</p>
-        { !!selectedInstrument.pictureUrl ?
-            (<img src={ selectedInstrument.pictureUrl } alt="instrument" className="btnimg" />) :
+        <p>{ numeral(instrument.price/100).format('$0,0.00') } USD</p>
+        { !!instrument.pictureUrl ?
+            (<img src={ instrument.pictureUrl } alt={instrument.name} className="btnimg" />) :
             ('')
         }
       </div>
-      { validSize(activeSlotSize, selectedInstrument.size) ?
         <Button
-          text={ buttonLabel }
-          onClick={ ()=>{ toggleInstrumentToSlot(selectedInstrument) } }
-        /> :
-        <div className="inactive"><Button
-          text={ "Incompatible slot" }
-        /></div>
-      }
+          text="Remove"
+          onClick={ onRemove }
+        />
     </div>
   )
 }

@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { signIn, signUp, signOut } from './api/auth'
 import { getDecodedToken } from './api/token'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import WelcomePage from './components/WelcomePage'
 import { loadPanels, createPanel, updatePanel, deletePanel } from './api/panels'
 import { loadInstruments } from './api/instruments'
+import Panel from './components/Panel'
 import { emailPanelDesign } from './api/emailSubmission'
 import ModalWindow from './components/ModalWindow'
-import Configurator from './components/Configurator'
 
 
 class App extends Component {
@@ -174,34 +174,31 @@ class App extends Component {
           <div className="App">
             <Switch>
               <Route path='/' exact render={ () => (
-                  !templateName ? (
-                      <WelcomePage
-                          onSignOut={ this.onSignOut }
-                          doModalWindow={ this.doModalWindow }
-                          signedIn={ signedIn }
-                          email={ signedIn && decodedToken.email }
-                          onSelectTemplate={this.onSelectTemplate}
-                      /> ) : (
-                      <Redirect to='/app' />
-                  )
+                !templateName ?
+                  <WelcomePage
+                    onSignOut={ this.onSignOut }
+                    doModalWindow={ this.doModalWindow }
+                    signedIn={ signedIn }
+                    email={ signedIn && decodedToken.email }
+                    onSelectTemplate={this.onSelectTemplate}
+                  />
+                :
+                  <Redirect to='/app' />
               )}/>
 
               <Route path='/app' exact render={ () => (
-                  !!templateName ? (
-                      <Configurator
-                          instruments={ instruments }
-                          templateName={ templateName }
-                          signedIn={ signedIn }
-                          decodedToken={ decodedToken }
-                          onSelectTemplate={this.onSelectTemplate}
-                      />
-                  ):(
-                      <Redirect to='/' />
-                  )
+                !!templateName ?
+                  <Panel
+                    instruments={ instruments }
+                    templateName={ templateName }
+                    signedIn={ signedIn }
+                    decodedToken={ decodedToken }
+                    onSelectTemplate={ this.onSelectTemplate }
+                  />
+                :
+                  <Redirect to='/' />
               )}/>
-
             </Switch>
-
 
           </div>
         </Router>

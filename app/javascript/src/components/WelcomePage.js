@@ -22,7 +22,7 @@ class WelcomePage extends Component {
   onBack = () => {
     this.setState({ templateType: "none" })
   }
-
+  
   render() {
     const {
       templateType

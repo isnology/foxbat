@@ -6,6 +6,7 @@ import Slot from './panelOutlines/Slot'
 import logo from '../img/foxbatlogo.png'
 import Button from './Button'
 import SubmitButton from './SubmitButton'
+import Sidebar from './sidebar/Sidebar'
 import { emailPanelDesign } from "../api/emailSubmission";
 import _forEach from 'lodash/forEach'
 import numeral from "numeral";
@@ -16,6 +17,11 @@ class Panel extends Component {
     panelId: null, // db id of users retrieved/saved panel
     panelList: null,  // list of all saved panels by this user
     templateSlots: null,  // list of slot names in template (array of strings)
+    selectedSlot: null,
+    slots: {},
+    selectedInstrumentClass: null,
+    selectedInstrumentBrand: null,
+    selectedInstrument: null,
     panelSaved: null,
     error: null, //for displaying any errors recieved from the server
     pxwFactor: 0.0,  // for adaptive sizing of instruments
@@ -86,14 +92,19 @@ class Panel extends Component {
 
 
   onClearPanel = () => {
-    this.props.onUpdateSlots({}, null, null)
+    this.setState({
+      slots: {},
+      selectedSlot: null,
+      selectedInstrument: null
+    })
   }
+  
 
   onClearCurrentPanel = () => {
     if (this.state.panelSaved === false) {
       if (window.confirm("Are you sure you want to clear the current panel? Any unsaved changes will be lost.")) {
         this.onSidebarClose()
-        this.props.onUpdateSlots({}, null, null)
+        this.onClearPanel()
         //const key = "paneldata"
         //if (!!localStorage.getItem(key)) {
         //  let localSlots = JSON.parse(localStorage.getItem(key))
@@ -107,7 +118,7 @@ class Panel extends Component {
     }
     else {
       this.onSidebarClose()
-      this.props.onUpdateSlots({}, null, null)
+      this.onClearPanel()
     }
   }
 
@@ -117,9 +128,11 @@ class Panel extends Component {
     this.setState({
       templateName: panelObj.template,
       panelId: panelObj.id,
-      templateSlots: panelObj.templateSlots
+      templateSlots: panelObj.templateSlots,
+      slots: panelObj.slots,
+      selectedSlot: null,
+      selectedInstrument: null
     })
-    this.props.onUpdateSlots(panelObj.slots, null, null)
     // const obj = {
     //   templateName: panelObj.template,
     //   panelName: panelObj.name,
@@ -129,6 +142,45 @@ class Panel extends Component {
     // const key = "paneldata"
     //localStorage.setItem(key, JSON.stringify(obj))
     this.onExitModal()
+  }
+
+  onSelectInstrument = (instrument) => {
+    this.setState({ selectedInstrument: instrument })
+  }
+
+  onSelectSlot = (slot) => {
+    this.setState({
+      selectedSlot: slot,
+      selectedInstrument: this.state.slots[slot]
+    })
+    this.onSidebarClose()
+  }
+
+  onUpdateSlots = (instrument) => {
+    const { slots, selectedSlot } = this.state
+    let newSlots = slots
+    if (!!newSlots[selectedSlot]) {
+      delete newSlots[selectedSlot]
+    }
+    else {
+      newSlots[selectedSlot] = instrument
+    }
+    this.setState({ slots: newSlots })
+  }
+  
+  onSelectInstrumentClass = (item) => {
+    this.setState({ selectedInstrumentClass: item })
+  }
+  
+  onSelectInstrumentBrand = (item) => {
+    this.setState({ selectedInstrumentBrand: item })
+  }
+  
+  onSidebarClose = () => {
+    this.setState({
+      selectedInstrumentClass: null,
+      selectedInstrumentBrand: null
+    })
   }
 
   onDeletePanel = () => {
@@ -161,9 +213,11 @@ class Panel extends Component {
       panelId: null,
       templateName: null,
       modalWindow: null,
-      templateSlots: null
+      templateSlots: null,
+      slots: {},
+      selectedSlot: null,
+      selectedInstrument: null
     })
-    this.props.onUpdateSlots({}, null, null)
     this.props.onSelectTemplate(null)
   }
 
@@ -180,9 +234,8 @@ class Panel extends Component {
   }
 
   totalCost = () => {
-    console.log("slots:", this.props.slots)
     let totalPrices = 0
-    _forEach(this.props.slots, (value, key) => {
+    _forEach(this.state.slots, (value, key) => {
       totalPrices += this.props.instruments[value].price
     })
     return totalPrices / 100
@@ -192,7 +245,13 @@ class Panel extends Component {
     const {
       panelName,
       panelId,
+      panelList,
       templateSlots,
+      selectedSlot,
+      slots,
+      selectedInstrumentClass,
+      selectedInstrumentBrand,
+      selectedInstrument,
       panelSaved,
       error,
       modalWindow
@@ -203,11 +262,6 @@ class Panel extends Component {
       templateName,
       signedIn,
       decodedToken,
-      selectedSlot,
-      selectedInstrument,
-      slots,
-      onSelectSlot,
-      onSelectInstrument,
       onSelectTemplate
     } = this.props
 
@@ -226,75 +280,90 @@ class Panel extends Component {
     }
 
     return (
-      <div className="panel-main">
-        <img className="configurator-logo" src={ logo } alt="Foxbat logo" />
+      <div className="configurator">
+        <div className="panel-main">
+          <img className="configurator-logo" src={ logo } alt="Foxbat logo" />
 
-        <div className="running-cost">
-          { !!panelName ? <p>Panel: <i>"{ panelName }"</i></p> : <i style={{color: '#bdbdbd'}}>Save to name your panel</i> }
-          <p>Current cost (USD): ${ numeral(this.totalCost()).format('0,0.00') }</p>
-        </div>
-        <div className="panel">
-          { templateName === 'a22' || templateName === 'a22Digital' ? <A22outline/> : <A32outline/> }
-          {console.log("draw slots")}
-          { slotLayout[templateName].map((slotArray, index) => (
-              <div key={index} className={ slotArray[0].substring(0,1).toLowerCase() + "-container"}>
-                { slotArray.map((slot, index2) => (
-                    <Slot
-                      key={index2}
-                      instruments={ instruments }
-                      slot={ slot }
-                      selectedSlot={ selectedSlot }
-                      slots={ slots }
-                      onSelectSlot={ onSelectSlot }
-                      pxWidth={ this.pxWidth }
-                    />
-                  ))
-                }
-              </div>
-            ))
-          }
-        </div>
-        <div className="panel-button-group">
-          <Button
-              text="Save"
-              onClick={ this.onSave }
-              style={ saveButtonStyle }
-          />
-          { signedIn &&
-          <SubmitButton
-              className="panel-button-group"
-              onClick={ this.submitPanel }
-              email={ email }
-              slots={ slots }
-              templateName={ templateName }
-              templateSlots={ templateSlots }
-          />
-          }
-          <div className="panel-button-low-group">
+          <div className="running-cost">
+            { !!panelName ? <p>Panel: <i>"{ panelName }"</i></p> : <i style={{color: '#bdbdbd'}}>Save to name your panel</i> }
+            <p>Current cost (USD): ${ numeral(this.totalCost()).format('0,0.00') }</p>
+          </div>
+          <div className="panel">
+            { templateName === 'a22' || templateName === 'a22Digital' ? <A22outline/> : <A32outline/> }
+            { slotLayout[templateName].map((slotArray, index) => (
+                <div key={index} className={ slotArray[0].substring(0,1).toLowerCase() + "-container"}>
+                  { slotArray.map((slot, index2) => (
+                      <Slot
+                        key={index2}
+                        instruments={ instruments }
+                        slot={ slot }
+                        selectedSlot={ selectedSlot }
+                        slots={ slots }
+                        onSelectSlot={ this.onSelectSlot }
+                        pxWidth={ this.pxWidth }
+                      />
+                    ))
+                  }
+                </div>
+              ))
+            }
+          </div>
+          <div className="panel-button-group">
+            <Button
+                text="Save"
+                onClick={ this.onSave }
+                style={ saveButtonStyle }
+            />
             { signedIn &&
-            <Button
-                text="Sign Out"
-                onClick={ onSignOut }
+            <SubmitButton
+                className="panel-button-group"
+                onClick={ this.submitPanel }
+                email={ email }
+                slots={ slots }
+                templateName={ templateName }
+                templateSlots={ templateSlots }
             />
             }
-            <Button
-                text={ "Clear panel" }
-                onClick={ this.onClearPanel }
-            />
-            { signedIn && !!panelId &&
-            <Link to="/" onClick={ onDeletePanel }>
+            <div className="panel-button-low-group">
+              { signedIn &&
               <Button
-                  text="Delete panel"
+                  text="Sign Out"
+                  onClick={ onSignOut }
               />
-            </Link>
-            }
-            <Link to="/" onClick={ () => onRefreshApp(true) }>
+              }
               <Button
-                  text="Back to start"
+                  text={ "Clear panel" }
+                  onClick={ this.onClearPanel }
               />
-            </Link>
+              { signedIn && !!panelId &&
+              <Link to="/" onClick={ this.onDeletePanel }>
+                <Button
+                    text="Delete panel"
+                />
+              </Link>
+              }
+              <Link to="/" onClick={ () => this.onRefreshApp(true) }>
+                <Button
+                    text="Back to start"
+                />
+              </Link>
+            </div>
           </div>
         </div>
+        <Sidebar
+          instruments={ instruments }
+          templateName={ templateName }
+          selectedSlot={ selectedSlot }
+          selectedInstrument={ selectedInstrument }
+          slots={ slots }
+          selectedInstrumentClass={ selectedInstrumentClass }
+          selectedInstrumentBrand={ selectedInstrumentBrand }
+          onSelectInstrument={ this.onSelectInstrument }
+          onUpdateSlots={ this.onUpdateSlots }
+          onSelectInstrumentClass={ this.onSelectInstrumentClass }
+          onSelectInstrumentBrand={ this.onSelectInstrumentBrand }
+          onSidebarClose={ this.onSidebarClose }
+        />
       </div>
     )
   }
