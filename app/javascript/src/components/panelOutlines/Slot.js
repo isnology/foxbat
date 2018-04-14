@@ -9,7 +9,8 @@ function Slot({
   pxWidth       // function to calc width in pixels from width %
 }){
 
-  var classForSlot = "size-" + slot.substring(0,1).toLowerCase() + " slot"
+
+  let classForSlot = "size-" + slot.substring(0,1).toLowerCase() + " slot"
   if (selectedSlot === slot) {
     classForSlot += " selected-slot"
   }
@@ -33,18 +34,18 @@ function Slot({
     marginTop: picVOffset
   }
 
-  return(
-      <div id={slot} className={classForSlot} onClick={() => onSelectedSlot(slot)}>
+
+
+  return (
+      <div id={slot} className={classForSlot} onClick={() => onSelectSlot(slot)}>
         { !!slotInstrument ?
           <Fragment>
             <img src={slotInstrument.pictureUrl} alt={slotInstrument.name} style={picStyle}/>
-            <div className="slot-label">
-              {`${slotInstrument.name} (${slotInstrument.brand})`}
-            </div>
           </Fragment>
           : ''
         }
       </div>
-  )}
+  )
+}
 
 export default Slot

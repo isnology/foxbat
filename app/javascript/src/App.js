@@ -13,16 +13,9 @@ import Configurator from './components/Configurator'
 class App extends Component {
   state = {
     decodedToken: getDecodedToken(), // Restore the previous signed in data
-    save: null,
     instruments: null, //hash of all instruments from server (key=id)
-    panelName: null, //title user gave their panel
-    panelId: null, // db id of users retrieved/saved panel
-    panelList: null,  // list of all saved panels by this user
     templateName: null, //which template? a22, a22digital, a32, a32digital
-    panelObject: null,
-    modalWindow: null, //display sign in/up to save panel window
-    error: null, //for displaying any errors recieved from the server
-    panelSaved: null,
+    modalWindow: null //display sign in/up to save panel window
   }
 
   onSignIn = ({ email, password }) => {
@@ -49,6 +42,28 @@ class App extends Component {
     })
     .catch((error) => {
       this.setState({ error })
+    })
+  }
+
+  onRegister = ({ email, password, passwordConfirmation }) => {
+    const data = {
+      user: {
+        email: email,
+        password: password,
+        password_confirmation: passwordConfirmation
+      }
+    }
+    signUp(data)
+    .then((decodedToken) => {
+      this.setState({ decodedToken })
+    })
+    .catch((error) => {
+      if (/ 422/.test(error.message)) {
+        this.setState({ error: {message: "This user is exists already, please try another." }})
+      }
+      else {
+        this.setState({ error })
+      }
     })
   }
 
@@ -94,55 +109,6 @@ class App extends Component {
     }
   }
 
-  doSave = ({ name }) => {
-    this.setState({ error: null })
-    const data = {
-      template: this.state.templateName,
-      name: name,
-      slots: this.state.slots,
-      templateSlots: this.state.templateSlots,
-      userId: this.state.decodedToken.sub     // as per passport documentation
-    }
-    if (!!this.state.panelId){
-      const id=this.state.panelId
-      updatePanel(id, data)
-      .then((panel) => {
-        this.onExitModal()
-        this.setState({ panelSaved: true })
-      })
-      .catch((error) => {
-        this.setState({ error })
-      })
-    } else {
-      createPanel(data)
-      .then((panel) => {
-        this.setState({
-          panelId: panel.id,
-          panelName: panel.name,
-          panelSaved: true
-        })
-        this.onExitModal()
-      })
-      .catch((error) => {
-        this.setState({ error })
-      })
-    }
-  }
-
-  onSave = () => {
-    const signedIn = !!this.state.decodedToken
-    const panelName = !!this.state.panelName
-    if (signedIn && panelName) {
-      const name = this.state.panelName
-      this.doSave({ name })
-    }
-    else {
-      this.setState({ modalWindow: 'saveRegister' })
-    }
-  }
-
-
-
   onSignOut = () => {
     signOut()
     this.setState({ decodedToken: null, error: null, templateName: null, panelName: null, panelId: null })
@@ -158,8 +124,6 @@ class App extends Component {
     this.setState({ modalWindow: null })
   }
 
-
-
   onSelectTemplate = (templateName) => {
     this.setState({
       templateName: templateName,
@@ -167,53 +131,39 @@ class App extends Component {
   }
 
 
-  onSelectPanel = (panel) => {
-    const panelObj = JSON.parse(panel)
+// { modal &&
+// <ModalWindow
+// window={ modalWindow }
+// onExit={ this.onExitModal }
+// onSignIn={ this.onSignIn }
+// onSaveRegister={ this.onSaveRegister }
+// loadPanelList={ this.loadPanelList }
+// panelList={ this.state.panelList }
+// onSelectPanel={ this.onSelectPanel }
+// errMsg={ !!error ? error.message : null }
+// signedIn={ signedIn }
+// />
+// }
 
-    this.setState({
-      templateName: panelObj.template,
-      panelObject: panelObj
-    })
-    // const obj = {
-    //   templateName: panelObj.template,
-    //   panelName: panelObj.name,
-    //   panelId: panelObj.id,
-    //   slots: slots
-    // }
-    // const key = "paneldata"
-    //localStorage.setItem(key, JSON.stringify(obj))
-    this.onExitModal()
-  }
-
-  submitPanel = (email, slotData, templateName, templateSlots) => {
-    if (window.confirm("Click OK to confrim and send your panel design to Foxabt Australia")) {
-      emailPanelDesign(email, slotData, templateName, templateSlots)
-      .then((res) => {
-        alert("Panel design has been sent")
-      })
-      .catch((error) => {
-        alert("There was an error sending your design, please get in contact with us to resolve this issue")
-      })
-    }
-  }
+// panelId={ panelId }
+// onSave={ this.onSave }
+// onSubmit={ this.submitPanel }
+// onSelectSlot={ this.onSelectSlot }
+// onClearPanel={ this.onClearCurrentPanel }
+// onSignOut={ this.onSignOut }
+// onInstrumentSelection={ this.onInstrumentSelection }
+// assignInstrumentToSelectedSlot={ this.assignInstrumentToSelectedSlot }
+// sidebarClose={ this.onSidebarClose }
+// onBackClick={ this.onBackClick }
+// onRefreshApp={ this.onRefreshApp }
+// onDeletePanel={ this.onDeletePanel }
 
   render() {
     const {
       decodedToken,
-      modalWindow,
-      templateName,
-      panelObject,
-      panelId,
       instruments,
-      selectedSlot,
-      selectedInstrumentClass,
-      selectedInstrumentBrand,
-      selectedInstrument,
-      slots,
-      templateSlots,
-      error,
-      panelSaved,
-      panelName
+      modalWindow,
+      templateName
     } = this.state
 
     const signedIn = !!decodedToken
@@ -241,22 +191,9 @@ class App extends Component {
                       <Configurator
                           instruments={ instruments }
                           templateName={ templateName }
-                          email={ signedIn && decodedToken.email }
-                          panelObject={ panelObject }
                           signedIn={ signedIn }
+                          decodedToken={ decodedToken }
                           onSelectTemplate={this.onSelectTemplate}
-                          panelId={ panelId }
-                          onSave={ this.onSave }
-                          onSubmit={ this.submitPanel }
-                          onSelectSlot={ this.onSelectSlot }
-                          onClearPanel={ this.onClearCurrentPanel }
-                          onSignOut={ this.onSignOut }
-                          onInstrumentSelection={ this.onInstrumentSelection }
-                          assignInstrumentToSelectedSlot={ this.assignInstrumentToSelectedSlot }
-                          sidebarClose={ this.onSidebarClose }
-                          onBackClick={ this.onBackClick }
-                          onRefreshApp={ this.onRefreshApp }
-                          onDeletePanel={ this.onDeletePanel }
                       />
                   ):(
                       <Redirect to='/' />
@@ -265,19 +202,7 @@ class App extends Component {
 
             </Switch>
 
-            { modal &&
-            <ModalWindow
-                window={ modalWindow }
-                onExit={ this.onExitModal }
-                onSignIn={ this.onSignIn }
-                onSaveRegister={ this.onSaveRegister }
-                loadPanelList={ this.loadPanelList }
-                panelList={ this.state.panelList }
-                onSelectPanel={ this.onSelectPanel }
-                errMsg={ !!error ? error.message : null }
-                signedIn={ signedIn }
-            />
-            }
+
           </div>
         </Router>
     )

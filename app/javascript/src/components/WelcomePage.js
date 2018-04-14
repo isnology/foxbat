@@ -28,7 +28,13 @@ class WelcomePage extends Component {
       templateType
     } = this.state
 
-    const { onSignOut, doModalWindow, signedIn, email , onSelectTemplate } = this.props
+    const {
+      onSignOut,
+      doModalWindow,
+      signedIn,
+      email,
+      onSelectTemplate
+    } = this.props
 
     const panel = {
       none: {

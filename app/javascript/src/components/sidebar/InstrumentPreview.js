@@ -28,8 +28,7 @@ const InstrumentPreview = ({
 
   if (!!selectedSlot) {
 
-    activeSlot = slots[selectedSlot]
-    activeSlotSize = selectedSlot.substring(0,1)
+    slotSize = selectedSlot.substring(0,1)
     if (!!activeSlot) {
       buttonLabel = "Remove"
       selectedInstrument = instruments[activeSlot]

@@ -1,24 +1,43 @@
 .configurator {
   display: flex;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
-.panel-container {
+.panel-main {
   display: flex;
+  flex-direction: column;
+  width: 75vw;
+  height: 100%;
+}
+.configurator-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35vw;
+  height: 8vw;
+}
+.running-cost {
+  position: absolute;
+  top: 8vw;
+  left: 0;
+  padding: 0 0 2rem 2rem;
+  font-size: 2vw;
+  text-align: left;
+  width: 35vw;
+  height: 8vw;
+  p {
+    margin: 0;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: row;
   margin-top: 18.7vw;
   padding-left: 8.1vw;
-  /*background: blue;*/
-  width: 66.4vw;
-  height: 28vw;
-  .running-cost {
-    align-self: flex-start;
-    padding: 0 0 2rem 2rem;
-    font-size: 2rem;
-    text-align: left;
-    p {
-      margin: 0;
-    }
-  }
+  //background: blue;
+  width: 100vw;
+  height: 30.5vw;
 }
 .sidebar {
   display: flex;
@@ -30,7 +49,7 @@
   position: absolute;
   top: 14vw;
   left: .2vw;
-  z-index: -1;
+
 }
 
 .slot {
@@ -41,7 +60,7 @@
   background: #9b9b9b;
   cursor: pointer;
 }
-.slot:hover {
+.selected-slot, .slot:hover {
   box-shadow: 0 0 .5vw .5vw lightgray, inset 0 0 .5vw .5vw lightgray;
 }
 
@@ -76,50 +95,50 @@
 .l-container {
   display: flex;
   width: 11.55vw;
-  height: 38vw;
+  height: 30vw;
   flex-direction: column;
+  z-index: 1;
 }
 .m-container {
   display: flex;
   width: 9vw;
-  height: 38vw;
+  height: 30vw;
   flex-direction: column;
+  z-index: 1;
 }
 .s-container {
   display: flex;
   width: 7vw;
-  height: 38vw;
+  height: 30vw;
   flex-direction: column;
+  z-index: 1;
 }
 .d-container {
-  /*display: flex;*/
-  display: none;
+  display: flex;
   width: 42vw;
-  height: 38vw;
+  height: 30vw;
   flex-direction: column;
+  z-index: 1;
 }
 .r-container {
-  /*display: flex;*/
-  display: none;
+  display: flex;
   width: 9vw;
-  height: 38vw;
+  height: 30vw;
   flex-direction: column;
+  z-index: 1;
 }
 img {
   height: auto;
+  z-index: 1;
 }
 svg {
   fill: #424242;
   width: 74.8vw;
   height: 35.5vw;
+
 }
 
-.configurator-logo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 9rem;
-}
+
 
 
 
@@ -127,57 +146,57 @@ svg {
 
 
 // INSTRUMENT PANEL
-#svgbox{
-  position: absolute;
-  top: 14vw;
-  left: .2vw;
-  z-index: -1;
-}
+//#svgbox{
+//  position: absolute;
+//  top: 14vw;
+//  left: .2vw;
+//  z-index: -1;
+//}
 
-.panel-svg .svg-line {
-stroke:#6f7174;
-stroke-width: 1px;
-fill: #ACB3B8;
-}
+//.panel-svg .svg-line {
+//stroke:#6f7174;
+//stroke-width: 1px;
+//fill: #ACB3B8;
+//}
 
-#a22svg {
-width: 100%;
-height: auto;
-}
+//#a22svg {
+//width: 100%;
+//height: auto;
+//}
 
-#a32svg {
-width: 100%;
-height: auto;
-}
+//#a32svg {
+//width: 100%;
+//height: auto;
+//}
 
-.slot {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: solid #6f7174 1px;
-  background-color: #ACB3B8;
-  overflow: hidden;
-  box-shadow: inset -1px -1px 1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px 1px rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-}
+//.slot {
+//  position: absolute;
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  border: solid #6f7174 1px;
+//  background-color: #ACB3B8;
+//  overflow: hidden;
+//  box-shadow: inset -1px -1px 1px 1px rgba(0, 0, 0, 0.25), inset 1px 1px 1px 1px rgba(255, 255, 255, 0.2);
+//  cursor: pointer;
+//}
 
-.slot img {
-  z-index: 1;
+//.slot img {
+//  z-index: 1;
   /*margin-bottom: 100px;
   margin-right: 100px; */
-}
+//}
 
-.slot-label {
-  position: absolute;
-  font-size: 1rem;
-  z-index: 1;
-}
+//.slot-label {
+//  position: absolute;
+//  font-size: 1rem;
+//  z-index: 1;
+//}
 
-.selected-slot, .slot:hover {
-  border-color: #23547c;
-  box-shadow: 0px 0px 5px 5px #23547c, inset 0px 0px 5px 5px #23547c;
-}
+//.selected-slot, .slot:hover {
+//  border-color: #23547c;
+//  box-shadow: 0px 0px 5px 5px #23547c, inset 0px 0px 5px 5px #23547c;
+//}
 
 .panel-button-group button {
   margin: 1rem 0.5rem;
@@ -204,6 +223,7 @@ height: auto;
 // SIDEBAR
 .sidebar {
   display: flex;
+  flex-direction: column;
   width: 25vw;
   height: 100vh;
   background: red;

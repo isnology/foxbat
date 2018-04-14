@@ -4,7 +4,6 @@ import { sideBarMessages } from '../../constants/messages'
 
 function NavList({
   displayItems,
-  modelObjects,
   onInstrumentSelection
 }) {
 
