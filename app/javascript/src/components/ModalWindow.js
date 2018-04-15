@@ -3,9 +3,19 @@ import SaveRegister from './SaveRegister'
 import SignIn from './SignIn'
 import MyPanels from './MyPanels'
 
+export function doModalWindow({ name }) {
+  this.setState({ modalWindow: name })
+}
+
+export function onExitModal() {
+  this.setState({ modalWindow: null })
+}
+
+
 function ModalWindow({ window, onExit, onSignIn, onSaveRegister, loadPanelList, panelList, onSelectPanel, errMsg, signedIn }) {
   const signIn = (window === "signIn")
-  const save = (window === "saveRegister")
+  const register = (window === "register")
+  const save = (window === "save")
   const select = (window === "selectPanel")
   if (select) loadPanelList()
   return (
@@ -18,12 +28,20 @@ function ModalWindow({ window, onExit, onSignIn, onSaveRegister, loadPanelList, 
         />
       }
       { save &&
-        <SaveRegister
+        <Save
           onExit={ onExit }
-          onSubmit={ onSaveRegister }
+          onSubmit={ onSave }
           errMsg={ errMsg }
           signedIn={ signedIn }
         />
+      }
+      { register &&
+      <Register
+        onExit={ onExit }
+        onSubmit={ onRegister }
+        errMsg={ errMsg }
+        signedIn={ signedIn }
+      />
       }
       { select &&
       <MyPanels

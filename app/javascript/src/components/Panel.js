@@ -15,7 +15,6 @@ class Panel extends Component {
   state = {
     panelName: null, //title user gave their panel
     panelId: null, // db id of users retrieved/saved panel
-    panelList: null,  // list of all saved panels by this user
     templateSlots: null,  // list of slot names in template (array of strings)
     selectedSlot: null,
     slots: {},

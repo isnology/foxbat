@@ -8,11 +8,17 @@ import a22Thumb from '../img/a22.png'
 import a22DigitalThumb from '../img/a22digital.png'
 import a32Thumb from '../img/a32.png'
 import a32DigitalThumb from '../img/a32digital.png'
+import ModalWindow, { doModalWindow, onExitModal } from './ModalWindow'
+import { loadPanels } from '../api/panels'
+import { signIn, signUp } from "../api/auth";
 
 
 class WelcomePage extends Component {
   state = {
-    templateType: "none"
+    templateType: "none",
+    panelList: null,  // list of all saved panels by this user
+    modalWindow: null, //display sign in/up to save panel window
+    error: null
   }
 
   onSelect = (id) => {
@@ -23,18 +29,74 @@ class WelcomePage extends Component {
     this.setState({ templateType: "none" })
   }
   
+  onSignIn = ({ email, password }) => {
+    this.setState({ error: null })
+    const data = {
+      user: {
+        email: email,
+        password: password
+      }
+    }
+    signIn({data})
+    .then((decodedToken) => {
+      this.props.onDecodedToken(decodedToken)
+      doModalWindow("selectPanel")
+    })
+    .catch((error) => {
+      this.setState({ error })
+    })
+  }
+  
+  onRegister = ({ email, password, passwordConfirmation }) => {
+    const data = {
+      user: {
+        email: email,
+        password: password,
+        password_confirmation: passwordConfirmation
+      }
+    }
+    signUp(data)
+    .then((decodedToken) => {
+      this.props.onDecodedToken(decodedToken)
+      doModalWindow("selectPanel")
+    })
+    .catch((error) => {
+      if (/ 422/.test(error.message)) {
+        this.setState({ error: {message: "This user is exists already, please try another." }})
+      }
+      else {
+        this.setState({ error })
+      }
+    })
+  }
+  
+  loadPanelList = () => {
+    loadPanels({user: this.props.decodedToken.sub})
+    .then((panelList) => {
+      this.setState({ panelList: panelList})
+    })
+    .catch((error) => {
+      this.setState({ error })
+    })
+  }
+  
   render() {
     const {
-      templateType
+      templateType,
+      panelList,
+      modalWindow,
+      error
     } = this.state
 
     const {
+      decodedToken,
       onSignOut,
-      doModalWindow,
       signedIn,
       email,
       onSelectTemplate
     } = this.props
+  
+    const modal = !!modalWindow
 
     const panel = {
       none: {
@@ -123,6 +185,20 @@ class WelcomePage extends Component {
                 />
             }
           </div>
+          { modal &&
+            <ModalWindow
+               window={ modalWindow }
+               loadPanelList={ this.loadPanelList }
+               panelList={ panelList }
+               onSelectPanel={ this.onSelectPanel }
+               onExit={ onExitModal }
+               onRegister={ this.onRegister }
+               onSignIn={ this.onSignIn }
+               onSave={ this.onSave }
+               errMsg={ !!error ? error.message : null }
+               signedIn={ signedIn }
+            />
+          }
         </Fragment>
     )
   }

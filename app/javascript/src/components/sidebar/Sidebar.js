@@ -4,10 +4,11 @@ import BackButton from '../BackButton'
 import Button from '../Button'
 import NavList from './NavList'
 import SidebarText from './SidebarText'
-import InstrumentPreview from './InstrumentPreview'
+import InstrumentPreview, { turnTextToAnkor } from './InstrumentPreview'
 import { sideBarHeadings } from '../../constants/messages'
 import _forEach from 'lodash/forEach'
 import _toArray from 'lodash/toArray'
+import numeral from "numeral";
 
 export function validSize(slotSize, instSize) {
   const size = { L: 3, M: 2, S: 1 }
@@ -38,15 +39,18 @@ function Sidebar ({
       }
     })
     return (
-      _toArray(list).map((value, index) => {
-        return (
-          <Button
-            key={index}
-            text={ value }
-            onClick={ () => onSelectInstrumentClass(value) }
-          />
-        )
-      })
+      <div className="subset">
+        { _toArray(list).map((value, index) => {
+            return (
+              <Button
+                key={index}
+                text={ value }
+                onClick={ () => onSelectInstrumentClass(value) }
+              />
+            )
+          })
+        }
+      </div>
     )
   }
   
@@ -60,15 +64,18 @@ function Sidebar ({
     let temp = _toArray(list)
     temp.push('All models')
     return (
-      temp.map((value, index) => {
-        return (
-          <Button
-            key={index}
-            text={ value }
-            onClick={ () => onSelectInstrumentBrand(value) }
-          />
-        )
-      })
+      <div className="subset">
+        { temp.map((value, index) => {
+            return (
+              <Button classname="subset"
+                      key={ index }
+                      text={ value }
+                      onClick={ () => onSelectInstrumentBrand(value) }
+              />
+            )
+          })
+        }
+      </div>
     )
   }
   
@@ -90,12 +97,25 @@ function Sidebar ({
       <div className="instrument-list">
         { _toArray(list).map((value, index) => {
           return (
-            <Button
-              key={ index }
-              text={ value.name }
-              image={ value.pictureUrl }
-              onClick={ () => doSelectInstrument(value.id) }
-            />
+            <div key={ index } className="full-button">
+              <Button
+                text={ value.name }
+                image={ value.pictureUrl }
+                onClick={ () => doSelectInstrument(value.id) }
+              />
+              <div className="info" >
+                <div className="instrument-details">
+                  <p><strong>Type:</strong> { value.instrumentClass.name }</p>
+                  <p><strong>Model:</strong> { value.model }</p>
+                  <p><strong>Part no:</strong> { value.partNo }</p>
+                  <p><strong>Size:</strong> { value.size }</p>
+                  <div className="instrument-preview">
+                    <p>{ numeral(value.price/100).format('$0,0.00') } USD</p>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
           )
         })
         }

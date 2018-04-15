@@ -7,7 +7,6 @@ import { loadPanels, createPanel, updatePanel, deletePanel } from './api/panels'
 import { loadInstruments } from './api/instruments'
 import Panel from './components/Panel'
 import { emailPanelDesign } from './api/emailSubmission'
-import ModalWindow from './components/ModalWindow'
 
 
 class App extends Component {
@@ -15,7 +14,6 @@ class App extends Component {
     decodedToken: getDecodedToken(), // Restore the previous signed in data
     instruments: null, //hash of all instruments from server (key=id)
     templateName: null, //which template? a22, a22digital, a32, a32digital
-    modalWindow: null //display sign in/up to save panel window
   }
 
   onSignIn = ({ email, password }) => {
@@ -35,14 +33,8 @@ class App extends Component {
     })
   }
 
-  loadPanelList = () => {
-    loadPanels({user: this.state.decodedToken.sub})
-    .then((panelList) => {
-      this.setState({ panelList: panelList})
-    })
-    .catch((error) => {
-      this.setState({ error })
-    })
+  onDecodedToken = (decodedToken) => {
+    this.setState({ decodedToken: decodedToken })
   }
 
   onRegister = ({ email, password, passwordConfirmation }) => {
@@ -55,7 +47,7 @@ class App extends Component {
     }
     signUp(data)
     .then((decodedToken) => {
-      this.setState({ decodedToken })
+      this.onDecodedToken(decodedToken)
     })
     .catch((error) => {
       if (/ 422/.test(error.message)) {
@@ -131,19 +123,7 @@ class App extends Component {
   }
 
 
-// { modal &&
-// <ModalWindow
-// window={ modalWindow }
-// onExit={ this.onExitModal }
-// onSignIn={ this.onSignIn }
-// onSaveRegister={ this.onSaveRegister }
-// loadPanelList={ this.loadPanelList }
-// panelList={ this.state.panelList }
-// onSelectPanel={ this.onSelectPanel }
-// errMsg={ !!error ? error.message : null }
-// signedIn={ signedIn }
-// />
-// }
+
 
 // panelId={ panelId }
 // onSave={ this.onSave }
@@ -162,12 +142,10 @@ class App extends Component {
     const {
       decodedToken,
       instruments,
-      modalWindow,
       templateName
     } = this.state
 
     const signedIn = !!decodedToken
-    const modal = !!modalWindow
 
     return (
         <Router>
@@ -176,10 +154,12 @@ class App extends Component {
               <Route path='/' exact render={ () => (
                 !templateName ?
                   <WelcomePage
-                    onSignOut={ this.onSignOut }
-                    doModalWindow={ this.doModalWindow }
+                    decodedToken={ decodedToken }
                     signedIn={ signedIn }
                     email={ signedIn && decodedToken.email }
+                    onSignOut={ this.onSignOut }
+                    onSignIn={ this.onSignIn }
+                    onRegister={ this.onRegister }
                     onSelectTemplate={this.onSelectTemplate}
                   />
                 :
@@ -191,8 +171,11 @@ class App extends Component {
                   <Panel
                     instruments={ instruments }
                     templateName={ templateName }
-                    signedIn={ signedIn }
                     decodedToken={ decodedToken }
+                    signedIn={ signedIn }
+                    onSignOut={ this.onSignOut }
+                    onSignIn={ this.onSignIn }
+                    onRegister={ this.onRegister }
                     onSelectTemplate={ this.onSelectTemplate }
                   />
                 :

@@ -1,9 +1,9 @@
 import React from 'react'
 import Button from '../Button';
 import numeral from "numeral";
-import { validSize } from './Sidebar'
 
-function turnTextToAnkor(text) {
+
+export function turnTextToAnkor(text) {
   if (text.indexOf("http") >= 0) {
     return (
       <a href={ text } target="_blank">Link (opens in new tab)</a>
