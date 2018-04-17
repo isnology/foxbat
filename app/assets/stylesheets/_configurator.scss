@@ -176,7 +176,7 @@ svg {
   position: relative;
   margin-left: 20vw;
   width: 25vw;
-  height: 10vw;
+  height: 8vw;
   background: $foxbat-blue;
   color: #F5F5F5;
 }
@@ -187,14 +187,14 @@ svg {
   justify-content: space-between;
   margin: 0.5vw 1vw;
   top: 0;
-  height: 30px;
+  height: 40px;
 }
 
 .sidebar-top h3 {
   position: absolute;
   top: 2.5vw;
   width: 25vw;
-  margin-left: 0;
+  margin: 0;
   text-align: center;
   font-size: 1.7vw;
   font-weight: 300;
@@ -204,7 +204,7 @@ svg {
 
 .sidebar-lower {
   display: block;
-  height: calc(100% - 10vw);
+  height: calc(100% - 8vw);
   overflow-y: auto;
   .subset {
     .main-button {
@@ -212,10 +212,10 @@ svg {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin: 2vw 0 2vw 21.5vw;
+      margin: 1vw 0 1vw 21.5vw;
       padding: 0.5vw;
       width: 22vw;
-      height: 4vw;
+      height: 3vw;
       cursor: pointer;
       border-radius: 0.4vw;
     }
@@ -252,21 +252,24 @@ svg {
       width: 22vw;
       height: 11vw;
       cursor: pointer;
-      border-radius: 0.3vw;
+      border-radius: 0.4vw;
     }
     .info {
-      display: none;
-    }
-    .main-button:hover + .info {
-      display: block;
       position: absolute;
       top: 0;
       left: 0;
-      width: 21vw;
+      width: 21.5vw;
       height: 13vw;
       z-index: 10;
       background: gray;
-      border-radius: 0.3vw;
+      border-radius: 0.4vw;
+      overflow-y: scroll;
+      .instrument-details {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 0 0.5vw;
+      }
     }
   }
 
@@ -296,11 +299,10 @@ svg {
 }
 
 .instrument-details {
-  padding: 5px;
+  padding: 0.5vw;
   width: 100%;
   background: $white-background;
   height: 13vw;
-  border-radius: 0.3vw;
 }
 
 .previewClass {
@@ -308,15 +310,15 @@ svg {
   margin-left: 20vw;
 }
 .instrument-details p {
-  font-size: 1.1vw;
+  font-size: 1vw;
   text-align: left;
-  line-height: 1.1vw;
+  line-height: 1vw;
 }
 
 .instrument-preview {
-  //margin: 3rem auto;
+  margin: .3vw;
   p {
-    font-size: 1.8vw;
+    font-size: 1.7vw;
     text-align: center;
   }
   img {
