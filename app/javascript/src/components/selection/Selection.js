@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import Button from '../Button'
 import PlaneSelect from './PlaneSelect'
-import FoxbatLogo from '../FoxbatLogo'
+import FoxbatLogo from './FoxbatLogo'
 import a22pic from '../../img/a22.jpg'
 import a32pic from '../../img/a32.jpg'
 import a22Thumb from '../../img/a22.png'
