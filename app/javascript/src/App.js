@@ -1,12 +1,18 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component, Fragment, createContext } from 'react'
 import { signIn, signUp, signOut } from './api/auth'
 import { getDecodedToken } from './api/token'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import WelcomePage from './components/WelcomePage'
-import { loadPanels, createPanel, updatePanel, deletePanel } from './api/panels'
+import Selection from './components/selection/Selection'
 import { loadInstruments } from './api/instruments'
-import Panel from './components/Panel'
-import { emailPanelDesign } from './api/emailSubmission'
+import Panel from './components/panel/Panel'
+import SignIn from './components/modalWindows/SignIn'
+
+
+// Initialize a context
+const Context = createContext()
+
+// This context contains two interesting components
+const { Provider, Consumer } = Context
 
 
 class App extends Component {
@@ -14,177 +20,125 @@ class App extends Component {
     decodedToken: getDecodedToken(), // Restore the previous signed in data
     instruments: null, //hash of all instruments from server (key=id)
     templateName: null, //which template? a22, a22digital, a32, a32digital
+    modalWindow: null,
+    error: null
   }
-
-  onSignIn = ({ email, password }) => {
-    this.setState({ error: null })
-    const data = {
-      user: {
-        email: email,
-        password: password
-      }
-    }
-    signIn({data})
-    .then((decodedToken) => {
-      this.setState({ decodedToken, modalWindow: "selectPanel"})
-    })
-    .catch((error) => {
-      this.setState({ error })
-    })
-  }
-
-  onDecodedToken = (decodedToken) => {
-    this.setState({ decodedToken: decodedToken })
-  }
-
+  
+  
   onRegister = ({ email, password, passwordConfirmation }) => {
-    const data = {
-      user: {
-        email: email,
-        password: password,
-        password_confirmation: passwordConfirmation
-      }
+    const user = {
+      email: email,
+      password: password,
+      password_confirmation: passwordConfirmation
     }
-    signUp(data)
+    signUp({ user })
     .then((decodedToken) => {
       this.onDecodedToken(decodedToken)
+      this.onModalWindow("selectPanel")
     })
     .catch((error) => {
       if (/ 422/.test(error.message)) {
-        this.setState({ error: {message: "This user is exists already, please try another." }})
+        this.setState({ error: { message: "This user is registered already, please try another." } })
       }
       else {
         this.setState({ error })
       }
     })
   }
-
-  onSaveRegister = ({ name, email, password }) => {
-    const signedIn = !!this.state.decodedToken
+  
+  onSignIn = ({ email, password }) => {
     this.setState({ error: null })
-    const data = {
-      user: {
-        email: email,
-        password: password,
-        password_confirmation: password
-      }
+    const user = {
+      email: email,
+      password: password
     }
-    if (!signedIn) {
-      signUp(data)
-      .then((decodedToken) => {
-        this.setState({ decodedToken, panelName: name })
-        this.doSave({name})
-      })
-      .catch((error) => {
-        // User has already been taken
-        if (/ 422/.test(error.message)) {
-          return signIn(data)
-          .then((decodedToken) => {
-            this.setState({ decodedToken })
-            this.doSave({ name })
-          })
-        }
-        else {
-          throw error
-        }
-      })
-      .catch((error) => {
-        this.setState({ error })
-      })
-    }
-    else if (signedIn && !!this.state.panelName) {
-      const panelName = this.state.panelName
-      this.doSave({ name: panelName })
-    }
-    else {
-      this.doSave({ name })
-    }
+    signIn({ user })
+    .then((decodedToken) => {
+      this.onDecodedToken(decodedToken)
+      this.onModalWindow(null)
+    })
+    .catch((error) => {
+      this.setState({ error })
+    })
   }
-
+  
   onSignOut = () => {
     signOut()
-    this.setState({ decodedToken: null, error: null, templateName: null, panelName: null, panelId: null })
-    const key = "paneldata"
+    this.setState({ decodedToken: null, error: null })
+    //const key = "paneldata"
     //localStorage.removeItem(key)
   }
 
-  doModalWindow = ({ name }) => {
-    this.setState({ modalWindow: name })
+  onDecodedToken = (decodedToken) => {
+    this.setState({ decodedToken })
   }
-
-  onExitModal = () => {
-    this.setState({ modalWindow: null })
+  
+  onModalWindow = (modalWindow) => {
+    this.setState({ modalWindow })
   }
 
   onSelectTemplate = (templateName) => {
-    this.setState({
-      templateName: templateName,
-    })
+    this.setState({ templateName })
   }
-
-
-
-
-// panelId={ panelId }
-// onSave={ this.onSave }
-// onSubmit={ this.submitPanel }
-// onSelectSlot={ this.onSelectSlot }
-// onClearPanel={ this.onClearCurrentPanel }
-// onSignOut={ this.onSignOut }
-// onInstrumentSelection={ this.onInstrumentSelection }
-// assignInstrumentToSelectedSlot={ this.assignInstrumentToSelectedSlot }
-// sidebarClose={ this.onSidebarClose }
-// onBackClick={ this.onBackClick }
-// onRefreshApp={ this.onRefreshApp }
-// onDeletePanel={ this.onDeletePanel }
-
+  
+  
   render() {
     const {
       decodedToken,
       instruments,
-      templateName
+      templateName,
+      modalWindow,
+      error
     } = this.state
-
-    const signedIn = !!decodedToken
-
+    
+    const actions = {
+      onRegister: this.onRegister,
+      onSignIn: this.onSignIn,
+      onSignOut: this.onSignOut,
+      onDecodedToken: this.onDecodedToken,
+      onModalWindow: this.onModalWindow,
+      onSelectTemplate: this.onSelectTemplate,
+    }
+  
+    const message = !!error ? error.message : null
+    const onExit = () => this.onModalWindow(null)
+    
+    
     return (
-        <Router>
-          <div className="App">
-            <Switch>
-              <Route path='/' exact render={ () => (
-                !templateName ?
-                  <WelcomePage
-                    decodedToken={ decodedToken }
-                    signedIn={ signedIn }
-                    email={ signedIn && decodedToken.email }
-                    onSignOut={ this.onSignOut }
-                    onSignIn={ this.onSignIn }
-                    onRegister={ this.onRegister }
-                    onSelectTemplate={this.onSelectTemplate}
-                  />
-                :
-                  <Redirect to='/app' />
-              )}/>
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route path='/' exact render={ () => (
+              !!templateName || modalWindow === 'selectPanel' ?
+                <Panel
+                  state={ this.state }
+                  actions={ actions }
+                />
+              :
+                <Selection
+                  state={ this.state }
+                  actions={ actions }
+                />
+            )}/>
+          </Switch>
 
-              <Route path='/app' exact render={ () => (
-                !!templateName ?
-                  <Panel
-                    instruments={ instruments }
-                    templateName={ templateName }
-                    decodedToken={ decodedToken }
-                    signedIn={ signedIn }
-                    onSignOut={ this.onSignOut }
-                    onSignIn={ this.onSignIn }
-                    onRegister={ this.onRegister }
-                    onSelectTemplate={ this.onSelectTemplate }
-                  />
-                :
-                  <Redirect to='/' />
-              )}/>
-            </Switch>
-
-          </div>
-        </Router>
+          { modalWindow === "register" &&
+            <SignIn
+              onExit={ onExit }
+              onSubmit={ this.onRegister }
+              errMsg={ message }
+              register
+            />
+          }
+          { modalWindow === "signIn" &&
+            <SignIn
+              onExit={ onExit }
+              onSubmit={ this.onSignIn }
+              errMsg={ message }
+            />
+          }
+        </div>
+      </Router>
     )
   }
 

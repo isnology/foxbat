@@ -1,12 +1,12 @@
 import React from 'react'
-import Button from './Button'
+import Button from '../Button'
 import BasePopUp from './BasePopUp'
 
-function SignIn({ onExit, onSubmit, errMsg }) {
+function SignIn({ onExit, onSubmit, errMsg, register = false }) {
   return (
       <BasePopUp onExit={ onExit } errMsg={ errMsg } >
         <p className="form-text">
-          Please log in to retrieve saved instument panels.
+          Please { register ? "register to save" : "sign in to retrieve saved"} instument panels.
         </p>
         <form
             onSubmit={ (event) => {
@@ -16,9 +16,12 @@ function SignIn({ onExit, onSubmit, errMsg }) {
               // Get entered values from fields
               const email = elements.email.value
               const password = elements.password.value
-
               // Pass this information along to the parent component
-              onSubmit({ email, password })
+              if (!!register) {
+                const passwordConfirmation = elements.passwordconfirmation.value
+                onSubmit({ email, password, passwordConfirmation })
+              }
+              else onSubmit({ email, password })
             } }
         >
           <label>
@@ -37,9 +40,19 @@ function SignIn({ onExit, onSubmit, errMsg }) {
                 name='password'
             />
           </label>
+          
+          { !!register &&
+            <label>
+              {'Password confirmation: '}
+              <input
+                type='password'
+                name='passwordconfirmation'
+              />
+            </label>
+          }
 
           <br />
-          <Button text="Sign In"
+          <Button text={ !!register ? "Register" : "Sign In"}
                   onClick={ () => {} }
           />
         </form>

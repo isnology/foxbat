@@ -12,11 +12,13 @@
     "numeral": "^2.0.6",
     "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-modal": "^3.3.2",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "react-modal": "^3.4.1",
+    "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "redux": "^4.0.0"
   },
   "devDependencies": {
     "webpack-dev-server": "^2.11.1"

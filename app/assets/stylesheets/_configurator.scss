@@ -146,8 +146,9 @@ svg {
 
 .panel-button-low-group {
   margin: 0 auto;
-  button {
+  .main-button {
     width: 10rem;
+    min-width: 10rem;
     margin: auto;
     background: $foxbat-light-blue;
     height: 3.5rem;
@@ -255,6 +256,7 @@ svg {
       border-radius: 0.4vw;
     }
     .info {
+      display: none;
       position: absolute;
       top: 0;
       left: 0;

@@ -1,5 +1,5 @@
 import React from 'react'
-import ExitButton from './ExitButton'
+import ExitButton from '../ExitButton'
 
 function RoundExitButton({ onExitClick }) {
   return (

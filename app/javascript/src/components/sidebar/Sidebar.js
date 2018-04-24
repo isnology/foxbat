@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import ExitButton from '../ExitButton'
-import BackButton from '../BackButton'
+import BackButton from './BackButton'
 import Button from '../Button'
 import NavList from './NavList'
 import SidebarText from './SidebarText'
@@ -28,13 +28,16 @@ class Sidebar extends Component {
     } = this.state
     
     const {
-      instruments,
-      templateName,
       selectedSlot,
       selectedInstrument,
       slots,
       selectedInstrumentClass,
       selectedInstrumentBrand,
+    } = this.props.state
+    
+    const {
+      instruments,
+      templateName,
       onSelectInstrument,
       onUpdateSlots,
       onSelectInstrumentClass,
@@ -96,28 +99,24 @@ class Sidebar extends Component {
     }
   
     const onMouseOverButton = (index) => {
-      const newVal = this.state.overButton
+      const newVal = []
       newVal[index] = true
       this.setState({ overButton: newVal })
     }
   
     const onMouseOutButton = (index) => {
-      const newVal = this.state.overButton
-      newVal[index] = false
-      this.setState({ overButton: newVal })
+      this.setState({ overButton: [] })
     }
   
   
     const onMouseOverInfo = (index) => {
-      const newVal = this.state.overInfo
+      const newVal = []
       newVal[index] = true
       this.setState({ overInfo: newVal })
     }
   
     const onMouseOutInfo = (index) => {
-      const newVal = this.state.overInfo
-      newVal[index] = false
-      this.setState({ overInfo: newVal })
+      this.setState({ overInfo: [] })
     }
     
     const instrumentList = (instruments, slotSize, selectedInstrumentClass, selectedInstrumentBrand) => {
@@ -131,21 +130,15 @@ class Sidebar extends Component {
         }
       })
       
-      let infoStyle
+      let infoStyle = {
+        display: "none"
+      }
       
       return (
         <div className="instrument-list">
           { _toArray(list).map((value, index) => {
-            if (!!overButton[index] || !!overInfo[index]) {
-              infoStyle = {
-                display: "block"
-              }
-            }
-            else {
-              infoStyle = {
-                display: "none"
-              }
-            }
+            if (!!overButton[index] || !!overInfo[index]) infoStyle.display = "block"
+            
             return (
               <div key={ index } className="full-button">
                 <button

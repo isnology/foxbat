@@ -5,9 +5,9 @@ function extractToken(res) {
   return res.headers.authorization.substring(7)
 }
 
-export function signIn(data) {
+export function signIn(user) {
   setHeaders(getValidToken())
-  return api.post('/users/sign_in', data)
+  return api.post('/users/sign_in', user)
   .then((res) => {
     rememberToken(extractToken(res))
     return getDecodedToken()
@@ -20,9 +20,9 @@ export function signIn(data) {
   })
 }
 
-export function signUp(data) {
+export function signUp(user) {
   setHeaders(getValidToken())
-  return api.post('/users', data)
+  return api.post('/users', user)
   .then((res) => {
     rememberToken(extractToken(res))
     return getDecodedToken()

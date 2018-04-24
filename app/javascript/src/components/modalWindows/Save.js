@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
-import Button from './Button'
+import Button from '../Button'
 import BasePopUp from './BasePopUp'
 
-function SaveRegister({ onExit, onSubmit, errMsg, signedIn }) {
+function Save({ onExit, onSubmit, errMsg, signedIn }) {
   return (
     <BasePopUp onExit={ onExit } errMsg={ errMsg }>
       <p className="form-text">
@@ -24,8 +24,8 @@ function SaveRegister({ onExit, onSubmit, errMsg, signedIn }) {
               password = elements.password.value
             }
             else {
-              email = 'f'
-              password = 'f'
+              email = ''
+              password = ''
             }
             const name = elements.name.value
             // Pass this information along to the parent component
@@ -69,4 +69,4 @@ function SaveRegister({ onExit, onSubmit, errMsg, signedIn }) {
   )
 }
 
-export default SaveRegister
+export default Save
