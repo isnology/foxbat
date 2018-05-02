@@ -2,127 +2,16 @@ import React, { Component, Fragment } from 'react'
 import ExitButton from '../ExitButton'
 import BackButton from './BackButton'
 import Button from '../Button'
-import NavList from './NavList'
 import SidebarText from './SidebarText'
-import InstrumentPreview, { turnTextToAnkor } from './InstrumentPreview'
+import InstrumentPreview from './InstrumentPreview'
 import { sideBarHeadings } from '../../constants/messages'
 import _toArray from 'lodash/toArray'
 import _forEach from 'lodash/forEach'
-import numeral from "numeral"
+import InstrumentListRow from './InstrumentListRow'
 
 export function validSize(slotSize, instSize) {
   const size = { L: 3, M: 2, S: 1 }
   return (size[slotSize] > size[instSize] || slotSize === instSize)
-}
-
-function instrumentClassList(instruments, slotSize, onSelectInstrumentClass) {
-  let list = {}
-  _forEach(instruments, (value, key) => {
-    if (validSize(slotSize, value.size)) {
-      list[value.instrumentClass.name] = value.instrumentClass.name
-    }
-  })
-  return (
-    <div className="subset">
-      { _toArray(list).map((value, index) => (
-        <Button
-          key={index}
-          text={ value }
-          onClick={ () => onSelectInstrumentClass(value) }
-        />
-      ))
-      }
-    </div>
-  )
-}
-
-function instrumentBrandList(instruments, slotSize, selectedInstrumentClass, onSelectInstrumentBrand) {
-  let list = {}
-  _forEach(instruments, (value, key) => {
-    if (validSize(slotSize, value.size) && selectedInstrumentClass === value.instrumentClass.name) {
-      list[value.brand] = value.brand
-    }
-  })
-  let temp = _toArray(list)
-  temp.push('All models')
-  return (
-    <div className="subset">
-      { temp.map((value, index) => (
-        <Button classname="subset"
-                key={ index }
-                text={ value }
-                onClick={ () => onSelectInstrumentBrand(value) }
-        />
-      ))
-      }
-    </div>
-  )
-}
-
-function InstrumentList({
-                          instruments,
-                          slotSize,
-                          selectedInstrumentClass,
-                          selectedInstrumentBrand,
-                          overButton,
-                          overInfo,
-                          doSelectInstrument,
-                          onMouseOverButton,
-                          onMouseOutButton,
-                          onMouseOverInfo,
-                          onMouseOutInfo
-                        }) {
-  let list = {}
-  _forEach(instruments, (value, key) => {
-    if (validSize(slotSize, value.size) &&
-      selectedInstrumentClass === value.instrumentClass.name &&
-      (selectedInstrumentBrand === 'All models' || selectedInstrumentBrand === value.brand)) {
-      list[key] = value
-    }
-  })
-  
-  let infoStyle = {
-    display: "none"
-  }
-  
-  return (
-    <div className="instrument-list">
-      { _toArray(list).map((value, index) => {
-        if (!!overButton[index] || !!overInfo[index]) infoStyle.display = "block"
-        else infoStyle.display = "none"
-        
-        return (
-          <div key={ index } className="full-button">
-            <button
-              className="main-button"
-              onClick={ () => doSelectInstrument(value.id) }
-              onMouseOver={ () => onMouseOverButton(index) }
-              onMouseOut={ () => onMouseOutButton(index) }
-            >
-              <span className="button-text">{ value.name }</span>
-              <img src={ value.pictureUrl } alt="instrument" className="btnimg"/>
-            </button>
-            <div key={ index } className="info"
-                 style={ infoStyle }
-                 onMouseOver={ () => onMouseOverInfo(index) }
-                 onMouseOut={ () => onMouseOutInfo(index) }
-            >
-              <div className="instrument-details">
-                <p><strong>Type:</strong> { value.instrumentClass.name }</p>
-                <p><strong>Model:</strong> { value.model }</p>
-                <p><strong>Part no:</strong> { value.partNo }</p>
-                <p><strong>Size:</strong> { value.size }</p>
-                <p>{ turnTextToAnkor(value.text) }</p>
-                <div className="instrument-preview">
-                  <p>{ numeral(value.price/100).format('$0,0.00') } USD</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )})
-      }
-    </div>
-  )
 }
 
 
@@ -155,8 +44,98 @@ class Sidebar extends Component {
       onSelectInstrumentBrand,
       onSidebarClose
     } = this.props
-    
   
+    let slotSize = null
+    if (!!selectedSlot) {
+      slotSize = selectedSlot.substring(0,1)
+    }
+    
+    const instrumentPreview = () => (
+      <InstrumentPreview
+        instruments={ instruments }
+        slots={ slots }
+        selectedSlot={ selectedSlot }
+        selectedInstrument={ selectedInstrument }
+        onUpdateSlots={ onUpdateSlots }
+        onSidebarClose={ onSidebarClose }
+        onSelectInstrument={ onSelectInstrument }
+      />
+    )
+    
+    const instrumentClassList = () => {
+      let list = {}
+      _forEach(instruments, (value, key) => {
+        if (validSize(slotSize, value.size)) {
+          list[value.instrumentClass.name] = value.instrumentClass.name
+        }
+      })
+      return (
+        <div className="subset">
+          { _toArray(list).map((value, index) => (
+            <Button
+              key={index}
+              text={ value }
+              onClick={ () => onSelectInstrumentClass(value) }
+            />
+          ))
+          }
+        </div>
+      )
+    }
+  
+    const instrumentBrandList = () => {
+      let list = {}
+      _forEach(instruments, (value, key) => {
+        if (validSize(slotSize, value.size) && selectedInstrumentClass === value.instrumentClass.name) {
+          list[value.brand] = value.brand
+        }
+      })
+      let temp = _toArray(list)
+      temp.push('All models')
+      return (
+        <div className="subset">
+          { temp.map((value, index) => (
+            <Button classname="subset"
+                    key={ index }
+                    text={ value }
+                    onClick={ () => onSelectInstrumentBrand(value) }
+            />
+          ))
+          }
+        </div>
+      )
+    }
+  
+    const instrumentList = () => {
+      let list = {}
+      _forEach(instruments, (value, key) => {
+        if (validSize(slotSize, value.size) &&
+          selectedInstrumentClass === value.instrumentClass.name &&
+          (selectedInstrumentBrand === 'All models' || selectedInstrumentBrand === value.brand)) {
+          list[key] = value
+        }
+      })
+    
+      return (
+        <div className="instrument-list">
+          { _toArray(list).map((value, index) => {
+            return (
+              <InstrumentListRow key={ index }
+                                 value={value}
+                                 index={index}
+                                 style={!!overButton[index] || !!overInfo[index] ? "block" : "none"}
+                                 doSelectInstrument={doSelectInstrument}
+                                 onMouseOverButton={onMouseOverButton}
+                                 onMouseOutButton={onMouseOutButton}
+                                 onMouseOverInfo={onMouseOverInfo}
+                                 onMouseOutInfo={onMouseOutInfo}
+              />
+            )})
+          }
+        </div>
+      )
+    }
+    
     const doSelectInstrument = (value) => {
       onUpdateSlots(value)
       onSelectInstrument(value)
@@ -172,7 +151,6 @@ class Sidebar extends Component {
       this.setState({ overButton: {} })
     }
   
-  
     const onMouseOverInfo = (index) => {
       let newVal = {}
       newVal[index] = true
@@ -181,13 +159,6 @@ class Sidebar extends Component {
   
     const onMouseOutInfo = (index) => {
       this.setState({ overInfo: {} })
-    }
-    
-    
-    
-    let slotSize = null
-    if (!!selectedSlot) {
-      slotSize = selectedSlot.substring(0,1)
     }
   
     let topHeading
@@ -204,42 +175,22 @@ class Sidebar extends Component {
     // single instrument
     else if (!!selectedSlot && !!selectedInstrument) {
       topHeading = `${instruments[selectedInstrument].name} (${instruments[selectedInstrument].brand})`
-      displayItems = <InstrumentPreview
-        instruments={ instruments }
-        slots={ slots }
-        selectedSlot={ selectedSlot }
-        selectedInstrument={ selectedInstrument }
-        onUpdateSlots={ onUpdateSlots }
-        onSidebarClose={ onSidebarClose }
-        onSelectInstrument={ onSelectInstrument }
-      />
+      displayItems = instrumentPreview()
     }
     // Instrument class list
     else if (!!selectedSlot && !selectedInstrumentClass) {
       topHeading = sideBarHeadings.selectInstrumentType
-      displayItems = instrumentClassList(instruments, slotSize, onSelectInstrumentClass)
+      displayItems = instrumentClassList()
     }
     // Brand list
     else if (!!selectedSlot && !!selectedInstrumentClass && !selectedInstrumentBrand) {
       topHeading = selectedInstrumentClass + ": " + sideBarHeadings.selectBrand
-      displayItems = instrumentBrandList(instruments, slotSize, selectedInstrumentClass, onSelectInstrumentBrand)
+      displayItems = instrumentBrandList()
     }
     // Instrument list
     else if (!!selectedSlot && !!selectedInstrumentClass && !!selectedInstrumentBrand && !selectedInstrument) {
       topHeading =  selectedInstrumentBrand + " " + selectedInstrumentClass.toLowerCase() + sideBarHeadings.selectModel
-      displayItems = <InstrumentList
-        instruments={instruments}
-        slotSize={slotSize}
-        selectedInstrumentClass={selectedInstrumentClass}
-        selectedInstrumentBrand={selectedInstrumentBrand}
-        overButton={overButton}
-        overInfo={overInfo}
-        doSelectInstrument={doSelectInstrument}
-        onMouseOverButton={onMouseOverButton}
-        onMouseOutButton={onMouseOutButton}
-        onMouseOverInfo={onMouseOverInfo}
-        onMouseOutInfo={onMouseOutInfo}
-      />
+      displayItems = instrumentList()
     }
     
     const onBackClick = () => {
