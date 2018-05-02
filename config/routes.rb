@@ -2,8 +2,10 @@ Rails.application.routes.draw do
 
   root "init#index"
 
-  devise_for :users, defaults: { format: :json }
-
+  #devise_for :users, defaults: { format: :json }
+  
+  devise_for :users, defaults: { format: :json }, controllers: {sessions: 'users/sessions'}
+  
   namespace :api, defaults: { format: :json } do
     resources :instruments, only: [:index, :show, :create, :update]
     

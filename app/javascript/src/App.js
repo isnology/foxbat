@@ -97,7 +97,7 @@ class App extends Component {
       onSignOut: this.onSignOut,
       onDecodedToken: this.onDecodedToken,
       onModalWindow: this.onModalWindow,
-      onSelectTemplate: this.onSelectTemplate,
+      onSelectTemplate: this.onSelectTemplate
     }
   
     const message = !!error ? error.message : null
