@@ -2,11 +2,12 @@ class Api::InstrumentsController < ApplicationController
   before_action :authenticate_request!, only: [:create, :update]
   
   def index
-    render json: format_many(Instrument.all), status: :ok
+    render json: format_many(Instrument.includes(:instrument_class).all),
+           status: :ok
   end
 
   def create
-    instrument = Instrument.new(instrument_params)
+    instrument = Instrument.includes(:instrument_class).new(instrument_params)
     if instrument.save
       render json: format(instrument), status: :created
     else
@@ -15,7 +16,7 @@ class Api::InstrumentsController < ApplicationController
   end
 
   def update
-    instrument = Instrument.find(params[:id])
+    instrument = Instrument.includes(:instrument_class).find(params[:id])
     if instrument.update(instrument_params)
       render json: format(instrument), status: :ok
     else
