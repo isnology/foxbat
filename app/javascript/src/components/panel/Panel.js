@@ -11,7 +11,6 @@ import { emailPanelDesign } from "../../api/emailSubmission"
 import _forEach from 'lodash/forEach'
 import numeral from "numeral";
 import { createPanel, updatePanel } from "../../api/panels"
-import MyPanels from '../modalWindows/MyPanels'
 import Save from '../modalWindows/Save'
 
 
