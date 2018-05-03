@@ -258,29 +258,6 @@ class Panel extends Component {
       onSelectTemplate(null)
     }
   
-    const onSelectPanel = (panel) => {
-      const panelObj = JSON.parse(panel)
-  
-      onSelectTemplate(panelObj.template)
-      this.setState({
-        panelName: panelObj.name,
-        panelId: panelObj.id,
-        templateSlots: panelObj.templateSlots,
-        slots: panelObj.slots
-      })
-      //this.setState({ panelObj: panelObj })
-      // const obj = {
-      //   templateName: panelObj.template,
-      //   panelName: panelObj.name,
-      //   panelId: panelObj.id,
-      //   slots: slots
-      // }
-      // const key = "paneldata"
-      //localStorage.setItem(key, JSON.stringify(obj))
-      
-      onModalWindow(null)
-    }
-  
     const submitPanel = () => {
       if (window.confirm("Click OK to confirm and send your panel design to Foxbat Australia")) {
         emailPanelDesign(email, slots, templateName, templateSlots)
@@ -298,89 +275,86 @@ class Panel extends Component {
       <div className="configurator">
         <div className="panel-main">
           <img className="configurator-logo" src={ logo } alt="Foxbat logo"/>
-          { !!templateName &&
-            <Fragment>
-              <div className="running-cost">
-                { !!panelName ? <p>Panel: <i>{ panelName }</i></p> :
-                  <i style={ { color: '#bdbdbd' } }>Save to name your panel</i> }
-                <p>Current cost (USD): ${ numeral(totalCost()).format('0,0.00') }</p>
-              </div>
-              
-              <div className="panel">
-                { templateName === 'a22' || templateName === 'a22Digital' ? <A22outline/> : <A32outline/> }
-                { slotLayout[templateName].map((slotArray, index) => (
-                  <div key={ index } className={ slotArray[0].substring(0, 1).toLowerCase() + "-container" }>
-                    { slotArray.map((slot, index2) => (
-                      <Slot
-                        key={ index2 }
-                        instruments={ instruments }
-                        slot={ slot }
-                        selectedSlot={ selectedSlot }
-                        slots={ slots }
-                        onSelectSlot={ this.onSelectSlot }
-                        pxWidth={ this.pxWidth }
-                      />
-                    ))
-                    }
-                  </div>
+         
+          <div className="running-cost">
+            { !!panelName ? <p>Panel: <i>{ panelName }</i></p> :
+              <i style={ { color: '#bdbdbd' } }>Save to name your panel</i> }
+            <p>Current cost (USD): ${ numeral(totalCost()).format('0,0.00') }</p>
+          </div>
+          
+          <div className="panel">
+            { templateName === 'a22' || templateName === 'a22Digital' ? <A22outline/> : <A32outline/> }
+            { slotLayout[templateName].map((slotArray, index) => (
+              <div key={ index } className={ slotArray[0].substring(0, 1).toLowerCase() + "-container" }>
+                { slotArray.map((slot, index2) => (
+                  <Slot
+                    key={ index2 }
+                    instruments={ instruments }
+                    slot={ slot }
+                    selectedSlot={ selectedSlot }
+                    slots={ slots }
+                    onSelectSlot={ this.onSelectSlot }
+                    pxWidth={ this.pxWidth }
+                  />
                 ))
                 }
               </div>
-              <div className="panel-button-group">
-                { signedIn &&
-                  <Button onClick={ onSave }
-                    text="Save"
-                    style={ saveButtonStyle }
-                  />
-                }
-                { signedIn &&
-                  <SubmitButton onClick={ submitPanel }
-                    className="panel-button-group"
-                    email={ email }
-                    slots={ slots }
-                    templateName={ templateName }
-                    templateSlots={ templateSlots }
-                  />
-                }
-                <div className="panel-button-low-group">
-                  { !signedIn &&
-                    <Button onClick={ () => onModalWindow("signIn") }
-                      text="Sign In"
-                    />
-                  }
-                  { signedIn &&
-                    <Button onClick={ onSignOut }
-                      text="Sign Out"
-                    />
-                  }
-                  <Button onClick={ this.onClearCurrentPanel }
-                    text={ "Clear panel" }
-                  />
-                  { signedIn && !!panelId &&
-                    <Button onClick={ onDeletePanel }
-                      text="Delete panel"
-                    />
-                  }
-                  <Button onClick={ () => onRefreshApp(true) }
-                    text="Back to start"
-                  />
-                </div>
-              </div>
-            </Fragment>
-          }
+            ))
+            }
+          </div>
+          <div className="panel-button-group">
+            { signedIn &&
+              <Button onClick={ onSave }
+                text="Save"
+                style={ saveButtonStyle }
+              />
+            }
+            { signedIn &&
+              <SubmitButton onClick={ submitPanel }
+                className="panel-button-group"
+                email={ email }
+                slots={ slots }
+                templateName={ templateName }
+                templateSlots={ templateSlots }
+              />
+            }
+            <div className="panel-button-low-group">
+              { !signedIn &&
+                <Button onClick={ () => onModalWindow("signIn") }
+                  text="Sign In"
+                />
+              }
+              { signedIn &&
+                <Button onClick={ onSignOut }
+                  text="Sign Out"
+                />
+              }
+              <Button onClick={ this.onClearCurrentPanel }
+                text={ "Clear panel" }
+              />
+              { signedIn && !!panelId &&
+                <Button onClick={ onDeletePanel }
+                  text="Delete panel"
+                />
+              }
+              <Button onClick={ () => onRefreshApp(true) }
+                text="Back to start"
+              />
+            </div>
+          </div>
         </div>
-        { !!templateName &&
-          <Sidebar
-            instruments = { instruments }
-            templateName={ templateName }
-            state={ this.state }
-            onSelectInstrument={ this.onSelectInstrument }
-            onUpdateSlots={ this.onUpdateSlots }
-            onSelectInstrumentClass={ this.onSelectInstrumentClass }
-            onSelectInstrumentBrand={ this.onSelectInstrumentBrand }
-            onSidebarClose={ this.onSidebarClose }
-          />
-        }
+        
+        <Sidebar
+          instruments = { instruments }
+          templateName={ templateName }
+          state={ this.state }
+          onSelectInstrument={ this.onSelectInstrument }
+          onUpdateSlots={ this.onUpdateSlots }
+          onSelectInstrumentClass={ this.onSelectInstrumentClass }
+          onSelectInstrumentBrand={ this.onSelectInstrumentBrand }
+          onSidebarClose={ this.onSidebarClose }
+        />
+        
         { modalWindow === "save" &&
           <Save
             onExit={ onExit }
@@ -389,20 +363,24 @@ class Panel extends Component {
             signedIn={ signedIn }
           />
         }
-        { modalWindow === "selectPanel" &&
-          <MyPanels
-            decodedToken={ decodedToken }
-            onExit={ onExit }
-            onSubmit={ onSelectPanel }
-            errMsg={ message }
-          />
-        }
       </div>
     )
   }
   
   componentWillMount() {
-    if (!!this.props.state.templateName) this.setTemplateSlots()
+    this.updateWindowDimensions()
+    const panelObj = this.props.state.panelObj
+    
+    if (!!panelObj) {
+      this.setState({
+        panelName: panelObj.name,
+        panelId: panelObj.id,
+        templateSlots: panelObj.templateSlots,
+        slots: panelObj.slots
+      })
+      this.props.actions.onPanelObj(null)
+    }
+    else if (!!this.props.state.templateName) this.setTemplateSlots()
   }
   
   // code necessary for window size detection
@@ -417,7 +395,6 @@ class Panel extends Component {
   
   // When this App first appears on screen
   componentDidMount() {
-    this.updateWindowDimensions()
     window.addEventListener('resize', this.updateWindowDimensions.bind(this))
 
     window.addEventListener("beforeunload", function (e) {

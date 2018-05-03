@@ -6,6 +6,7 @@ import Selection from './components/selection/Selection'
 import { loadInstruments } from './api/instruments'
 import Panel from './components/panel/Panel'
 import SignIn from './components/modalWindows/SignIn'
+import MyPanels from './components/modalWindows/MyPanels'
 
 
 // Initialize a context
@@ -21,7 +22,8 @@ class App extends Component {
     instruments: null, //hash of all instruments from server (key=id)
     templateName: null, //which template? a22, a22digital, a32, a32digital
     modalWindow: null,
-    error: null
+    error: null,
+    panelObj: null
   }
   
   
@@ -81,6 +83,19 @@ class App extends Component {
     this.setState({ templateName })
   }
   
+  onSelectPanel = (panel) => {
+    const panelObj = JSON.parse(panel)
+    
+    this.onSelectTemplate(panelObj.template)
+    this.onPanelObj(panelObj)
+    this.onModalWindow(null)
+  }
+  
+  onPanelObj = (obj) => {
+    this.setState({ panelObj: obj })
+  }
+  
+  
   
   render() {
     const {
@@ -97,7 +112,8 @@ class App extends Component {
       onSignOut: this.onSignOut,
       onDecodedToken: this.onDecodedToken,
       onModalWindow: this.onModalWindow,
-      onSelectTemplate: this.onSelectTemplate
+      onSelectTemplate: this.onSelectTemplate,
+      onPanelObj: this.onPanelObj
     }
   
     const message = !!error ? error.message : null
@@ -109,7 +125,7 @@ class App extends Component {
         <div className="App">
           <Switch>
             <Route path='/' exact render={ () => (
-              !!templateName || modalWindow === 'selectPanel' ?
+              !!templateName ?
                 <Panel
                   state={ this.state }
                   actions={ actions }
@@ -137,14 +153,20 @@ class App extends Component {
               errMsg={ message }
             />
           }
+          { modalWindow === "selectPanel" &&
+            <MyPanels
+              decodedToken={ decodedToken }
+              onExit={ onExit }
+              onSubmit={ this.onSelectPanel }
+              errMsg={ message }
+            />
+          }
         </div>
       </Router>
     )
   }
-
-
-  // When this App first appears on screen
-  componentDidMount() {
+  
+  componentWillMount() {
     this.doLoadInstruments()
     //this.restoreFromLocalStorage()
   }
