@@ -61,64 +61,40 @@
 }
 
 .size-l {
-  width: 10.46vw;
-  height: 10.46vw;
   border-radius: 50%;
-  margin: 0 0 1.1vw 1vw;
 }
 .size-m {
-  width: 7.47vw;
-  height: 7.47vw;
   border-radius: 50%;
-  margin: 0 0 1.1vw 1.1vw;
 }
 .size-s {
-  width: 6.73vw;
-  height: 6.73vw;
   border-radius: 50%;
-  margin: .3vw 0 1.6vw 1vw;
-}
-.size-d {
-  width: 40vw;
-  height: 30vw;
-  margin: .5vw;
-}
-.size-r {
-  width: 7vw;
-  height: 14vw;
-  margin: 1vw;
 }
 .l-container {
   display: flex;
-  width: 11.55vw;
   height: 30vw;
   flex-direction: column;
   z-index: 1;
 }
 .m-container {
   display: flex;
-  width: 9vw;
   height: 30vw;
   flex-direction: column;
   z-index: 1;
 }
 .s-container {
   display: flex;
-  width: 8vw;
   height: 30vw;
   flex-direction: column;
   z-index: 1;
 }
 .d-container {
   display: flex;
-  width: 42vw;
   height: 30vw;
   flex-direction: column;
   z-index: 1;
 }
 .r-container {
   display: flex;
-  width: 9vw;
   height: 30vw;
   flex-direction: column;
   z-index: 1;
@@ -131,7 +107,105 @@ svg {
   fill: #424242;
   width: 74.8vw;
   height: 35.5vw;
+}
 
+.a22 {
+  .size-l {
+    width: 10.46vw;
+    height: 10.46vw;
+    margin: 0 0 1.1vw 1vw;
+  }
+  .size-m {
+    width: 7.47vw;
+    height: 7.47vw;
+    margin: 0 0 1.1vw 1.1vw;
+  }
+  .size-s {
+    width: 6.73vw;
+    height: 6.73vw;
+    margin: .3vw 0 1.6vw 1vw;
+  }
+  .size-d {
+    width: 31vw;
+    height: 21.9vw;
+    margin: -0.8vw 0 0 2.2vw;
+  }
+  .size-r {
+    width: 5.7vw;
+    height: 11.08vw;
+    margin: -0.8vw 1vw 1.4vw 1vw;
+  }
+  .l-container {
+    width: 11.55vw;
+  }
+  .m-container {
+    width: 9vw;
+  }
+  .s-container {
+    width: 8vw;
+  }
+  .d-container {
+    width: 33.5vw;
+  }
+  .r-container {
+    width: 8vw;
+  }
+  &.digital {
+    .m-container {
+      padding: 2vw 0 0 0;
+    }
+    .size-m {
+      margin: 0 0 1.1vw 2.1vw;
+    }
+  }
+}
+.a32 {
+  .size-l {
+    width: 9.78vw;
+    height: 9.78vw;
+    margin: 0 0 1.1vw 0;
+  }
+  .size-m {
+    width: 6.99vw;
+    height: 6.99vw;
+    margin: 0 0 1.1vw .7vw;
+  }
+  .size-s {
+    width: 6.29vw;
+    height: 6.29vw;
+    margin: .3vw 0 1.6vw .2vw;
+  }
+  .size-d {
+    width: 29vw;
+    height: 20.5vw;
+    margin: .25vw 3vw 3vw 3vw;
+  }
+  .size-r {
+    width: 5.3vw;
+    height: 10.3vw;
+    margin: .25vw 1vw .25vw 1vw;
+  }
+  .l-container {
+    padding-top: 1vw;
+    width: 10.5vw;
+  }
+  .m-container {
+    width: 9vw;
+  }
+  .s-container {
+    width: 8vw;
+  }
+  .d-container {
+    width: 33.5vw;
+  }
+  .r-container {
+    width: 7vw;
+  }
+  &.digital {
+    .size-m {
+      margin: 0 0 1.1vw 2.1vw;
+    }
+  }
 }
 
 //.selected-slot, .slot:hover {

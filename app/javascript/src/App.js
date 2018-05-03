@@ -9,13 +9,6 @@ import SignIn from './components/modalWindows/SignIn'
 import MyPanels from './components/modalWindows/MyPanels'
 
 
-// Initialize a context
-const Context = createContext()
-
-// This context contains two interesting components
-const { Provider, Consumer } = Context
-
-
 class App extends Component {
   state = {
     decodedToken: getDecodedToken(), // Restore the previous signed in data
@@ -94,7 +87,6 @@ class App extends Component {
   onPanelObj = (obj) => {
     this.setState({ panelObj: obj })
   }
-  
   
   
   render() {

@@ -281,7 +281,7 @@ class Panel extends Component {
             <p>Current cost (USD): ${ numeral(totalCost()).format('0,0.00') }</p>
           </div>
           
-          <div className="panel">
+          <div className={`panel ${templateName.substring(0,3)} ${templateName.length > 3 ? "digital" : ""}`}>
             { templateName === 'a22' || templateName === 'a22Digital' ? <A22outline/> : <A32outline/> }
             { slotLayout[templateName].map((slotArray, index) => (
               <div key={ index } className={ slotArray[0].substring(0, 1).toLowerCase() + "-container" }>
