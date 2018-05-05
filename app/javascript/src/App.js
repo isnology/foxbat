@@ -13,7 +13,7 @@ class App extends Component {
   state = {
     decodedToken: getDecodedToken(), // Restore the previous signed in data
     instruments: null, //hash of all instruments from server (key=id)
-    templateName: null, //which template? a22, a22digital, a32, a32digital
+    template: null, //which template? a22, a22digital, a32, a32digital
     modalWindow: null,
     error: null,
     panelObj: null
@@ -72,8 +72,8 @@ class App extends Component {
     this.setState({ modalWindow })
   }
 
-  onSelectTemplate = (templateName) => {
-    this.setState({ templateName })
+  onSelectTemplate = (template) => {
+    this.setState({ template: template })
   }
   
   onSelectPanel = (panel) => {
@@ -93,7 +93,7 @@ class App extends Component {
     const {
       decodedToken,
       instruments,
-      templateName,
+      template,
       modalWindow,
       error
     } = this.state
@@ -117,7 +117,7 @@ class App extends Component {
         <div className="App">
           <Switch>
             <Route path='/' exact render={ () => (
-              !!templateName ?
+              !!template ?
                 <Panel
                   state={ this.state }
                   actions={ actions }
@@ -147,7 +147,6 @@ class App extends Component {
           }
           { modalWindow === "selectPanel" &&
             <MyPanels
-              decodedToken={ decodedToken }
               onExit={ onExit }
               onSubmit={ this.onSelectPanel }
               errMsg={ message }
@@ -183,7 +182,7 @@ class App extends Component {
   //    const key = "paneldata"
   //    obj = JSON.parse(localStorage.getItem(key))
   //    !!obj && this.setState({
-  //      templateName: obj.templateName,
+  //      template: obj.template,
   //      panelName: obj.panelName,
   //      panelId: obj.panelId,
   //      slots: obj.slots

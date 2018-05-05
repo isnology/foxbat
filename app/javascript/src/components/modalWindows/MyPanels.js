@@ -9,7 +9,7 @@ class MyPanels extends Component {
   }
   
   loadPanelList = () => {
-    loadPanels(this.props.decodedToken.sub)
+    loadPanels()
     .then((panelList) => {
       this.setState({ panelList: panelList })
     })

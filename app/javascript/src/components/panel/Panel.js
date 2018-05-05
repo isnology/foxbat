@@ -38,7 +38,7 @@ class Panel extends Component {
   setTemplateSlots = () => {
     if (!this.state.templateSlots) {
       let templateSlots
-      if (this.props.state.templateName === 'a22' || this.props.state.templateName === 'a32') {
+      if (this.props.state.template === 'a22' || this.props.state.template === 'a32') {
         templateSlots = require('../../data').analogSlots
       }
       else {
@@ -118,7 +118,7 @@ class Panel extends Component {
   }
   
   // onExit = () => {
-  //   this.setState({ templateName: null })
+  //   this.setState({ template: null })
   // }
 
   render () {
@@ -138,7 +138,7 @@ class Panel extends Component {
     const {
       instruments,
       decodedToken,
-      templateName,
+      template,
       modalWindow
     } = this.props.state
     
@@ -190,7 +190,7 @@ class Panel extends Component {
     const doSave = ({ name }) => {
       this.setState({ error: null })
       const data = {
-        template: templateName,
+        template: template,
         name: name,
         slots: slots,
         templateSlots: templateSlots,
@@ -259,7 +259,7 @@ class Panel extends Component {
   
     const submitPanel = () => {
       if (window.confirm("Click OK to confirm and send your panel design to Foxbat Australia")) {
-        emailPanelDesign(email, slots, templateName, templateSlots)
+        emailPanelDesign(email, slots, template, templateSlots)
         .then((res) => {
           alert("Panel design has been sent")
         })
@@ -281,9 +281,9 @@ class Panel extends Component {
             <p>Current cost (USD): ${ numeral(totalCost()).format('0,0.00') }</p>
           </div>
           
-          <div className={`panel ${templateName.substring(0,3)} ${templateName.length > 3 ? "digital" : ""}`}>
-            { templateName === 'a22' || templateName === 'a22Digital' ? <A22outline/> : <A32outline/> }
-            { slotLayout[templateName].map((slotArray, index) => (
+          <div className={`panel ${template.substring(0,3)} ${template.length > 3 ? "digital" : ""}`}>
+            { template === 'a22' || template === 'a22Digital' ? <A22outline/> : <A32outline/> }
+            { slotLayout[template].map((slotArray, index) => (
               <div key={ index } className={ slotArray[0].substring(0, 1).toLowerCase() + "-container" }>
                 { slotArray.map((slot, index2) => (
                   <Slot
@@ -292,7 +292,7 @@ class Panel extends Component {
                     slot={ slot }
                     selectedSlot={ selectedSlot }
                     slots={ slots }
-                    templateName={ templateName }
+                    template={ template }
                     onSelectSlot={ this.onSelectSlot }
                     pxWidth={ this.pxWidth }
                   />
@@ -314,7 +314,7 @@ class Panel extends Component {
                 className="panel-button-group"
                 email={ email }
                 slots={ slots }
-                templateName={ templateName }
+                template={ template }
                 templateSlots={ templateSlots }
               />
             }
@@ -346,7 +346,7 @@ class Panel extends Component {
         
         <Sidebar
           instruments = { instruments }
-          templateName={ templateName }
+          template={ template }
           state={ this.state }
           onSelectInstrument={ this.onSelectInstrument }
           onUpdateSlots={ this.onUpdateSlots }
@@ -380,7 +380,7 @@ class Panel extends Component {
       })
       this.props.actions.onPanelObj(null)
     }
-    else if (!!this.props.state.templateName) this.setTemplateSlots()
+    else if (!!this.props.state.template) this.setTemplateSlots()
   }
   
   // code necessary for window size detection

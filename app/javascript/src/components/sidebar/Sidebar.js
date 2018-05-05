@@ -37,7 +37,7 @@ class Sidebar extends Component {
     
     const {
       instruments,
-      templateName,
+      template,
       onSelectInstrument,
       onUpdateSlots,
       onSelectInstrumentClass,
@@ -168,7 +168,7 @@ class Sidebar extends Component {
   
     // Nothing selected
     if (!selectedSlot) {
-      topHeading = `Build your ${templateName.charAt(0).toUpperCase() + templateName.slice(1)} instrument panel`
+      topHeading = `Build your ${template.charAt(0).toUpperCase() + template.slice(1)} instrument panel`
       exitButton = false
       backButton = false
     }

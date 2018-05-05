@@ -1,10 +1,9 @@
 import api, { setHeaders } from './init'
 import { getValidToken } from './token'
 
-export function loadPanels(userId) {
+export function loadPanels() {
   setHeaders(getValidToken())
-  // pass user_id as a parameter so no login is required to get the records
-  return api.get(`/api/panels?user_id=${userId}`)
+  return api.get('/api/panels')
   .then((res) => res.data)
 }
 

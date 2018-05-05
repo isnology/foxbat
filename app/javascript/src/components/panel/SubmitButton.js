@@ -5,12 +5,12 @@ function SubmitButton({
   onClick,
   email,
   slots,
-  templateName
+  template
 }) {
   return (
     <Button text="Submit Panel Design"
       onClick={ (event) => {
-      onClick({email, slots, templateName})
+      onClick({email, slots, template})
     }}
     />
   )
