@@ -5,6 +5,7 @@ function Slot({
   slot,         // current slot to draw eg "L01"
   selectedSlot,
   slots,        // hash of slots with instruments already
+  templateName,
   onSelectSlot, // callback function to pass back which slot was clicked
   pxWidth       // function to calc width in pixels from width %
 }){
@@ -20,12 +21,13 @@ function Slot({
   let picHeight = 11
   let picHOffset = 0
   let picVOffset = 0
+  const multiplier = (templateName === "a32" || templateName === "a32Digital" ? 0.935 : 1)
   if (!!slots[slot]) {
     slotInstrument = instruments[slots[slot]]
-    picWidth = pxWidth(slotInstrument.pictureWidth)
-    picHeight = pxWidth(slotInstrument.pictureHeight)
-    picHOffset = pxWidth(slotInstrument.pictureHOffset)
-    picVOffset = pxWidth(slotInstrument.pictureVOffset)
+    picWidth = pxWidth(slotInstrument.pictureWidth) * multiplier
+    picHeight = pxWidth(slotInstrument.pictureHeight) * multiplier
+    picHOffset = pxWidth(slotInstrument.pictureHOffset) * multiplier
+    picVOffset = pxWidth(slotInstrument.pictureVOffset) * multiplier
   }
   let picStyle = {
     width: picWidth,

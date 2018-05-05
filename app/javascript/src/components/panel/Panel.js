@@ -292,6 +292,7 @@ class Panel extends Component {
                     slot={ slot }
                     selectedSlot={ selectedSlot }
                     slots={ slots }
+                    templateName={ templateName }
                     onSelectSlot={ this.onSelectSlot }
                     pxWidth={ this.pxWidth }
                   />

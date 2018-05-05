@@ -1,9 +1,9 @@
 class Api::PanelsController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :authenticate_user!, only: [:index, :create, :update, :destroy]
   before_action :set_panel, only: [:show, :update, :destroy]
   
   def index
-    render json: format_many(Panel.all), status: :ok
+    render json: format_many(Panel.where(user_id: current_user.id)), status: :ok
   end
   
   def show

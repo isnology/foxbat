@@ -9,7 +9,7 @@ class MyPanels extends Component {
   }
   
   loadPanelList = () => {
-    loadPanels({ user: this.props.decodedToken.sub })
+    loadPanels(this.props.decodedToken.sub)
     .then((panelList) => {
       this.setState({ panelList: panelList })
     })
@@ -22,7 +22,6 @@ class MyPanels extends Component {
     const { panelList } = this.state
     
     const {
-      decodedToken,
       onExit,
       onSubmit,
       errMsg
