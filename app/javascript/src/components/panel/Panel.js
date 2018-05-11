@@ -26,15 +26,8 @@ class Panel extends Component {
     selectedInstrument: null,
     panelSaved: true,
     error: null, //for displaying any errors recieved from the server
-    pxwFactor: 0.0  // for adaptive sizing of instruments
   }
   
-  
-  // converts screen width % to pixels
-  pxWidth = (screenWidthPercent) => {
-    return Math.round(this.state.pxwFactor * screenWidthPercent)
-  }
-
   setTemplateSlots = () => {
     if (!this.state.templateSlots) {
       let templateSlots
@@ -143,6 +136,7 @@ class Panel extends Component {
     } = this.props.state
     
     const {
+      pxWidth,
       onSelectTemplate,
       onSignOut,
       onModalWindow
@@ -194,7 +188,7 @@ class Panel extends Component {
         name: name,
         slots: slots,
         templateSlots: templateSlots,
-        userId: decodedToken.sub     // as per passport documentation
+        user_id: decodedToken.sub     // as per passport documentation
       }
       if (!!panelId){
         const id = panelId
@@ -294,7 +288,7 @@ class Panel extends Component {
                     slots={ slots }
                     template={ template }
                     onSelectSlot={ this.onSelectSlot }
-                    pxWidth={ this.pxWidth }
+                    pxWidth={ pxWidth }
                   />
                 ))
                 }
@@ -368,7 +362,6 @@ class Panel extends Component {
   }
   
   componentWillMount() {
-    this.updateWindowDimensions()
     const panelObj = this.props.state.panelObj
     
     if (!!panelObj) {
@@ -383,31 +376,15 @@ class Panel extends Component {
     else if (!!this.props.state.template) this.setTemplateSlots()
   }
   
-  // code necessary for window size detection
-  updateWindowDimensions() {
-    const pxw = window.innerWidth / 100
-    this.setState({
-      //windowWidth: window.innerWidth,
-      //windowHeight: window.innerHeight,
-      pxwFactor: pxw
-    })
-  }
+  
   
   // When this App first appears on screen
   componentDidMount() {
-    window.addEventListener('resize', this.updateWindowDimensions.bind(this))
-
     window.addEventListener("beforeunload", function (e) {
       if (panelSaved === false) {
         e.returnValue = "You may have unsaved changes. Are you sure you want to leave?"
       }
     })
-  }
-
-  // code necessary for window size detection
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions)
-    //window.removeEventListener('beforeunload')
   }
   
 }

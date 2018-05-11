@@ -2,14 +2,19 @@ class Api::InstrumentsController < ApplicationController
   before_action :authenticate_request!, only: [:create, :update]
   
   def index
-    render json: format_many(Instrument.includes(:instrument_class).all),
-           status: :ok
+    #render json: format_many(Instrument.includes(:instrument_class).all),
+    #       status: :ok
+    #render json: Api::InstrumentSerializer.new(Instrument.includes(:instrument_class).all).serialized_json,
+    #       status: :ok
+    instruments = Instrument.includes(:instrument_class).all
+    render json: instruments, status: :ok
   end
 
   def create
     instrument = Instrument.includes(:instrument_class).new(instrument_params)
     if instrument.save
-      render json: format(instrument), status: :created
+      #render json: format(instrument), status: :created
+      render json: instrument, status: :created
     else
       render json: instrument.errors, status: :unprocessable_entity
     end
@@ -18,7 +23,8 @@ class Api::InstrumentsController < ApplicationController
   def update
     instrument = Instrument.includes(:instrument_class).find(params[:id])
     if instrument.update(instrument_params)
-      render json: format(instrument), status: :ok
+      #render json: format(instrument), status: :ok
+      render json: instrument, status: :ok
     else
       render json: instrument.errors, status: :unprocessable_entity
     end
@@ -42,14 +48,5 @@ class Api::InstrumentsController < ApplicationController
         :picture_width,
         :picture_height,
         :instrument_class_id)
-    end
-
-    def format(data)
-      {id: data.id, name: data.name, brand: data.brand, model: data.model, partNo: data.part_no, text: data.text,
-       price: data.price, size: data.size, pictureUrl: data.picture_url,
-       pictureWidth: data.picture_width, pictureHeight: data.picture_height,
-       pictureHOffset: data.picture_h_offset, pictureVOffset: data.picture_v_offset,
-       instrumentClass: {id: data.instrument_class.id, name: data.instrument_class.name}
-      }
     end
 end

@@ -66,7 +66,7 @@ class Sidebar extends Component {
       let list = {}
       _forEach(instruments, (value, key) => {
         if (validSize(slotSize, value.size)) {
-          list[value.instrumentClass.name] = value.instrumentClass.name
+          list[value.instrument_class.name] = value.instrument_class.name
         }
       })
       return (
@@ -86,7 +86,7 @@ class Sidebar extends Component {
     const instrumentBrandList = () => {
       let list = {}
       _forEach(instruments, (value, key) => {
-        if (validSize(slotSize, value.size) && selectedInstrumentClass === value.instrumentClass.name) {
+        if (validSize(slotSize, value.size) && selectedInstrumentClass === value.instrument_class.name) {
           list[value.brand] = value.brand
         }
       })
@@ -110,7 +110,7 @@ class Sidebar extends Component {
       let list = {}
       _forEach(instruments, (value, key) => {
         if (validSize(slotSize, value.size) &&
-          selectedInstrumentClass === value.instrumentClass.name &&
+          selectedInstrumentClass === value.instrument_class.name &&
           (selectedInstrumentBrand === 'All models' || selectedInstrumentBrand === value.brand)) {
           list[key] = value
         }

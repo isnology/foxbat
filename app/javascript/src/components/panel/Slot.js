@@ -24,10 +24,10 @@ function Slot({
   const multiplier = (template === "a32" || template === "a32Digital" ? 0.935 : 1)
   if (!!slots[slot]) {
     slotInstrument = instruments[slots[slot]]
-    picWidth = pxWidth(slotInstrument.pictureWidth * multiplier)
-    picHeight = pxWidth(slotInstrument.pictureHeight * multiplier)
-    picHOffset = pxWidth(slotInstrument.pictureHOffset * multiplier)
-    picVOffset = pxWidth(slotInstrument.pictureVOffset * multiplier)
+    picWidth = pxWidth(slotInstrument.picture_width * multiplier)
+    picHeight = pxWidth(slotInstrument.picture_height * multiplier)
+    picHOffset = pxWidth(slotInstrument.picture_h_offset * multiplier)
+    picVOffset = pxWidth(slotInstrument.picture_v_offset * multiplier)
   }
   let picStyle = {
     width: picWidth,
@@ -40,7 +40,7 @@ function Slot({
   return (
       <div id={slot} className={classForSlot} onClick={() => onSelectSlot(slot)}>
         { !!slotInstrument ?
-            <img src={slotInstrument.pictureUrl} alt={slotInstrument.name} style={picStyle}/>
+            <img src={slotInstrument.picture_url} alt={slotInstrument.name} style={picStyle}/>
           : ''
         }
       </div>

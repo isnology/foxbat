@@ -16,9 +16,14 @@ class App extends Component {
     template: null, //which template? a22, a22digital, a32, a32digital
     modalWindow: null,
     error: null,
-    panelObj: null
+    panelObj: null,
+    pxwFactor: 0.0  // for adaptive sizing of instruments
   }
   
+  // converts screen width % to pixels
+  pxWidth = (screenWidthPercent) => {
+    return Math.round(this.state.pxwFactor * screenWidthPercent)
+  }
   
   onRegister = ({ email, password, passwordConfirmation }) => {
     const user = {
@@ -99,6 +104,7 @@ class App extends Component {
     } = this.state
     
     const actions = {
+      pxWidth: this.pxWidth,
       onRegister: this.onRegister,
       onSignIn: this.onSignIn,
       onSignOut: this.onSignOut,
@@ -158,8 +164,28 @@ class App extends Component {
   }
   
   componentWillMount() {
+    this.updateWindowDimensions()
     this.doLoadInstruments()
     //this.restoreFromLocalStorage()
+  }
+  
+  componentDidMount() {
+    window.addEventListener('resize', this.updateWindowDimensions.bind(this))
+  }
+  
+  // code necessary for window size detection
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions)
+  }
+  
+  // code necessary for window size detection
+  updateWindowDimensions() {
+    const pxw = window.innerWidth / 100
+    this.setState({
+      //windowWidth: window.innerWidth,
+      //windowHeight: window.innerHeight,
+      pxwFactor: pxw
+    })
   }
 
   doLoadInstruments() {

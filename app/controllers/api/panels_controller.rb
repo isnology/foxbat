@@ -3,11 +3,11 @@ class Api::PanelsController < ApplicationController
   before_action :set_panel, only: [:show, :update, :destroy]
   
   def index
-    render json: format_many(Panel.where(user_id: current_user.id)), status: :ok
+    render json: Panel.where(user_id: current_user.id), status: :ok
   end
   
   def show
-    render json: format(@panel), status: :ok
+    render json: @panel, status: :ok
   end
 
   def create
@@ -15,7 +15,7 @@ class Api::PanelsController < ApplicationController
     panel.user = current_user
     
     if panel.save
-      render json: format(panel), status: :created
+      render json: panel, status: :created
     else
       render json: panel.errors, status: :unprocessable_entity
     end
@@ -23,15 +23,15 @@ class Api::PanelsController < ApplicationController
 
   def update
     if @panel.update(panel_params)
-      render json: format(@panel), status: :ok
+      render json: @panel, status: :ok
     else
-      render json: panel.errors, status: :unprocessable_entity
+      render json: @panel.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
     @panel.destroy
-    render json: format(@panel), status: :ok
+    render json: @panel, status: :ok
   end
   
   private
@@ -49,7 +49,4 @@ class Api::PanelsController < ApplicationController
       @panel = Panel.find(params[:id])
     end
   
-    def format(data)
-      {id: data.id, name: data.name, template: data.template, slots: data.slots, userId: data.user_id}
-    end
 end

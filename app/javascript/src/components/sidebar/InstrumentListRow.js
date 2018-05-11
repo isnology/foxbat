@@ -24,7 +24,7 @@ export default function InstrumentListRow({ value,
         onMouseOut={ () => onMouseOutButton(index) }
       >
         <span className="button-text">{ value.name }</span>
-        <img src={ value.pictureUrl } alt="instrument" className="btnimg"/>
+        <img src={ value.picture_url } alt="instrument" className="btnimg"/>
       </button>
       <div className="info"
            style={ infoStyle }
@@ -32,9 +32,9 @@ export default function InstrumentListRow({ value,
            onMouseOut={ () => onMouseOutInfo(index) }
       >
         <div className="instrument-details">
-          <p><strong>Type:</strong> { value.instrumentClass.name }</p>
+          <p><strong>Type:</strong> { value.instrument_class.name }</p>
           <p><strong>Model:</strong> { value.model }</p>
-          <p><strong>Part no:</strong> { value.partNo }</p>
+          <p><strong>Part no:</strong> { value.part_no }</p>
           <p><strong>Size:</strong> { value.size }</p>
           <p>{ turnTextToAnkor(value.text) }</p>
           <div className="instrument-preview">
