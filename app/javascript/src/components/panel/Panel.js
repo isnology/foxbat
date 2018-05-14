@@ -109,10 +109,6 @@ class Panel extends Component {
       selectedInstrumentBrand: null
     })
   }
-  
-  // onExit = () => {
-  //   this.setState({ template: null })
-  // }
 
   render () {
     const {
