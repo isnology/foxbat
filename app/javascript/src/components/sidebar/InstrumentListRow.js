@@ -36,10 +36,10 @@ export default function InstrumentListRow({ value,
           <p><strong>Model:</strong> { value.model }</p>
           <p><strong>Part no:</strong> { value.part_no }</p>
           <p><strong>Size:</strong> { value.size }</p>
-          <p>{ turnTextToAnkor(value.text) }</p>
           <div className="instrument-preview">
             <p>{ numeral(value.price/100).format('$0,0.00') } USD</p>
           </div>
+          <p>{ turnTextToAnkor(value.text) }</p>
         </div>
       </div>
     </div>

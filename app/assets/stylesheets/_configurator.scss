@@ -337,7 +337,7 @@ svg {
       width: 21.5vw;
       height: 13vw;
       z-index: 10;
-      background: gray;
+      background: $white-background;
       border-radius: 0.4vw;
       overflow-y: scroll;
       .instrument-details {
@@ -379,28 +379,28 @@ svg {
   width: 100%;
   background: $white-background;
   height: 13vw;
+  p {
+    font-size: 1vw;
+    text-align: left;
+    line-height: .9vw;
+  }
+  .instrument-preview {
+    p {
+      font-size: 1.7vw;
+      text-align: center;
+    }
+    img {
+      display: block;
+    }
+  }
 }
 
 .previewClass {
   width: 25vw;
   margin-left: 20vw;
 }
-.instrument-details p {
-  font-size: 1vw;
-  text-align: left;
-  line-height: 1vw;
-}
 
-.instrument-preview {
-  margin: .3vw;
-  p {
-    font-size: 1.7vw;
-    text-align: center;
-  }
-  img {
-    display: block;
-  }
-}
+
 
 .inactive .main-button {
   background: grey;
