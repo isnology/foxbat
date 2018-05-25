@@ -8,6 +8,7 @@ import a22Thumb from '../../img/a22.png'
 import a22DigitalThumb from '../../img/a22digital.png'
 import a32Thumb from '../../img/a32.png'
 import a32DigitalThumb from '../../img/a32digital.png'
+import {MainConsumer} from './context/MainContext'
 
 
 class Selection extends Component {
@@ -73,66 +74,70 @@ class Selection extends Component {
     
     
     return (
-      <Fragment>
-        <FoxbatLogo/>
-
-        <div className="welcome-container">
-          <div>
-            <h1 style={ { marginBottom: 0 } }>Welcome to the Foxbat Instrument Panel Configurator</h1>
-            { signedIn && <p>You are signed in as { email }</p> }
-          </div>
-
-          <h2>
-            { templateType === "none" ? "Click on a Foxbat model to start configuring a new instrument panel"
-              : "Click on a template to continue"
-            }
-          </h2>
-          <div className="selection-images">
-            <PlaneSelect
-              name={ panel[templateType].name }
-              imageURL={ panel[templateType].img }
-              onClick={ panel[templateType].onClick }
-            />
-            <PlaneSelect
-              name={ panel[templateType].name2 }
-              imageURL={ panel[templateType].img2 }
-              onClick={ panel[templateType].onClick2 }
-            />
-          </div>
-          { templateType === "none" ?
-              <Fragment>
-                { signedIn ?
-                    <div className="panel-button-group">
-                      <Button
-                          text="Saved panels"
-                          onClick={ () => onModalWindow('selectPanel') }
-                      />
-                      <Button
-                        text="Sign out"
-                        onClick={ onSignOut }
-                      />
-                    </div>
-                  :
-                    <Fragment>
-                      <Button
-                        text="Sign In"
-                        onClick={ () => onModalWindow('signIn') }
-                      />
-                      <Button
-                        text="Register"
-                        onClick={ () => onModalWindow('register') }
-                      />
-                    </Fragment>
+      <MainConsumer>
+        {store =>
+          <Fragment>
+            <FoxbatLogo/>
+    
+            <div className="welcome-container">
+              <div>
+                <h1 style={ { marginBottom: 0 } }>Welcome to the Foxbat Instrument Panel Configurator</h1>
+                { signedIn && <p>You are signed in as { email }</p> }
+              </div>
+    
+              <h2>
+                { templateType === "none" ? "Click on a Foxbat model to start configuring a new instrument panel"
+                  : "Click on a template to continue"
                 }
-              </Fragment>
-            :
-              <Button
-                text="Back"
-                onClick={ () => this.onBack() }
-              />
-          }
-        </div>
-      </Fragment>
+              </h2>
+              <div className="selection-images">
+                <PlaneSelect
+                  name={ panel[templateType].name }
+                  imageURL={ panel[templateType].img }
+                  onClick={ panel[templateType].onClick }
+                />
+                <PlaneSelect
+                  name={ panel[templateType].name2 }
+                  imageURL={ panel[templateType].img2 }
+                  onClick={ panel[templateType].onClick2 }
+                />
+              </div>
+              { templateType === "none" ?
+                  <Fragment>
+                    { signedIn ?
+                        <div className="panel-button-group">
+                          <Button
+                              text="Saved panels"
+                              onClick={ () => onModalWindow('selectPanel') }
+                          />
+                          <Button
+                            text="Sign out"
+                            onClick={ onSignOut }
+                          />
+                        </div>
+                      :
+                        <Fragment>
+                          <Button
+                            text="Sign In"
+                            onClick={ () => onModalWindow('signIn') }
+                          />
+                          <Button
+                            text="Register"
+                            onClick={ () => onModalWindow('register') }
+                          />
+                        </Fragment>
+                    }
+                  </Fragment>
+                :
+                  <Button
+                    text="Back"
+                    onClick={ () => this.onBack() }
+                  />
+              }
+            </div>
+          </Fragment>
+        }
+      </MainConsumer>
     )
   }
 }
