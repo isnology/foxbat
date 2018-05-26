@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import BasePopUp from './BasePopUp'
-import { loadPanels } from "../../api/panels"
-import {MainConsumer} from './Context'
+import { loadPanels } from "../../api/panels";
 
 
 class MyPanels extends Component {
@@ -22,10 +21,14 @@ class MyPanels extends Component {
   render() {
     const { panelList } = this.state
     
+    const {
+      onExit,
+      onSubmit,
+      errMsg
+    } = this.props
+    
     return (
-      <MainConsumer>
-        {store =>
-      <BasePopUp onExit={ store.onExit } errMsg={ store.message }>
+      <BasePopUp onExit={ onExit } errMsg={ errMsg }>
       
         <h2>Welcome back to the <strong>Foxbat</strong> Instrument Panel Configurator</h2>
         <h3>Exit to start a new instrument panel</h3>
@@ -33,7 +36,7 @@ class MyPanels extends Component {
         <h3>Click a saved panel to continue editing</h3>
       
         <select defaultValue="" onChange={ (event) => {
-          store.onSelectPanel(event.target.value)
+          onSubmit(event.target.value)
         } } size="5">
           <option key="1" disabled value=""> -- select a saved dashboard --</option>
           { !!panelList && panelList.map((panel) => (
@@ -42,12 +45,10 @@ class MyPanels extends Component {
         </select>
     
       </BasePopUp>
-        }
-      </MainConsumer>
     )
   }
   
-  componentDidMount() {
+  componentWillMount() {
     this.loadPanelList()
   }
 }

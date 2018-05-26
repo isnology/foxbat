@@ -28,22 +28,22 @@ class Sidebar extends Component {
     } = this.state
     
     const {
+      instruments,
+      template,
       selectedSlot,
       selectedInstrument,
       slots,
       selectedInstrumentClass,
       selectedInstrumentBrand,
-    } = this.props.state
+    } = this.props.values
     
     const {
-      instruments,
-      template,
       onSelectInstrument,
       onUpdateSlots,
       onSelectInstrumentClass,
       onSelectInstrumentBrand,
       onSidebarClose
-    } = this.props
+    } = this.props.actions
   
     let slotSize = null
     if (!!selectedSlot) {

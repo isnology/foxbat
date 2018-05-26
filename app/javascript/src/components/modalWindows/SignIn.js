@@ -1,13 +1,10 @@
 import React from 'react'
 import Button from '../Button'
 import BasePopUp from './BasePopUp'
-import {MainConsumer} from './Context'
 
-function SignIn({ register = false }) {
+function SignIn({ onExit, onSubmit, errMsg, register = false }) {
   return (
-    <MainConsumer>
-      {store =>
-      <BasePopUp onExit={ store.onExit } errMsg={ store.message } >
+      <BasePopUp onExit={ onExit } errMsg={ errMsg } >
         <p className="form-text">
           Please { register ? "register to save" : "sign in to retrieve saved"} instument panels.
         </p>
@@ -22,9 +19,9 @@ function SignIn({ register = false }) {
               // Pass this information along to the parent component
               if (!!register) {
                 const passwordConfirmation = elements.passwordconfirmation.value
-                store.onRegister({ email, password, passwordConfirmation })
+                onSubmit({ email, password, passwordConfirmation })
               }
-              else store.onSignIn({ email, password })
+              else onSubmit({ email, password })
             } }
         >
           <label>
@@ -61,8 +58,6 @@ function SignIn({ register = false }) {
         </form>
         <br />
       </BasePopUp>
-      }
-    </MainConsumer>
   )
 }
 
