@@ -78,11 +78,8 @@ export default class Selection extends Component {
         </Header>
 
         <div className="welcome-container">
-          <div>
-            <h1 style={ { marginBottom: 0 } }>Welcome to the Foxbat Instrument Panel Configurator</h1>
-            { app.signedIn() && <p>You are signed in as { app.email() }</p> }
-          </div>
-
+          <h1>Welcome to the Foxbat Instrument Panel Configurator</h1>
+          { app.signedIn() && <h3>You are signed in as { app.email() }</h3> }
           <h2>
             { templateType === "none" ? "Click on a Foxbat model to start configuring a new instrument panel"
               : "Click on a template to continue"
