@@ -1,0 +1,264 @@
+@import './constants';
+@import './buttons';
+@import './configurator';
+
+*, *::after, *::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+/* root font size (rem) */
+html {
+// define the size of 1rem
+font-size: 62.5%; /* 16px default changed to 10px (10px = 1rem)*/
+}
+
+body {
+  box-sizing: border-box;
+//font-family: sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 1.6rem;
+}
+
+.App {
+//text-align: center;
+//background: white;
+
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 5rem;
+  z-index: 2;
+  background: $header-background;
+  display: flex;
+  border-bottom: .3rem solid $foxbat-website-blue;
+
+
+&_logo {
+   display: inline-block;
+   width: 25%;
+   min-width: 30rem;
+
+&-img {
+   display: inline-block;
+   max-width: 30rem;
+   margin: -1rem .5rem -1rem .5rem;
+ }
+}
+
+&_nav {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   flex-wrap: wrap;
+
+&-item {
+   display: inline-block;
+   margin: 0 .5rem 0 .5rem;
+
+ //position: relative;
+ //top: 0;
+ //text-align: center;
+ //font-size: 1.5rem;
+ //padding: .5rem;
+
+//&:not(:last-child) {
+   //  border-bottom: 1px solid gray;
+   //}
+}
+}
+}
+
+.welcome-container {
+  margin-top: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 84vh;
+  text-align: center;
+  background: white;
+
+h1, h2, h3 {
+  font-weight: normal;
+}
+
+h1 {
+  margin: 3rem auto;
+  font-size: 3.2rem;
+}
+
+h2 {
+  margin: 2rem auto;
+  font-size: 2.4rem;
+}
+
+h3 {
+  margin: 1rem auto;
+  font-size: 2rem;
+  font-weight: normal;
+}
+}
+
+.signin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+
+&_text {
+   display: flex;
+   justify-content: center;
+   font-size: 2.5rem;
+ }
+
+&_form {
+   display: flex;
+   justify-content: center;
+&-btn {
+   display: flex;
+   justify-content: center;
+ }
+}
+}
+
+.logo-div {
+  width: 100vw;
+  height: 16vh;
+  min-height: 5.3rem;
+  max-height: 11rem;
+  border-bottom: #01013a 1px solid;
+}
+.foxbat-logo {
+  top: 0;
+  margin: auto;
+  height: 15vh;
+  min-height: 5rem;
+  max-height: 10rem;
+  width: auto;
+}
+
+.selection-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.landing-page-rectangle {
+  margin: 2rem;
+  padding: 0;
+  cursor: pointer;
+}
+
+.landing-page-rectangle:hover {
+  border-color: #23547c;
+  box-shadow: 0 0 5px 5px #23547c;
+}
+
+.plane-selector{
+  height: 20rem;
+  cursor: pointer;
+}
+
+.center {
+  text-align: center;
+}
+
+.template {
+  border: 1px solid black;
+  height: 128px;
+  width: 256px;
+  cursor: pointer;
+}
+
+.template-with-text {
+  width: 256px;
+  display: inline-block;
+  margin: 20px;
+}
+
+.base-popup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  overflow: scroll;
+  left: 50%;
+  top: 50%;
+  width: 87.5%;
+  height: 87.5%;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 5%;
+  z-index: 10;
+  background: $popup-background;
+  transform: translate(-50%, -50%);
+h2 {
+strong {
+  color: $foxbat-blue;
+}
+}
+
+h3 {
+  margin: 1rem;
+}
+
+form label {
+  height: 3rem;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin: 2.5rem;
+input {
+  background: $input-background;
+  min-width: 5rem;
+  height: 3rem;
+  font-size: 1.8rem
+}
+}
+
+select {
+  border:2px solid $foxbat-blue;
+  width: 40rem;
+  max-width: 100%;
+  min-height: 10rem;
+}
+option {
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 1.6rem;
+}
+.errmsg {
+  background: $light-red;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: $font-large;
+}
+.round-exit-button {
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  margin: 0;
+  height: 4rem;
+  width: 4rem;
+  border-radius: 0;
+}
+}
+
+.form-text {
+  font-size: 2rem;
+  text-align: center;
+  width: 100%;
+}

@@ -1,0 +1,13 @@
+{
+  "name": "foxbat",
+  "engines": {
+    "node": "10.9.0"
+  },
+  "scripts": {
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "build-js": "react-scripts build",
+    "build": "cd web && npm install && npm run build-css && npm run build-js && cd ..",
+    "deploy": "cp -a web/build/. public/",
+    "postinstall": "npm run build && npm run deploy && echo 'Web Client built!'"
+  }
+}
