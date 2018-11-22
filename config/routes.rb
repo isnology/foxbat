@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
   
-  get '/', to: redirect('/index')
-  
   devise_for :users, path_prefix: 'api', defaults: { format: :json }
   
   namespace :api, defaults: { format: :json } do
@@ -14,8 +12,6 @@ Rails.application.routes.draw do
       resources :admin, only: [:create, :update, :destroy]#
     end
   end
-  
-  get '*path', to: redirect('/index')
   
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
