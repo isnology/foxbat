@@ -172,13 +172,15 @@ export default class App extends Component {
 
     // Create timer.
     this.timer = setInterval(() => {
-      // Interval complete.
-      console.log('Token expired.')
-      this.setState((oldState) => {
-        return { user: null }
-      })
-      clearInterval(this.timer)
-    }, this.timeout - new Date()*1)
+      if (new Date()*1 > this.timeout) {
+        // Interval complete.
+        console.log('Token expired.')
+        this.setState((oldState) => {
+          return { user: null }
+        })
+        clearInterval(this.timer)
+      }
+    }, 10000)
   }
 
   // SignIn
