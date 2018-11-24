@@ -1,7 +1,7 @@
-@import './constants';
-@import './buttons';
-@import './configurator';
-@import './slider';
+@import 'constants';
+@import 'buttons';
+@import 'configurator';
+@import 'slider';
 
 *, *::after, *::before {
   margin: 0;
@@ -133,6 +133,7 @@ body {
   max-height: 11rem;
   border-bottom: #01013a 1px solid;
 }
+
 .foxbat-logo {
   top: 0;
   margin: auto;

@@ -4,7 +4,7 @@ import { createInstrument, loadInstruments, updateInstrument } from './api/instr
 import { loadInstrumentClasses } from './api/instrumentClasses'
 import { signIn, signOut, signUp } from "./api/auth"
 import { createPanel, updatePanel, deletePanel  } from "./api/panels"
-import './App.css';
+import './style/App.css';
 import Main from './Main'
 
 export default class App extends Component {
@@ -162,6 +162,25 @@ export default class App extends Component {
     this.setState({ touch })
   }
 
+  tokenExpiry = () => {
+    // Prevent duplicates.
+    clearInterval(this.timer)
+
+    // Set timeout.
+    this.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date()*1
+    console.log('Token valid for:',this.timeout - new Date()*1)
+
+    // Create timer.
+    this.timer = setInterval(() => {
+      // Interval complete.
+      console.log('Token expired.')
+      this.setState((oldState) => {
+        return { user: null }
+      })
+      clearInterval(this.timer)
+    }, this.timeout - new Date()*1)
+  }
+
   // SignIn
 
   onRegister = ({ email, password, passwordConfirmation }) => {
@@ -173,6 +192,7 @@ export default class App extends Component {
     signUp({ user })
     .then((user) => {
       this.onSetUser(user)
+      this.tokenExpiry()
       this.onModalWindow("selectPanel")
     })
     .catch((error) => {
@@ -194,6 +214,7 @@ export default class App extends Component {
     signIn({ user })
     .then((user) => {
       this.onSetUser(user)
+      this.tokenExpiry()
       this.onModalWindow(null)
     })
     .catch((error) => {
@@ -584,6 +605,7 @@ export default class App extends Component {
 
   componentDidMount() {
     this.doLoadInstruments()
+    this.tokenExpiry()
 
     //window.addEventListener('resize', this.updateWindowDimensions.bind(this))
     window.addEventListener('touchstart', function onFirstTouch() {
