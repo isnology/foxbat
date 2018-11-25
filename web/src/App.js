@@ -187,7 +187,7 @@ export default class App extends Component {
             return { user: user }
           })
           this.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : now
-          console.log('Token valid for:', (this.timeout - now) / 1000, 'date:', new Date() )
+          console.log('Token valid for:', (this.timeout - now) / 1000, 'date:', new Date(), 'JTI:', getDecodedToken().jti )
         })
       }
     }, 10000)
