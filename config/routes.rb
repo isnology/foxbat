@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   devise_for :users, path_prefix: 'api', defaults: { format: :json }
   
   namespace :api, defaults: { format: :json } do
+    get 'auth/create'
     namespace :v1 do
       resources :instruments, only: [:index, :show, :create, :update]
       resources :instrument_classes, only: [:index, :show, :create, :update]

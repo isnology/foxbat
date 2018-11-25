@@ -49,3 +49,12 @@ export function signOut() {
     return null
   })
 }
+
+export function nextToken() {
+  setHeaders()
+  return api.get('api/auth/create')
+  .then((res) => {
+    rememberToken(extractToken(res))
+    return getDecodedToken()
+  })
+}

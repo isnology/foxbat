@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { getDecodedToken } from './api/token'
 import { createInstrument, loadInstruments, updateInstrument } from './api/instruments'
 import { loadInstrumentClasses } from './api/instrumentClasses'
-import { signIn, signOut, signUp } from "./api/auth"
+import { signIn, signOut, signUp, nextToken } from "./api/auth"
 import { createPanel, updatePanel, deletePanel  } from "./api/panels"
 import './style/App.css';
 import Main from './Main'
@@ -167,18 +167,25 @@ export default class App extends Component {
     clearInterval(this.timer)
 
     // Set timeout.
-    this.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date()*1
-    console.log('Token valid for:',this.timeout - new Date()*1)
+    this.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
+    console.log('Token valid for:', (this.timeout - new Date() * 1) / 1000)
 
     // Create timer.
     this.timer = setInterval(() => {
-      if (new Date()*1 > this.timeout) {
+      const now = new Date() * 1
+      if (now > this.timeout) {
         // Interval complete.
         console.log('Token expired.')
         this.setState((oldState) => {
           return { user: null }
         })
         clearInterval(this.timer)
+      } else if (now + 15000 > this.timeout) {
+        nextToken()
+        .then((user) => {
+          this.onSetUser(user)
+          this.tokenExpiry()
+        })
       }
     }, 10000)
   }
