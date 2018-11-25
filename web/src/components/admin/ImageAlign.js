@@ -106,6 +106,7 @@ export default function ImageAlign({ app }) {
     border: "red solid 1px",
     overflow: "hidden",
     background: "white",
+    color: "white",
     //marginBottom: "1rem"
   }
 

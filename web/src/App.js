@@ -180,7 +180,7 @@ export default class App extends Component {
           return { user: null }
         })
         clearInterval(this.timer)
-      } else if (now + 15000 > this.timeout) {
+      } else if (now + 300000 > this.timeout) {
         nextToken()
         .then((user) => {
           this.onSetUser(user)
@@ -501,6 +501,7 @@ export default class App extends Component {
 
   onCloseModal = () => {
     this.setState({ modalOpen: false })
+    this.onAdminClear()
   }
 
   onSelect = (id) => {
