@@ -183,7 +183,9 @@ export default class App extends Component {
       } else if (now + 300000 > this.timeout) {
         nextToken()
         .then((user) => {
-          this.onSetUser(user)
+          this.setState((oldState) => {
+            return { user: user }
+          })
           this.tokenExpiry()
         })
       }
