@@ -168,7 +168,7 @@ export default class App extends Component {
 
     // Set timeout.
     this.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
-    console.log('Token valid for:', (this.timeout - new Date() * 1) / 1000)
+    console.log('Token valid for:', (this.timeout - new Date() * 1) / 1000, 'date:', new Date() )
 
     // Create timer.
     this.timer = setInterval(() => {
