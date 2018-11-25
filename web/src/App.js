@@ -186,7 +186,8 @@ export default class App extends Component {
           this.setState((oldState) => {
             return { user: user }
           })
-          this.tokenExpiry()
+          this.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : now
+          console.log('Token valid for:', (this.timeout - now) / 1000, 'date:', new Date() )
         })
       }
     }, 10000)
