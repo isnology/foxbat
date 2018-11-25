@@ -136,6 +136,7 @@ export default class App extends Component {
 
   onSignOut = () => {
     signOut()
+    clearInterval(this.timer)
     this.onSetUser(null)
     this.setState({ error: null })
     //const key = "paneldata"
@@ -618,7 +619,6 @@ export default class App extends Component {
 
   componentDidMount() {
     this.doLoadInstruments()
-    this.tokenExpiry()
 
     //window.addEventListener('resize', this.updateWindowDimensions.bind(this))
     window.addEventListener('touchstart', function onFirstTouch() {
