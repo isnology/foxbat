@@ -16,6 +16,8 @@ export default class App extends Component {
     modalWindow: null,
     touch: false,
     //pxwFactor: 0.0,  // for adaptive sizing of instruments
+    timeout: nill,
+    timer: nill,
     error: null,
 
     // selection
@@ -116,6 +118,10 @@ export default class App extends Component {
     },
   }
 
+  renew = {
+    timer: nill,
+    timeout: 0,
+  }
 
   // App
 
@@ -136,7 +142,7 @@ export default class App extends Component {
 
   onSignOut = () => {
     signOut()
-    clearInterval(this.timer)
+    clearInterval(this.renew.timer)
     this.onSetUser(null)
     this.setState({ error: null })
     //const key = "paneldata"
@@ -165,30 +171,30 @@ export default class App extends Component {
 
   tokenExpiry = () => {
     // Prevent duplicates.
-    clearInterval(this.timer)
+    clearInterval(this.renew.timer)
 
     // Set timeout.
-    this.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
-    console.log('Token valid for:', (this.timeout - new Date() * 1) / 1000, 'date:', new Date() )
+    this.renew.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
+    console.log('Token valid for:', (this.renew.timeout - new Date() * 1) / 1000, 'date:', new Date() )
 
     // Create timer.
-    this.timer = setInterval(() => {
+    this.renew.timer = setInterval(() => {
       const now = new Date() * 1
-      if (now > this.timeout) {
+      if (now > this.renew.timeout) {
         // Interval complete.
         console.log('Token expired.')
         this.setState((oldState) => {
           return { user: null }
         })
-        clearInterval(this.timer)
-      } else if (now + 300000 > this.timeout) {
+        clearInterval(this.renew.timer)
+      } else if (now + 300000 > this.renew.timeout) {
         nextToken()
         .then((user) => {
           this.setState((oldState) => {
             return { user: user }
           })
-          this.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : now
-          console.log('Token valid for:', (this.timeout - now) / 1000, 'date:', new Date(), 'JTI:', getDecodedToken().jti )
+          this.renew.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : now
+          console.log('Token valid for:', (this.renew.timeout - now) / 1000, 'date:', new Date(), 'JTI:', getDecodedToken().jti )
         })
       }
     }, 10000)
