@@ -16,8 +16,6 @@ export default class App extends Component {
     modalWindow: null,
     touch: false,
     //pxwFactor: 0.0,  // for adaptive sizing of instruments
-    timeout: nill,
-    timer: nill,
     error: null,
 
     // selection
@@ -119,7 +117,7 @@ export default class App extends Component {
   }
 
   renew = {
-    timer: nill,
+    timer: null,
     timeout: 0,
   }
 
