@@ -1,0 +1,31 @@
+Foxbat Cockpit Panel Layout
+
+----------------------------
+
+From: <%= @from_email %>
+
+Message:
+
+
+<%= @template %> panel layout for <%= @from_email %>
+
+
+<% @template_slots.each do |slot| %>
+  <% if item = @slots[slot] %>
+    Slot: <%= "#{slot[0]} - #{slot[2]}" %>  Name: <%= item.name %>  Brand: <%= item.brand %>  Model: <%= item.model %>
+
+    Part No.: <%= item.part_no %>
+
+    Price: $<%= item.price.to_f / 100 %>
+
+    <%= image_url(item.picture_url) %>
+
+
+
+  <% else %>
+    Slot: <%= "#{slot[0]} - #{slot[2]}" %> is blank.
+
+
+
+  <% end %>
+<% end %>

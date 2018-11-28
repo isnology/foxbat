@@ -24,7 +24,14 @@ export default class Panel extends Component {
   submitPanel = () => {
     if (window.confirm("Click OK to confirm and send your panel design to Foxbat Australia")) {
       const { slots, templateSlots, template } = this.app.state
-      emailPanelDesign(this.app.email(), slots, template, templateSlots)
+      const data = {
+        user_id: this.app.state.user.sub,
+        email: this.app.email(),
+        slots: slots,
+        template: template,
+        templateSlots: templateSlots,
+      }
+      emailPanelDesign(data)
       .then((res) => {
         alert("Panel design has been sent")
       })

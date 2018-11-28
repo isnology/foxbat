@@ -52,7 +52,7 @@ export function signOut() {
 
 export function nextToken() {
   setHeaders()
-  return api.get('api/auth/create')
+  return api.post('api/auth')
   .then((res) => {
     rememberToken(extractToken(res))
     return getDecodedToken()

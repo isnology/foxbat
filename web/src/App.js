@@ -141,6 +141,7 @@ export default class App extends Component {
   onSignOut = () => {
     signOut()
     clearInterval(this.renew.timer)
+    this.renew.timer = null
     this.onSetUser(null)
     this.setState({ error: null })
     //const key = "paneldata"
@@ -170,6 +171,7 @@ export default class App extends Component {
   tokenExpiry = () => {
     // Prevent duplicates.
     clearInterval(this.renew.timer)
+    this.renew.timer = null
 
     // Set timeout.
     this.renew.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
@@ -185,6 +187,7 @@ export default class App extends Component {
           return { user: null }
         })
         clearInterval(this.renew.timer)
+        this.renew.timer = null
       } else if (now + 300000 > this.renew.timeout) {
         nextToken()
         .then((user) => {
@@ -623,6 +626,9 @@ export default class App extends Component {
 
   componentDidMount() {
     this.doLoadInstruments()
+    if (!this.renew.timer) {
+      this.tokenExpiry()
+    }
 
     //window.addEventListener('resize', this.updateWindowDimensions.bind(this))
     window.addEventListener('touchstart', function onFirstTouch() {

@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.0'
-
 gem 'dotenv-rails', groups: [:development, :test]
+
+ruby '2.5.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.1'
@@ -26,6 +26,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'devise-jwt'
 gem 'annotate'
 gem 'foreman'
+gem 'mailgun-ruby', '~>1.1.6'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

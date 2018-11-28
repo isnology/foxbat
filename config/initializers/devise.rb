@@ -288,10 +288,10 @@ Devise.setup do |config|
   #   include Turbolinks::Controller
   # end
   config.jwt do |jwt|
-    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY']
+    jwt.secret = ENV.fetch('DEVISE_JWT_SECRET_KEY')
     jwt.expiration_time = 1 * 3600 + 300  # 1 hour + 5 minutes (renewed 5 minutes before expiry)
     jwt.dispatch_requests = [
-      ['GET', %r{^/api/auth/create$}],
+      ['POST', %r{^/api/auth$}],
     ]
   end
 end

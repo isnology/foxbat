@@ -1,0 +1,42 @@
+<h1>Foxbat Cockpit Panel Layout</h1>
+
+<hr />
+
+<p>From: <%= @from_email %> </p>
+<p>Message:</p>
+
+
+<h2 style="display: inline-block; padding-right: 2px;"><%= @template %></h2>
+  panel layout for <%= @from_email %>
+
+<% @template_slots.each do |slot| %>
+  <% if item = @slots[slot] %>
+    <div style="padding-top: 10px; padding-bottom: 10px; padding-left: 10px;">
+      <div style="display: inline-block; padding: 5px;">
+        <h3>Slot: <%= "#{slot[0]} - #{slot[2]}" %></h3>
+      </div>
+      <div style="display: inline-block; padding: 5px;">
+        Name: <%= item.name %>
+      </div>
+      <div style="display: inline-block; padding: 5px;">
+        Brand: <%= item.brand %>
+      </div>
+      <div style="display: inline-block; padding: 5px;">
+        Model: <%= item.model %>
+      </div>
+      <div style="padding: 5px;">
+        Part No.: <%= item.part_no %>
+      </div>
+      <div style="padding: 5px;">
+        Price: $<%= item.price.to_f / 100 %>
+      </div>
+      <div style="padding: 5px;">
+        <img src="<%= item.picture_url %>" alt="<%= item.name %>" />
+      </div>
+    </div>
+  <% else %>
+    <div style="padding-top: 15px; padding-bottom: 15px; padding-left: 15px;">
+      <h3 style="display: inline-block; padding-right: 5px;">Slot: <%= "#{slot[0]} - #{slot[2]}" %></h3>  is blank.
+    </div>
+  <% end %>
+<% end %>
