@@ -50,6 +50,15 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "foxbat_#{Rails.env}"
 
   config.action_mailer.perform_caching = false
+  ActionMailer::Base.smtp_settings = {
+    :port           => ENV.fetch('MAILGUN_SMTP_PORT'),
+    :address        => ENV.fetch('MAILGUN_SMTP_SERVER'),
+    :user_name      => ENV.fetch('MAILGUN_SMTP_LOGIN'),
+    :password       => ENV.fetch('MAILGUN_SMTP_PASSWORD'),
+    :domain         => 'glenn-foxtest.herokuapp.com',
+    :authentication => :plain,
+  }
+  ActionMailer::Base.delivery_method = :smtp
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
