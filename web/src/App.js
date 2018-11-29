@@ -140,9 +140,8 @@ export default class App extends Component {
 
   onSignOut = () => {
     signOut()
-    clearInterval(this.renew.timer)
-    this.renew.timer = null
     this.onSetUser(null)
+    this.renew.timeout = new Date() * 1
     this.setState({ error: null })
     //const key = "paneldata"
     //localStorage.removeItem(key)
@@ -169,36 +168,9 @@ export default class App extends Component {
   }
 
   tokenExpiry = () => {
-    // Prevent duplicates.
-    clearInterval(this.renew.timer)
-    this.renew.timer = null
-
     // Set timeout.
     this.renew.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
     console.log('Token valid for:', (this.renew.timeout - new Date() * 1) / 1000, 'date:', new Date() )
-
-    // Create timer.
-    this.renew.timer = setInterval(() => {
-      const now = new Date() * 1
-      if (now > this.renew.timeout) {
-        // Interval complete.
-        console.log('Token expired.')
-        this.setState((oldState) => {
-          return { user: null }
-        })
-        clearInterval(this.renew.timer)
-        this.renew.timer = null
-      } else if (now + 300000 > this.renew.timeout) {
-        nextToken()
-        .then((user) => {
-          this.setState((oldState) => {
-            return { user: user }
-          })
-          this.renew.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : now
-          console.log('Token valid for:', (this.renew.timeout - now) / 1000, 'date:', new Date(), 'JTI:', getDecodedToken().jti )
-        })
-      }
-    }, 10000)
   }
 
   // SignIn
@@ -626,9 +598,30 @@ export default class App extends Component {
 
   componentDidMount() {
     this.doLoadInstruments()
-    if (!this.renew.timer) {
-      this.tokenExpiry()
-    }
+
+    this.tokenExpiry()
+    let now
+
+    this.renew.timer = setInterval(() => {
+      now = new Date() * 1
+      if (now > this.renew.timeout) {
+        // Interval complete.
+        console.log('Token expired.')
+        this.setState((oldState) => {
+          return { user: null }
+        })
+        this.renew.timeout = 99999999999999
+      } else if (now + 300000 > this.renew.timeout) {
+        nextToken()
+        .then((user) => {
+          this.setState((oldState) => {
+            return { user: user }
+          })
+          this.renew.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
+          console.log('Token valid for:', (this.renew.timeout - now) / 1000, 'date:', new Date(), 'JTI:', !!getDecodedToken() ? getDecodedToken().jti : null )
+        })
+      }
+    }, 10000)
 
     //window.addEventListener('resize', this.updateWindowDimensions.bind(this))
     window.addEventListener('touchstart', function onFirstTouch() {
@@ -641,6 +634,10 @@ export default class App extends Component {
     // isSignedIn()
     // .then((res) => this.setState({ user: res.user}))
 
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.renew.timer);
   }
 
   // code necessary for window size detection
