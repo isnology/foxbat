@@ -170,8 +170,9 @@ export default class App extends Component {
 
   tokenExpiry = () => {
     // Set timeout.
-    this.renew.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
-    console.log('Token valid for:', (this.renew.timeout - new Date() * 1) / 1000, 'date:', new Date() )
+    const token = getDecodedToken()
+    this.renew.timeout = !!token ? token.exp * 1000 : new Date() * 1
+    console.log('Token valid for:', (this.renew.timeout - new Date() * 1) / 1000)
   }
 
   // SignIn
@@ -605,8 +606,7 @@ export default class App extends Component {
 
     this.renew.timer = setInterval(() => {
       now = new Date() * 1
-      this.renew.count++
-      if (this.renew.count > 10) this.renew.count = 10
+      if (this.renew.count < 10) this.renew.count++
       if (now > this.renew.timeout) {
         // Interval complete.
         console.log('Token expired.')
@@ -621,8 +621,7 @@ export default class App extends Component {
           this.setState((oldState) => {
             return { user: user }
           })
-          this.renew.timeout = !!getDecodedToken() ? getDecodedToken().exp * 1000 : new Date() * 1
-          console.log('Token valid for:', (this.renew.timeout - now) / 1000, 'date:', new Date(), 'JTI:', !!getDecodedToken() ? getDecodedToken().jti : null )
+          this.tokenExpiry()
         })
       }
     }, 10000)
