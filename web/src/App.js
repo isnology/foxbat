@@ -119,6 +119,7 @@ export default class App extends Component {
   renew = {
     timer: null,
     timeout: 0,
+    count: 0,
   }
 
   // App
@@ -604,6 +605,8 @@ export default class App extends Component {
 
     this.renew.timer = setInterval(() => {
       now = new Date() * 1
+      this.renew.count++
+      if (this.renew.count > 10) this.renew.count = 10
       if (now > this.renew.timeout) {
         // Interval complete.
         console.log('Token expired.')
@@ -611,7 +614,8 @@ export default class App extends Component {
           return { user: null }
         })
         this.renew.timeout = 99999999999999
-      } else if (now + 300000 > this.renew.timeout) {
+      } else if (now + 300000 > this.renew.timeout && this.renew.count > 9) {
+        this.renew.count = 0
         nextToken()
         .then((user) => {
           this.setState((oldState) => {
