@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Selection from './components/selection/Selection'
 import Panel from './components/panel/Panel'
@@ -7,43 +7,40 @@ import MyPanels from './components/modalWindows/MyPanels'
 import Admin from './components/admin/Admin'
 
 
-export default class Main extends Component {
+export default function Main({app}) {
 
-  render() {
-    const app = this.props.app
+  const {
+    modalWindow,
+    template,
+  } = app.state
 
-    const {
-      modalWindow,
-      template,
-    } = app.state
+  return (
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path='/' exact render={ () => (
+            !!template ?
+              <Panel app={ app }/>
+              :
+              <Selection app={ app }/>
+          )}/>
 
-    return (
-      <Router>
-        <div className="App">
-          <Switch>
-            <Route path='/' exact render={ () => (
-              !!template ?
-                <Panel app={ app }/>
-                :
-                <Selection app={ app }/>
-            )}/>
+          <Route path='/admin' exact render={ () => (
+            <Admin app={ app }/>
+          )}/>
+        </Switch>
 
-            <Route path='/admin' exact render={ () => (
-              <Admin app={ app }/>
-            )}/>
-          </Switch>
+        { modalWindow === "register" &&
+        <SignIn app={ app } register />
+        }
+        { modalWindow === "signIn" &&
+        <SignIn app={ app }/>
+        }
+        { modalWindow === "selectPanel" &&
+        <MyPanels app={ app }/>
+        }
+      </div>
+    </Router>
+  )
 
-          { modalWindow === "register" &&
-          <SignIn app={ app } register />
-          }
-          { modalWindow === "signIn" &&
-          <SignIn app={ app }/>
-          }
-          { modalWindow === "selectPanel" &&
-          <MyPanels app={ app }/>
-          }
-        </div>
-      </Router>
-    )
-  }
 }
