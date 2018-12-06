@@ -5,7 +5,6 @@ import { loadPanels } from "../../api/panels";
 
 export default function MyPanels ({app}) {
   const [panelList, setPanelList] = useState(null)
-  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (panelList === null) {
@@ -14,7 +13,7 @@ export default function MyPanels ({app}) {
         setPanelList(res)
       })
       .catch((res) => {
-        setError(res)
+        app.setState({error: res})
       })
     }
   })
