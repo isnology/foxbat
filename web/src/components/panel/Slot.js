@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 
-export default function Slot({ app, slot }){
+export default function Slot({ slot }){
 
-  const {
-    instruments,
-    selectedSlot,
-    slots,
-    template
-  } = app.state
+  const [instruments, setInstruments] = useGlobal('instruments')
+  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
+  const [slots, setSlots] = useGlobal('slots')
+  const [template, setTemplate] = useGlobal('template')
+  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+
+  const onSelectSlot = (slot) => {
+      setSelectedSlot(slot)
+      setSelectedInstrument(slots[slot])
+      setSelectedInstrumentClass(null)
+    }
 
   let size = slot.substring(0,1)
   let slotInstrument = null
@@ -39,7 +45,7 @@ export default function Slot({ app, slot }){
 
 
   return (
-      <div id={slot} className={classForSlot} onClick={() => app.onSelectSlot(slot)}>
+      <div id={slot} className={classForSlot} onClick={() => onSelectSlot(slot)}>
         { !!slotInstrument ?
             <div className="panel_image" style={picStyle}>
               <img className="panel_img" src={slotInstrument.picture_url} alt={slotInstrument.name} />

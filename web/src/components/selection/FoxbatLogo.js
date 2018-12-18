@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'reactn'
 import logo from '../../img/foxbatlogo.png'
 
 
-function FoxbatLogo() {
+export default function FoxbatLogo() {
   return (
     <div className="logo-div">
       <a href="http://foxbat.com.au/" target="_blank" rel="noopener noreferrer">
@@ -11,5 +11,3 @@ function FoxbatLogo() {
     </div>
   )
 }
-
-export default FoxbatLogo

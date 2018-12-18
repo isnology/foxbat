@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useGlobal, useState, useEffect } from 'reactn'
 import BasePopUp from './BasePopUp'
 import { loadPanels } from "../../api/panels";
 
@@ -6,14 +6,33 @@ import { loadPanels } from "../../api/panels";
 export default function MyPanels ({app}) {
   const [panelList, setPanelList] = useState(null)
 
+  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+  const [panelName, setPanelName] = useGlobal('panelName')
+  const [panelId, setPanelId] = useGlobal('panelId')
+  const [slots, setSlots] = useGlobal('slots')
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const [error, setError] = useGlobal('error')
+
+
+  const onSelectPanel = (panel) => {
+    const panelObj = JSON.parse(panel)
+
+    app.onSelectTemplate(panelObj.template)
+    setModalWindow(null)
+    setPanelName(panelObj.name)
+    setPanelId(panelObj.id)
+    setSlots(panelObj.slots)
+    setPanelSaved(true)
+  }
+
   useEffect(() => {
     if (panelList === null) {
       loadPanels()
       .then((res) => {
         setPanelList(res)
       })
-      .catch((res) => {
-        app.setState({error: res})
+      .catch((err) => {
+        setError(err)
       })
     }
   })
@@ -27,7 +46,7 @@ export default function MyPanels ({app}) {
       <h3>Click a saved panel to continue editing</h3>
 
       <select defaultValue="" onChange={ (event) => {
-        app.onSelectPanel(event.target.value)
+        onSelectPanel(event.target.value)
       } } size="5">
         <option key="1" disabled value=""> -- select a saved dashboard --</option>
         { !!panelList && panelList.map((panel) => (

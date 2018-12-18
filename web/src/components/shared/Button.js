@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'reactn'
 
-function Button({
+export default function Button({
   children,
   onClick = () => {},
   subClass = "std"
@@ -11,5 +11,3 @@ function Button({
     </button>
   )
 }
-
-export default Button

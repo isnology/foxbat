@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button'
 import BasePopUp from './BasePopUp'
+
 
 export default function SignIn({ app, register = false }) {
   return (

@@ -1,89 +1,87 @@
-import React, { Component } from 'react'
+import React, { useGlobal, useState } from 'reactn'
 import { validSize } from "./Sidebar"
 import InstrumentListRow from './InstrumentListRow'
 import _forEach from 'lodash/forEach'
 
-export default class InstrumentList extends Component {
-  state = {
-    overButton: {},
-    overInfo: {}
+
+export default function InstrumentList({ app, slotSize }) {
+
+  const [instruments, setInstruments] = useGlobal('instruments')
+  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+
+  const [overButton, setOverButton] = useState({})
+  const [overInfo, setOverInfo] = useState({})
+
+
+  const doSelectInstrument = (value) => {
+    app.onUpdateSlots(value)
+    setSelectedInstrument(value)
   }
 
-  onMouseOverButton = (index) => {
+  const onMouseOverButton = (index) => {
     let newVal = {}
     newVal[index] = true
-    this.setState({ overButton: newVal })
+    setOverButton(newVal)
   }
 
-  onMouseOutButton = () => {
-    this.setState({ overButton: {} })
+  const onMouseOutButton = () => {
+    setOverButton({})
   }
 
-  onMouseOverInfo = (index) => {
+  const onMouseOverInfo = (index) => {
     let newVal = {}
     newVal[index] = true
-    this.setState({ overInfo: newVal })
+    setOverInfo(newVal)
   }
 
-  onMouseOutInfo = () => {
-    this.setState({ overInfo: {} })
+  const onMouseOutInfo = () => {
+    setOverInfo({})
   }
 
-  render () {
-    const {
-      overButton,
-      overInfo
-    } = this.state
+  let list = {}
+  let list2 = []
+  let head = null
+  let heading = false
 
-    const {
-      app,
-      slotSize
-    } = this.props
+  _forEach(instruments, (value, key) => {
+    if (validSize(slotSize, value.size) && selectedInstrumentClass === value.instrument_class.name) {
+      //list[key] = value
+      if (!list[value.brand]) list[value.brand] = {}
+      list[value.brand][key] = value
+    }
+  })
 
-    let list = {}
-    let list2 = []
-    let head = null
-    let heading = false
-
-    _forEach(app.state.instruments, (value, key) => {
-      if (validSize(slotSize, value.size) && app.state.selectedInstrumentClass === value.instrument_class.name) {
-        //list[key] = value
-        if (!list[value.brand]) list[value.brand] = {}
-        list[value.brand][key] = value
-      }
+  _forEach(list, (brand) => {
+    _forEach(brand, (value) => {
+      list2.push(value)
     })
+  })
 
-    _forEach(list, (brand) => {
-      _forEach(brand, (value) => {
-        list2.push(value)
-      })
-    })
-
-    return (
-      <div className="instrument-list">
-        { list2.map((value, index) => {
-          if (head !== value.brand) {
-            heading = true
-            head = value.brand
-          }
-          else heading = false
-          return (
-            <InstrumentListRow
-              key={ index }
-              value={ value }
-              index={ index }
-              heading={ heading }
-              style={ !!overButton[index] || !!overInfo[index] ? "block" : "none" }
-              doSelectInstrument={ app.doSelectInstrument }
-              onMouseOverButton={ this.onMouseOverButton }
-              onMouseOutButton={ this.onMouseOutButton }
-              onMouseOverInfo={ this.onMouseOverInfo }
-              onMouseOutInfo={ this.onMouseOutInfo }
-            />
-          )
-        })
+  return (
+    <div className="instrument-list">
+      { list2.map((value, index) => {
+        if (head !== value.brand) {
+          heading = true
+          head = value.brand
         }
-      </div>
-    )
-  }
+        else heading = false
+        return (
+          <InstrumentListRow
+            key={ index }
+            value={ value }
+            index={ index }
+            heading={ heading }
+            style={ !!overButton[index] || !!overInfo[index] ? "block" : "none" }
+            doSelectInstrument={ doSelectInstrument }
+            onMouseOverButton={ onMouseOverButton }
+            onMouseOutButton={ onMouseOutButton }
+            onMouseOverInfo={ onMouseOverInfo }
+            onMouseOutInfo={ onMouseOutInfo }
+          />
+        )
+      })
+      }
+    </div>
+  )
 }

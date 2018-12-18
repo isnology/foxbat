@@ -5,14 +5,12 @@ import Panel from './components/panel/Panel'
 import SignIn from './components/modalWindows/SignIn'
 import MyPanels from './components/modalWindows/MyPanels'
 import Admin from './components/admin/Admin'
+import { useGlobal } from 'reactn'
 
 
 export default function Main({app}) {
-
-  const {
-    modalWindow,
-    template,
-  } = app.state
+  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+  const [template, setTemplate] = useGlobal('template')
 
   return (
     <Router>
@@ -20,24 +18,24 @@ export default function Main({app}) {
         <Switch>
           <Route path='/' exact render={ () => (
             !!template ?
-              <Panel app={ app }/>
+              <Panel app={app}/>
               :
-              <Selection app={ app }/>
+              <Selection app={app}/>
           )}/>
 
           <Route path='/admin' exact render={ () => (
-            <Admin app={ app }/>
+            <Admin app={app} />
           )}/>
         </Switch>
 
         { modalWindow === "register" &&
-        <SignIn app={ app } register />
+        <SignIn app={app} register />
         }
         { modalWindow === "signIn" &&
-        <SignIn app={ app }/>
+        <SignIn app={app} />
         }
         { modalWindow === "selectPanel" &&
-        <MyPanels app={ app }/>
+        <MyPanels app={app} />
         }
       </div>
     </Router>

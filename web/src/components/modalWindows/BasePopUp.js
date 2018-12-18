@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'reactn'
 import RoundExitButton from './RoundExitButton';
 
-function BasePopUp({ children, onExit, errMsg }) {
+export default function BasePopUp({ children, onExit, errMsg }) {
   return (
     <div className="base-popup">
       <RoundExitButton
@@ -18,5 +18,3 @@ function BasePopUp({ children, onExit, errMsg }) {
     </div>
   )
 }
-
-export default BasePopUp

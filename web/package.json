@@ -17,7 +17,8 @@
     "react-modal": "^3.4.1",
     "react-rangeslider": "^2.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "reactn": "^0.1.6"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

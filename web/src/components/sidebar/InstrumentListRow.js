@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, {Fragment} from 'reactn'
 import numeral from "numeral";
 import { turnTextToAnkor } from "./InstrumentPreview";
 

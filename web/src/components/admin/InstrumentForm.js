@@ -1,13 +1,27 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button'
 import Modal from 'react-modal'
 import InstrumentListRow from './InstrumentListRow'
 import _map from 'lodash/map'
+import { table, useFormInput } from '../../App'
 
 
-export default function InstrumentForm({ app }) {
+export default function InstrumentForm({app}) {
 
   Modal.setAppElement('#root')
+
+  const [classes, setClasses] = useGlobal('classes')
+  const [instruments, setInstruments] = useGlobal('instruments')
+
+  const [modalOpen, setModalOpen] = useGlobal('modalOpen')
+  const name = useFormInput('name')
+  const brand = useFormInput('brand')
+  const model = useFormInput('model')
+  const partNo = useFormInput('partNo')
+  const textarea = useFormInput('textarea')
+  const price = useFormInput('price')
+  const size = useFormInput('size')
+  const klass = useFormInput('Klass')
 
   const form = {
     display: "flex",
@@ -53,27 +67,20 @@ export default function InstrumentForm({ app }) {
     height   : "79vh",
   }
 
-  const onChange = (event) => {
-    app.onChange(event)
-    if (event.target.name === 'size') {
-      const value = event.target.value
-      app.setState({
-        width: app.table.slot[value].wide,
-        height: app.table.slot[value].hi
-      })
-    }
+  const onCloseModal = () => {
+    setModalOpen(false)
+    app.onAdminClear()
   }
 
   return (
     <div className="admin_instrument-form" style={form} >
-      <Button onClick={app.onOpenModal}>Edit Saved Instrument</Button>
+      <Button onClick={() => setModalOpen(true)}>Edit Saved Instrument</Button>
       <label style={label}>
         {'Name: '}
         <input style={input}
           type='text'
           name='name'
-          onChange={onChange}
-          value={app.state.name}
+          {...name}
         />
       </label>
       <label style={label}>
@@ -81,8 +88,7 @@ export default function InstrumentForm({ app }) {
         <input style={input}
           type='text'
           name='brand'
-          onChange={onChange}
-          value={app.state.brand}
+          {...brand}
         />
       </label>
       <label style={label}>
@@ -90,8 +96,7 @@ export default function InstrumentForm({ app }) {
         <input style={input}
           type='text'
           name='model'
-          onChange={onChange}
-          value={app.state.model}
+          {...model}
         />
       </label>
       <label style={label}>
@@ -99,16 +104,14 @@ export default function InstrumentForm({ app }) {
         <input style={input}
           type='text'
           name='partNo'
-          onChange={onChange}
-          value={app.state.partNo}
+          {...partNo}
         />
       </label>
       <label style={label}>
         {'Text: '}
         <textarea style={input}
           name='textarea'
-          onChange={onChange}
-          value={app.state.textarea}
+          {...textarea}
         />
       </label>
       <label style={label}>
@@ -116,42 +119,41 @@ export default function InstrumentForm({ app }) {
         <input style={input}
           type='number'
           name='price'
-          onChange={onChange}
-          value={app.state.price}
+          {...price}
         />
       </label>
       <label style={label}>
         {'Size: '}
-        <select style={input} name="size" onChange={onChange} value={app.state.size}>
-          <option value="L">{app.table.size['L']}</option>
-          <option value="M">{app.table.size['M']}</option>
-          <option value="S">{app.table.size['S']}</option>
-          <option value="D">{app.table.size['D']}</option>
-          <option value="R">{app.table.size['R']}</option>
+        <select style={input} name="size" {...size}>
+          <option value="L">{table.size['L']}</option>
+          <option value="M">{table.size['M']}</option>
+          <option value="S">{table.size['S']}</option>
+          <option value="D">{table.size['D']}</option>
+          <option value="R">{table.size['R']}</option>
         </select>
       </label>
       <label style={Object.assign(label, last)} >
         {'Instrument Class: '}
-        <select style={input} name="class" onChange={onChange} value={app.state.class}>
+        <select style={input} name="klass" {...klass}>
           <option key="x" value=""></option>
-          { !!app.state.classes && app.state.classes.map((value, index) => (
+          { !!classes && classes.map((value, index) => (
             <option key={index} value={value.id}>{value.name}</option>
           ))}
         </select>
       </label>
 
       <Modal
-        isOpen={app.state.modalOpen}
-        onRequestClose={app.onCloseModal}
+        isOpen={modalOpen}
+        onRequestClose={onCloseModal}
         style={modal}
         contentLabel="Instrument List"
       >
         <div style={outerModal}>
           <h2>Instrument List</h2>
-          <Button onClick={app.onCloseModal}>Close</Button>
+          <Button onClick={onCloseModal}>Close</Button>
           <div style={innerModal}>
-            { _map(app.state.instruments, (value, key) => (
-              <InstrumentListRow key={ key } app={ app } value={ value }/>
+            { _map(instruments, (value, key) => (
+              <InstrumentListRow key={ key } value={ value }/>
             ))}
           </div>
         </div>

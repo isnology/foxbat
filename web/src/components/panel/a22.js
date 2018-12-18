@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'reactn'
 
 function A22outline() {
   return(

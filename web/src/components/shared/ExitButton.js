@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'reactn'
 
-function ExitButton({ onExitClick }) {
+export default function ExitButton({ onExitClick }) {
   return (
     <span className="btn--x" onClick={ onExitClick }>&#9747;</span>
   )
 }
-
-export default ExitButton

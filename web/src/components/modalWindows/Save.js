@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button'
 import BasePopUp from './BasePopUp'
 
-export default function Save({ app }) {
+
+export default function Save({app}) {
+
   return (
     <BasePopUp onExit={ app.onExit } errMsg={ app.message() }>
       <p className="form-text">

@@ -1,7 +1,26 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 
 
 export default function InstrumentListRow({ app, value }) {
+
+  const [instruments, setInstruments] = useGlobal('instruments')
+
+  const [size, setSize] = useGlobal('size')
+  const [vOffset, setVOffset] = useGlobal('vOffset')
+  const [hOffset, setHOffset] = useGlobal('hoffset')
+  const [width, setWidth] = useGlobal('width')
+  const [height, setHeight] = useGlobal('height')
+  const [modalOpen, setModalOpen] = useGlobal('modalOpen')
+  const [editInstrument, setEditInstrument] = useGlobal('editInstrument')
+  const [klass, setKlass] = useGlobal('Klass')
+  const [name, setName] = useGlobal('name')
+  const [brand, setBrand] = useGlobal('brand')
+  const [model, setModel] = useGlobal('model')
+  const [partNo, setPartNo] = useGlobal('partNo')
+  const [textarea, setTextarea] = useGlobal('textarea')
+  const [pictureUrl, setPictureUrl] = useGlobal('pictureUrl')
+  const [uploaded, setUploaded] = useGlobal('upload')
+  const [price, setPrice] = useGlobal('price')
 
   const descriptions = {
     width: "70%",
@@ -28,9 +47,29 @@ export default function InstrumentListRow({ app, value }) {
     left: "6rem",
   }
 
+  const onSelect = (id) => {
+    const inst = instruments[id]
+    setEditInstrument(id)
+    setModalOpen(false)
+    setName(inst.name)
+    setBrand(inst.brand)
+    setModel(inst.model)
+    setPartNo(inst.part_no)
+    setTextarea(inst.text)
+    setPrice(inst.price)
+    setSize(inst.size)
+    setKlass(inst.instrument_class.id)
+    setPictureUrl(inst.picture_url)
+    setUploaded(inst.uploaded)
+    setWidth(parseFloat(inst.picture_width))
+    setHeight(parseFloat(inst.picture_height))
+    setHOffset(parseFloat(inst.picture_h_offset))
+    setVOffset(parseFloat(inst.picture_v_offset))
+  }
+
   return (
       <button className="btn btn--admin-instrument"
-              onClick={ () => app.onSelect(value.id) }
+              onClick={ () => onSelect(value.id) }
       >
         <div style={descriptions}>
           <div style={style}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button';
 import numeral from "numeral";
 
@@ -14,9 +14,19 @@ export function turnTextToAnkor(text) {
   }
 }
 
-export default function InstrumentPreview({ app }) {
+export default function InstrumentPreview({app}) {
 
-  const instrument = app.state.instruments[app.state.selectedInstrument]
+  const [instruments, setInstruments] = useGlobal('instruments')
+  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+
+  const instrument = instruments[selectedInstrument]
+
+  const onRemove = () => {
+    app.onUpdateSlots(null)
+    setSelectedInstrument(null)
+    setSelectedInstrumentClass(null)
+  }
 
   return (
     <div className="sidebar_preview">
@@ -25,7 +35,7 @@ export default function InstrumentPreview({ app }) {
         (<img src={ instrument.picture_url } alt={instrument.name} className="instrument-preview--img" />)
         }
       </div>
-      <Button onClick={ app.onRemove }>Remove</Button>
+      <Button onClick={ onRemove }>Remove</Button>
       <div className="sidebar_preview_instrument-details">
         <p className="sidebar_preview_instrument-details--price">{ numeral(instrument.price/100).format('$0,0.00') } USD</p>
         <div className="sidebar_preview_text">

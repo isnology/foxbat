@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button'
 import Slider from 'react-rangeslider'
+import { table, html, useFormInput } from '../../App'
 
 
-export default function ImageAlign({ app }) {
+export default function ImageAlign({app}) {
+
+  const [size, setSize] = useGlobal('size')
+  const [vOffset, setVOffset] = useGlobal('vOffset')
+  const [hOffset, setHOffset] = useGlobal('hoffset')
+  const [width, setWidth] = useGlobal('width')
+  const [height, setHeight] = useGlobal('height')
+  const pictureUrl = useFormInput('pictureUrl')
+
 
   const style = {
     display: "flex",
@@ -22,13 +31,11 @@ export default function ImageAlign({ app }) {
     width: "30rem"
   }
 
-  const size = app.state.size
-
   const container = {
     position: "relative",
     display: "block",
-    width: app.table.imageEdit[size].wide,
-    height: app.table.imageEdit[size].hi,
+    width: table.imageEdit[size].wide,
+    height: table.imageEdit[size].hi,
     //background: "lightblue"
   }
 
@@ -111,12 +118,61 @@ export default function ImageAlign({ app }) {
   }
 
   const picStyle = {
-    width: `${app.state.width}vw`,
-    height: `${app.state.height}vw`,
-    marginLeft: `${app.state.hOffset}vw`,
-    marginTop: `${app.state.vOffset}vw`
+    width: `${width}vw`,
+    height: `${height}vw`,
+    marginLeft: `${hOffset}vw`,
+    marginTop: `${vOffset}vw`
   }
 
+
+  const onUp = () => {
+    const val = Math.round((vOffset - .01) * 1000) / 1000
+    setVOffset(val)
+  }
+
+  const onDown = () => {
+    const val = Math.round((vOffset + .01) * 1000) / 1000
+    setVOffset(val)
+  }
+
+  const onLeft = () => {
+    const val = Math.round((hOffset - .01) * 1000) / 1000
+    setHOffset(val)
+  }
+
+  const onRight = () => {
+    const val = Math.round((hOffset + .01) * 1000) / 1000
+    setHOffset(val)
+  }
+
+  const factor = () => {
+    const width = table.slot[size].wide
+    const height = table.slot[size].hi
+    return height / width
+  }
+
+  const onBigger = () => {
+    setWidth(Math.round((width + .01) * 1000) / 1000)
+    setHeight(Math.round((height + .01 * factor()) * 1000) / 1000)
+  }
+
+  const onSmaller = () => {
+    setWidth(Math.round((width - .01) * 1000) / 1000)
+    setHeight(Math.round((height - .01 * factor()) * 1000) / 1000)
+  }
+
+  const onChangeH = (value) => {
+    setHOffset(value)
+  }
+
+  const onChangeV = (value) => {
+    setVOffset(-value)
+  }
+
+  const onChangeS = (value) => {
+    setWidth(Math.round(value * 1000) / 1000)
+    setHeight(Math.round((height + (value - width) * factor()) * 1000) / 1000)
+  }
 
   return (
     <div style={style}>
@@ -125,8 +181,7 @@ export default function ImageAlign({ app }) {
         <input style={input}
           type='text'
           name='pictureUrl'
-          onChange={app.onChange}
-          value={app.state.pictureUrl}
+          {...pictureUrl}
         />
       </label>
       <div style={container}>
@@ -137,9 +192,9 @@ export default function ImageAlign({ app }) {
             max={5}
             step={.01}
             tooltip={false}
-            value={-app.state.vOffset}
+            value={-vOffset}
             orientation="vertical"
-            onChange={app.onChangeV}
+            onChange={onChangeV}
           />
         </div>
         <div style={horizontalSlider}>
@@ -148,43 +203,44 @@ export default function ImageAlign({ app }) {
             max={5}
             step={.01}
             tooltip={false}
-            value={app.state.hOffset}
-            onChange={app.onChangeH}
+            value={hOffset}
+            onChange={onChangeH}
           />
         </div>
         <div style={buttonT} >
-          <div onClick={app.onUp} className="btn btn-slider" >{app.html.plus}</div>
+          <div onClick={onUp} className="btn btn-slider" >{html.plus}</div>
         </div>
         <div style={buttonB} >
-          <div onClick={app.onDown} className="btn btn-slider" >{app.html.minus}</div>
+          <div onClick={onDown} className="btn btn-slider" >{html.minus}</div>
         </div>
         <div style={buttonL} >
-          <div onClick={app.onLeft} className="btn btn-slider" >{app.html.minus}</div>
+          <div onClick={onLeft} className="btn btn-slider" >{html.minus}</div>
         </div>
         <div style={buttonR} >
-          <div onClick={app.onRight} className="btn btn-slider" >{app.html.plus}</div>
+          <div onClick={onRight} className="btn btn-slider" >{html.plus}</div>
         </div>
         <div style={scaleSlider}>
           <Slider
-            min={app.table.min[size]}
-            max={app.table.max[size]}
+            min={table.min[size]}
+            max={table.max[size]}
             step={.01}
             tooltip={false}
-            value={app.state.width}
-            onChange={app.onChangeS}
+            value={width}
+            onChange={onChangeS}
           />
         </div>
         <div className={`size-${size}`} style={slot}>
           <div className="panel_image" style={picStyle}>
-            <img className="panel_img" src={app.state.pictureUrl} alt="instrument"/>
+            <img className="panel_img" src={pictureUrl.value} alt="instrument"/>
           </div>
         </div>
       </div>
 
       <div style={container2}>
-        <Button onClick={app.onSmaller}>Smaller</Button>
-        <Button onClick={app.onBigger}>Bigger</Button>
+        <Button onClick={onSmaller}>Smaller</Button>
+        <Button onClick={onBigger}>Bigger</Button>
       </div>
     </div>
   )
 }
+

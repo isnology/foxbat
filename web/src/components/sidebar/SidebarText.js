@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'reactn'
 import { sideBarMessages } from '../../constants/messages'
 
 export default function SidebarText() {

@@ -1,10 +1,8 @@
-import React from 'react'
+import React from 'reactn'
 import ExitButton from '../shared/ExitButton'
 
-function RoundExitButton({ onExitClick }) {
+export default function RoundExitButton({ onExitClick }) {
   return (
     <div className="btn--round-exit" ><ExitButton onExitClick={ onExitClick } /></div>
   )
 }
-
-export default RoundExitButton
