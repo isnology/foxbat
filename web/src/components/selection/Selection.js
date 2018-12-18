@@ -9,13 +9,19 @@ import a22Thumb from '../../img/a22.png'
 import a22DigitalThumb from '../../img/a22digital.png'
 import a32Thumb from '../../img/a32.png'
 import a32DigitalThumb from '../../img/a32digital.png'
+import { useAdmin, useSignedIn, useEmail, useSignOut } from '../../App'
+import { useSelectTemplate } from '../modalWindows/MyPanels'
 
 
-export default function Selection({app}) {
+export default function Selection() {
   const [templateType, setTemplateType] = useState("none")
-
   const [modalWindow, setModalWindow] = useGlobal('modalWindow')
   const [touch, setTouch] = useGlobal('touch')
+  const isAdmin = useAdmin()
+  const signedIn = useSignedIn()
+  const email = useEmail()
+  const onSignOut = useSignOut()
+  const onSelectTemplate = useSelectTemplate()
 
 
   const panel = {
@@ -30,18 +36,18 @@ export default function Selection({app}) {
     a22: {
       name: "Analogue A-22 Panel",
       img: a22Thumb,
-      onClick: () => app.onSelectTemplate("a22"),
+      onClick: () => onSelectTemplate("a22"),
       name2: "Digital A-22 Panel",
       img2: a22DigitalThumb,
-      onClick2: () => app.onSelectTemplate("a22Digital")
+      onClick2: () => onSelectTemplate("a22Digital")
     },
     a32: {
       name: "Analogue A-32 Panel",
       img: a32Thumb,
-      onClick: () => app.onSelectTemplate("a32"),
+      onClick: () => onSelectTemplate("a32"),
       name2: "Digital A-32 Panel",
       img2: a32DigitalThumb,
-      onClick2: () => app.onSelectTemplate("a32Digital")
+      onClick2: () => onSelectTemplate("a32Digital")
     }
   }
 
@@ -50,7 +56,7 @@ export default function Selection({app}) {
   return (
     <Fragment>
       <Header>
-        { app.isAdmin() &&
+        { isAdmin &&
         <Link to="/admin" className="btn btn--navbar btn--react-link">
           Admin Tasks
         </Link>
@@ -59,7 +65,7 @@ export default function Selection({app}) {
 
       <div className="welcome-container">
         <h1>Welcome to the Foxbat Instrument Panel Configurator</h1>
-        { app.signedIn() && <h3>You are signed in as { app.email() }</h3> }
+        { signedIn && <h3>You are signed in as { email }</h3> }
         <h2>
           { templateType === "none" ? "Click on a Foxbat model to start configuring a new instrument panel"
             : "Click on a template to continue"
@@ -79,10 +85,10 @@ export default function Selection({app}) {
         </div>
         { templateType === "none" ?
             <Fragment>
-              { app.signedIn() ?
+              { signedIn ?
                   <div className="panel-button-group">
                     <Button onClick={ () => setModalWindow('selectPanel') }>Saved panels</Button>
-                    <Button onClick={ () => app.onSignOut() }>Sign out</Button>
+                    <Button onClick={ onSignOut }>Sign out</Button>
                   </div>
                 :
                   <div className="panel-button-group">

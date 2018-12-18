@@ -3,16 +3,51 @@ import Button from '../shared/Button'
 import Modal from 'react-modal'
 import InstrumentListRow from './InstrumentListRow'
 import _map from 'lodash/map'
-import { table, useFormInput } from '../../App'
+import { table, useFormInput, useAdminClear } from './Admin'
 
 
-export default function InstrumentForm({app}) {
+const form = {
+  display: "flex",
+  alignItems: "center",
+  flexDirection: "column",
+  flex: "1"
+}
+
+const input = {
+  width: "30rem"
+}
+
+const modal = {
+  content: {
+    top        : '53%',
+    left       : '50%',
+    right      : 'auto',
+    bottom     : 'auto',
+    marginRight: '-50%',
+    transform  : 'translate(-50%, -50%)',
+    height     : "92vh",
+  }
+}
+
+const outerModal = {
+  display      : "flex",
+  flexDirection: "column",
+  alignItems   : "center"
+}
+const innerModal = {
+  marginTop: ".5rem",
+  display  : "block",
+  overflowY: 'scroll',
+  height   : "79vh",
+}
+
+
+export default function InstrumentForm() {
 
   Modal.setAppElement('#root')
 
   const [classes, setClasses] = useGlobal('classes')
   const [instruments, setInstruments] = useGlobal('instruments')
-
   const [modalOpen, setModalOpen] = useGlobal('modalOpen')
   const name = useFormInput('name')
   const brand = useFormInput('brand')
@@ -22,54 +57,16 @@ export default function InstrumentForm({app}) {
   const price = useFormInput('price')
   const size = useFormInput('size')
   const klass = useFormInput('Klass')
+  const onCloseModal = useCloseModal()
 
-  const form = {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "column",
-    flex: "1"
-  }
-
-  const label = {
-    width: "30rem",
-    padding: ".4rem 0 .1rem 0"
-  }
-
-  const input = {
-    width: "30rem"
-  }
 
   const last = {
     marginBottom: "2rem"
   }
 
-  const modal = {
-    content: {
-      top        : '53%',
-      left       : '50%',
-      right      : 'auto',
-      bottom     : 'auto',
-      marginRight: '-50%',
-      transform  : 'translate(-50%, -50%)',
-      height     : "92vh",
-    }
-  }
-
-  const outerModal = {
-    display      : "flex",
-    flexDirection: "column",
-    alignItems   : "center"
-  }
-  const innerModal = {
-    marginTop: ".5rem",
-    display  : "block",
-    overflowY: 'scroll',
-    height   : "79vh",
-  }
-
-  const onCloseModal = () => {
-    setModalOpen(false)
-    app.onAdminClear()
+  const label = {
+    width: "30rem",
+    padding: ".4rem 0 .1rem 0"
   }
 
   return (
@@ -160,4 +157,16 @@ export default function InstrumentForm({app}) {
       </Modal>
     </div>
   )
+}
+
+// hooks
+
+function useCloseModal() {
+  const [modalOpen, setModalOpen] = useGlobal('modalOpen')
+  const onAdminClear = useAdminClear()
+
+  return () => {
+    setModalOpen(false)
+    onAdminClear()
+  }
 }

@@ -6,7 +6,6 @@ import _forEach from 'lodash/forEach'
 
 
 export default function InstrumentClassList({ slotSize, }) {
-
   const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
   const [instruments, setInstruments] = useGlobal('instruments')
 

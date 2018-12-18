@@ -1,29 +1,16 @@
 import React, { useGlobal, useState, useEffect } from 'reactn'
 import BasePopUp from './BasePopUp'
 import { loadPanels } from "../../api/panels";
+import { useExit, useMessage } from '../../App'
 
 
-export default function MyPanels ({app}) {
+export default function MyPanels () {
   const [panelList, setPanelList] = useState(null)
-
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
-  const [panelName, setPanelName] = useGlobal('panelName')
-  const [panelId, setPanelId] = useGlobal('panelId')
-  const [slots, setSlots] = useGlobal('slots')
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
   const [error, setError] = useGlobal('error')
+  const onExit = useExit()
+  const message = useMessage()
+  const onSelectPanel = useSelectPanel()
 
-
-  const onSelectPanel = (panel) => {
-    const panelObj = JSON.parse(panel)
-
-    app.onSelectTemplate(panelObj.template)
-    setModalWindow(null)
-    setPanelName(panelObj.name)
-    setPanelId(panelObj.id)
-    setSlots(panelObj.slots)
-    setPanelSaved(true)
-  }
 
   useEffect(() => {
     if (panelList === null) {
@@ -38,7 +25,7 @@ export default function MyPanels ({app}) {
   })
 
   return (
-    <BasePopUp onExit={ app.onExit } errMsg={ app.message() }>
+    <BasePopUp onExit={ onExit } errMsg={ message }>
 
       <h2>Welcome back to the <strong>Foxbat</strong> Instrument Panel Configurator</h2>
       <h3>Exit to start a new instrument panel</h3>
@@ -56,4 +43,45 @@ export default function MyPanels ({app}) {
 
     </BasePopUp>
   )
+}
+
+// hooks
+
+function useSelectPanel() {
+  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+  const [panelName, setPanelName] = useGlobal('panelName')
+  const [panelId, setPanelId] = useGlobal('panelId')
+  const [slots, setSlots] = useGlobal('slots')
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const onSelectTemplate = useSelectTemplate()
+
+  return (panel) => {
+    const panelObj = JSON.parse(panel)
+
+    onSelectTemplate(panelObj.template)
+    setModalWindow(null)
+    setPanelName(panelObj.name)
+    setPanelId(panelObj.id)
+    setSlots(panelObj.slots)
+    setPanelSaved(true)
+  }
+}
+
+export function useSelectTemplate() {
+  const [template, setTemplate] = useGlobal('template')
+  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+
+  return (templateVal) => {
+    let templateSlotsVal
+    if (templateVal === 'a22' || templateVal === 'a32') {
+      templateSlotsVal = require('../../data').analogSlots
+    }
+    else {
+      templateSlotsVal = require('../../data').digitalSlots
+    }
+    setTemplate(templateVal)
+    setTemplateSlots(templateSlotsVal)
+    setPanelSaved(true)
+  }
 }

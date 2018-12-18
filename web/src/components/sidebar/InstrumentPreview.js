@@ -1,32 +1,16 @@
 import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button';
 import numeral from "numeral";
+import { useUpdateSlots } from '../panel/Panel'
 
 
-export function turnTextToAnkor(text) {
-  if (text.indexOf("http") >= 0) {
-    return (
-      <a href={ text } target="_blank" rel="noopener noreferrer">Link (opens in new tab)</a>
-    )
-  }
-  else {
-    return text
-  }
-}
-
-export default function InstrumentPreview({app}) {
+export default function InstrumentPreview() {
 
   const [instruments, setInstruments] = useGlobal('instruments')
   const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
-  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+  const onRemove = useRemove()
 
   const instrument = instruments[selectedInstrument]
-
-  const onRemove = () => {
-    app.onUpdateSlots(null)
-    setSelectedInstrument(null)
-    setSelectedInstrumentClass(null)
-  }
 
   return (
     <div className="sidebar_preview">
@@ -49,4 +33,31 @@ export default function InstrumentPreview({app}) {
       </div>
     </div>
   )
+}
+
+// hooks
+
+function useRemove() {
+  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+  const onUpdateSlots = useUpdateSlots()
+
+  return () => {
+    onUpdateSlots(null)
+    setSelectedInstrument(null)
+    setSelectedInstrumentClass(null)
+  }
+}
+
+// exports
+
+export function turnTextToAnkor(text) {
+  if (text.indexOf("http") >= 0) {
+    return (
+      <a href={ text } target="_blank" rel="noopener noreferrer">Link (opens in new tab)</a>
+    )
+  }
+  else {
+    return text
+  }
 }

@@ -17,25 +17,28 @@ import video1 from '../../img/Up.mp4'
 import video2 from '../../img/Up.webm'
 import { emailPanelDesign } from "../../api/emailSubmission";
 import { createPanel, deletePanel, updatePanel } from '../../api/panels'
+import { useSignedIn, useSignOut, useEmail } from '../../App'
+import { useSelectTemplate } from '../modalWindows/MyPanels'
 
 
-export default function Panel({app}) {
-  const [user, setUser] = useGlobal('user')
+export default function Panel() {
   const [modalWindow, setModalWindow] = useGlobal('modalWindow')
-
   const [panelName, setPanelName] = useGlobal('panelName')
   const [panelId, setPanelId] = useGlobal('panelId')
   const [slots, setSlots] = useGlobal('slots')
   const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
-  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
-
   const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
   const [template, setTemplate] = useGlobal('template')
-  const [instruments, setInstruments] = useGlobal('instruments')
-
-  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
-  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
-  const [error, setError] = useGlobal('error')
+  const signedIn = useSignedIn()
+  const onSignOut = useSignOut()
+  const email = useEmail()
+  const onSaveCheck = useSaveCheck()
+  const submitPanel = useSubmitPanel()
+  const totalCost = useTotalCost()
+  const onClearCurrent = useClearCurrent()
+  const onSave = useOnSave()
+  const onDelete = useDelete()
+  const onRefreshApp = useRefreshApp()
 
   const once = 1
 
@@ -45,66 +48,7 @@ export default function Panel({app}) {
     return () => window.removeEventListener('beforeunload', onSaveCheck)
   }, [once])
 
-  const onSaveCheck = (e) => {
-    if (panelSaved === false) {
-      e.returnValue = "You may have unsaved changes. Are you sure you want to leave?"
-    }
-  }
 
-  const submitPanel = () => {
-    if (window.confirm("Click OK to confirm and send your panel design to Foxbat Australia")) {
-      const data = {
-        user_id: user.sub,
-        email: app.email(),
-        slots: slots,
-        template: template,
-        templateSlots: templateSlots
-      }
-      emailPanelDesign(data)
-      .then((res) => {
-        alert("Panel design has been sent")
-      })
-      .catch((err) => {
-        alert("There was an error sending your design, please get in contact with us to resolve this issue")
-      })
-    }
-  }
-
-  const totalCost = () => {
-    let totalPrices = 0
-    _forEach(slots, (value) => {
-      totalPrices += instruments[value].price
-    })
-    return totalPrices / 100
-  }
-
-  const onClear = () => {
-    setSlots({})
-    setSelectedSlot(null)
-    setSelectedInstrument(null)
-  }
-
-  const onClearCurrent = () => {
-    if (panelSaved === false) {
-      if (window.confirm("Are you sure you want to clear the current panel? Any unsaved changes will be lost.")) {
-        setSelectedInstrumentClass(null)
-        onClear()
-        //const key = "paneldata"
-        //if (!!localStorage.getItem(key)) {
-        //  let localSlots = JSON.parse(localStorage.getItem(key))
-        //  localSlots.slots.map(slot => {
-        //    slot.instrument = null
-        //    return slot
-        //  })
-        //localStorage.setItem(key, JSON.stringify(localSlots))
-        //}
-      }
-    }
-    else {
-      setSelectedInstrumentClass(null)
-      onClear()
-    }
-  }
 
   // const onSelectSlot = (slot) => {
   //   setSelectedSlot(slot)
@@ -112,84 +56,39 @@ export default function Panel({app}) {
   //   setSelectedInstrumentClass(null)
   // }
 
-  const onSave = () => {
-    setError(null)
-    if (!app.signedIn()) {
-      setError({ message: "You must sign in before you can save your panel" })
-      return
-    }
-    if (!panelSaved) {
-      if (!!panelName) app.doSave({ name: panelName })
-      else setModalWindow('save')
-    }
-  }
-
-  const onDelete = () => {
-    deletePanel(panelId)
-    .catch((errorVal) => {
-      setError(errorVal)
-    })
-    onRefreshApp(false)
-  }
-
-  const onRefreshApp = (confirm) => {
-    if (panelSaved === false) {
-      if (confirm && !window.confirm("Are you sure you want to exit and return to the start? Any unsaved changes to" +
-        " this panel will be lost.")) {
-        return
-      }
-      else {
-        onRefresh()
-      }
-    }
-    else {
-      onRefresh()
-    }
-  }
-
-  const onRefresh = () => {
-    setPanelName(null)
-    setPanelId(null)
-    setTemplateSlots(null)
-    setSlots({})
-    setSelectedSlot(null)
-    setSelectedInstrument(null)
-    app.onSelectTemplate(null)
-  }
-
 
   return (
     <div className="configurator">
       <Header>
-        { app.signedIn() ?
-          <Button onClick={ app.onSignOut } subClass="navbar">Sign Out</Button>
+        { signedIn ?
+          <Button onClick={ onSignOut } subClass="navbar">Sign Out</Button>
           :
           <Button onClick={ () => setModalWindow("signIn") } subClass="navbar">Sign In</Button>
         }
-        { !app.signedIn() &&
+        { !signedIn &&
           <Button onClick={ () => setModalWindow("register") } subClass="navbar">Register</Button>
         }
-        { app.signedIn() &&
-          <Button onClick={ app.onSave } subClass={ !!panelSaved ? "saved btn--navbar" : "navbar" }>
+        { signedIn &&
+          <Button onClick={ onSave } subClass={ !!panelSaved ? "saved btn--navbar" : "navbar" }>
             Save
           </Button>
         }
-        { app.signedIn() &&
+        { signedIn &&
           <SubmitButton onClick={ submitPanel } subClass="navbar"
-                        email={ app.email() }
+                        email={ email }
                         slots={ slots }
                         template={ template }
                         templateSlots={ templateSlots }
           />
         }
-        { app.signedIn() && !!panelId &&
+        { signedIn && !!panelId &&
           <Button onClick={ onDelete } subClass="navbar">Delete panel</Button>
         }
         <Button onClick={ onClearCurrent } subClass="navbar">Clear panel</Button>
         <Button onClick={ () => onRefreshApp(true) } subClass="navbar">Back to start</Button>
       </Header>
 
-      <Sidebar app={app}/>
+      <Sidebar />
 
       <div className="panel">
         <div className="panel_bg-video">
@@ -225,8 +124,239 @@ export default function Panel({app}) {
       </div>
 
       { modalWindow === "save" &&
-        <Save app={app}/>
+        <Save />
       }
     </div>
   )
+}
+
+// hooks
+
+function useSaveCheck() {
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+
+  return (e) => {
+    if (panelSaved === false) {
+      e.returnValue = "You may have unsaved changes. Are you sure you want to leave?"
+    }
+  }
+}
+
+function useSubmitPanel() {
+  const [user, setUser] = useGlobal('user')
+  const [slots, setSlots] = useGlobal('slots')
+  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
+  const [template, setTemplate] = useGlobal('template')
+  const email = useEmail()
+
+  return () => {
+    if (window.confirm("Click OK to confirm and send your panel design to Foxbat Australia")) {
+      const data = {
+        user_id: user.sub,
+        email: email,
+        slots: slots,
+        template: template,
+        templateSlots: templateSlots
+      }
+      emailPanelDesign(data)
+      .then((res) => {
+        alert("Panel design has been sent")
+      })
+      .catch((err) => {
+        alert("There was an error sending your design, please get in contact with us to resolve this issue")
+      })
+    }
+  }
+}
+
+function useTotalCost() {
+  const [slots, setSlots] = useGlobal('slots')
+  const [instruments, setInstruments] = useGlobal('instruments')
+
+  return () => {
+    let totalPrices = 0
+    _forEach(slots, (value) => {
+      totalPrices += instruments[value].price
+    })
+    return totalPrices / 100
+  }
+}
+
+function useClear() {
+  const [slots, setSlots] = useGlobal('slots')
+  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
+  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+
+  return () => {
+    setSlots({})
+    setSelectedSlot(null)
+    setSelectedInstrument(null)
+  }
+}
+
+function useClearCurrent() {
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+  const onClear = useClear()
+
+  return () => {
+    if (panelSaved === false) {
+      if (window.confirm("Are you sure you want to clear the current panel? Any unsaved changes will be lost.")) {
+        setSelectedInstrumentClass(null)
+        onClear()
+        //const key = "paneldata"
+        //if (!!localStorage.getItem(key)) {
+        //  let localSlots = JSON.parse(localStorage.getItem(key))
+        //  localSlots.slots.map(slot => {
+        //    slot.instrument = null
+        //    return slot
+        //  })
+        //localStorage.setItem(key, JSON.stringify(localSlots))
+        //}
+      }
+    }
+    else {
+      setSelectedInstrumentClass(null)
+      onClear()
+    }
+  }
+}
+
+function useOnSave() {
+  const [error, setError] = useGlobal('error')
+  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+  const [panelName, setPanelName] = useGlobal('panelName')
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const signedIn = useSignedIn()
+  const doSave = useSave()
+
+  return () => {
+    setError(null)
+    if (!signedIn) {
+      setError({ message: "You must sign in before you can save your panel" })
+      return
+    }
+    if (!panelSaved) {
+      if (!!panelName) doSave({ name: panelName })
+      else setModalWindow('save')
+    }
+  }
+}
+
+function useDelete() {
+  const [panelId, setPanelId] = useGlobal('panelId')
+  const [error, setError] = useGlobal('error')
+  const onRefreshApp = useRefreshApp()
+
+  return () => {
+    deletePanel(panelId)
+    .catch((err) => {
+      setError(err)
+    })
+    onRefreshApp(false)
+  }
+}
+
+function useRefreshApp() {
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const onRefresh = useRefresh()
+
+  return (confirm) => {
+    if (panelSaved === false) {
+      if (confirm && !window.confirm("Are you sure you want to exit and return to the start? Any unsaved changes to" +
+        " this panel will be lost.")) {
+        return
+      }
+      else {
+        onRefresh()
+      }
+    }
+    else {
+      onRefresh()
+    }
+  }
+}
+
+function useRefresh() {
+  const [panelName, setPanelName] = useGlobal('panelName')
+  const [panelId, setPanelId] = useGlobal('panelId')
+  const [slots, setSlots] = useGlobal('slots')
+  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
+  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
+  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const onSelectTemplate = useSelectTemplate()
+
+  return () => {
+    setPanelName(null)
+    setPanelId(null)
+    setTemplateSlots(null)
+    setSlots({})
+    setSelectedSlot(null)
+    setSelectedInstrument(null)
+    onSelectTemplate(null)
+  }
+}
+
+// exported hooks
+
+export function useUpdateSlots() {
+  const [slots, setSlots] = useGlobal('slots')
+  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+
+  return (instrumentVal) => {
+    let newSlots = slots
+    if (!!newSlots[selectedSlot]) {
+      delete newSlots[selectedSlot]
+    }
+    else {
+      newSlots[selectedSlot] = instrumentVal
+    }
+    setSlots(newSlots)
+    setPanelSaved(false)
+  }
+}
+
+export function useSave() {
+  const [user, setUser] = useGlobal('user')
+  const [error, setError] = useGlobal('error')
+  const [template, setTemplate] = useGlobal('template')
+  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const [slots, setSlots] = useGlobal('slots')
+  const [panelId, setPanelId] = useGlobal('panelId')
+  const [panelName, setPanelName] = useGlobal('panelName')
+  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+
+  return ({ name }) => {
+    setError(null)
+    const data = {
+      template: template,
+      name: name,
+      slots: slots,
+      templateSlots: templateSlots,
+      user_id: user.id,
+    }
+    if (!!panelId) {
+      updatePanel(panelId, data)
+      .then((panel) => {
+        setModalWindow(null)
+        setPanelSaved(true)
+      })
+      .catch((err) => {
+        setError(err)
+      })
+    } else {
+      createPanel(data)
+      .then((panel) => {
+        setPanelId(panel.id)
+        setPanelName(panel.name)
+        setPanelSaved(true)
+        setModalWindow(null)
+      })
+      .catch((err) => {
+        setError(err)
+      })
+    }
+  }
 }

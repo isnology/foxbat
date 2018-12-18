@@ -1,11 +1,17 @@
 import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button'
 import BasePopUp from './BasePopUp'
+import { useExit, useMessage, useRegister, useSignIn } from '../../App'
 
 
-export default function SignIn({ app, register = false }) {
+export default function SignIn({ register = false }) {
+  const onExit = useExit()
+  const message = useMessage()
+  const onSignIn = useSignIn()
+  const onRegister = useRegister()
+
   return (
-      <BasePopUp onExit={ app.onExit } errMsg={ app.message() } >
+      <BasePopUp onExit={ onExit } errMsg={ message } >
         <div className="signin">
           <p className="signin signin_text">
             Please { register ? "register to save" : "sign in to retrieve saved"} instument panels.
@@ -20,9 +26,9 @@ export default function SignIn({ app, register = false }) {
                 // Pass this information along to the parent component
                 if (!!register) {
                   const passwordConfirmation = elements.passwordconfirmation.value
-                  app.onRegister({ email, password, passwordConfirmation })
+                  onRegister(email, password, passwordConfirmation)
                 }
-                else app.onSignIn({ email, password })
+                else onSignIn(email, password)
               } }
           >
             <label>

@@ -2,22 +2,16 @@ import React, { useGlobal, useState } from 'reactn'
 import { validSize } from "./Sidebar"
 import InstrumentListRow from './InstrumentListRow'
 import _forEach from 'lodash/forEach'
+import { useUpdateSlots } from '../panel/Panel'
 
 
-export default function InstrumentList({ app, slotSize }) {
-
+export default function InstrumentList({ slotSize }) {
   const [instruments, setInstruments] = useGlobal('instruments')
-  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
   const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
-
   const [overButton, setOverButton] = useState({})
   const [overInfo, setOverInfo] = useState({})
+  const doSelectInstrument = useSelectInstrument()
 
-
-  const doSelectInstrument = (value) => {
-    app.onUpdateSlots(value)
-    setSelectedInstrument(value)
-  }
 
   const onMouseOverButton = (index) => {
     let newVal = {}
@@ -84,4 +78,16 @@ export default function InstrumentList({ app, slotSize }) {
       }
     </div>
   )
+}
+
+// hooks
+
+function useSelectInstrument() {
+  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const onUpdateSlots = useUpdateSlots()
+
+  return (value) => {
+    onUpdateSlots(value)
+    setSelectedInstrument(value)
+  }
 }

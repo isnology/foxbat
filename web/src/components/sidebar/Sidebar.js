@@ -8,39 +8,13 @@ import InstrumentList from './InstrumentList'
 import InstrumentClassList from './InstrumentClassList'
 
 
-export function validSize(slotSize, instSize) {
-  const size = { L: 3, M: 2, S: 1 }
-  return (size[slotSize] > size[instSize] || slotSize === instSize)
-}
-
-
-export default function Sidebar({app}) {
-
+export default function Sidebar() {
   const [instruments, setInstruments] = useGlobal('instruments')
   const [template, setTemplate] = useGlobal('template')
   const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
   const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
   const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
-
-  const onBack = () => {
-    if (!!selectedInstrument) {
-      // do nothing
-    }
-    else if (!!selectedInstrumentClass) {
-      setSelectedInstrumentClass(null)
-    }
-  }
-
-  // doSelectInstrument = (value) => {
-  //   onUpdateSlots(value)
-  //   setSelectedInstrument(value)
-  // }
-
-  // const onRemove = () => {
-  //   onUpdateSlots(null)
-  //   setSelectedInstrumentClass(null)
-  //   setSelectedInstrument(null)
-  // }
+  const onBack = useBack()
 
 
   let slotSize = null
@@ -62,7 +36,7 @@ export default function Sidebar({app}) {
   // single instrument
   else if (!!selectedSlot && !!selectedInstrument) {
     topHeading = `${instruments[selectedInstrument].name} (${instruments[selectedInstrument].brand})`
-    displayItems = <InstrumentPreview app={app}/>
+    displayItems = <InstrumentPreview />
   }
   // Instrument class list
   else if (!!selectedSlot && !selectedInstrumentClass) {
@@ -72,7 +46,7 @@ export default function Sidebar({app}) {
   // Instrument list
   else if (!!selectedSlot && !!selectedInstrumentClass && !selectedInstrument) {
     topHeading = selectedInstrumentClass.toLowerCase() + sideBarHeadings.selectModel
-    displayItems = <InstrumentList app={app} slotSize={ slotSize }/>
+    displayItems = <InstrumentList slotSize={ slotSize }/>
   }
 
   return (
@@ -98,4 +72,28 @@ export default function Sidebar({app}) {
       </div>
     </div>
   )
+}
+
+// hooks
+
+function useBack() {
+  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+
+  return () => {
+    if (!!selectedInstrument) {
+      // do nothing
+    }
+    else if (!!selectedInstrumentClass) {
+      setSelectedInstrumentClass(null)
+    }
+  }
+}
+
+const size = { L: 3, M: 2, S: 1 }
+
+// exports
+
+export function validSize(slotSize, instSize) {
+  return (size[slotSize] > size[instSize] || slotSize === instSize)
 }

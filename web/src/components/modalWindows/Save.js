@@ -1,12 +1,17 @@
 import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button'
 import BasePopUp from './BasePopUp'
+import { useExit, useMessage } from '../../App'
+import { useSave } from '../panel/Panel'
 
 
-export default function Save({app}) {
+export default function Save() {
+  const onExit = useExit()
+  const message = useMessage()
+  const doSave = useSave()
 
   return (
-    <BasePopUp onExit={ app.onExit } errMsg={ app.message() }>
+    <BasePopUp onExit={ onExit } errMsg={ message }>
       <p className="form-text">
         Please give your panel a name (so it can be recalled later using this name).
       </p>
@@ -19,7 +24,7 @@ export default function Save({app}) {
             // Get entered values from fields
             const name = elements.name.value
             // Pass this information along to the parent component
-            app.doSave({ name })
+            doSave({ name })
           } }
       >
         <label>
