@@ -189,8 +189,6 @@ export function useSignOut() {
   }
 }
 
-// sign in
-
 export function useRegister() {
   const [gUser, setUser] = useGlobal('user')
   const [error, setError] = useGlobal('error')

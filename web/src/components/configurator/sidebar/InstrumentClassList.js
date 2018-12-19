@@ -1,6 +1,6 @@
 import React, { useGlobal } from 'reactn'
 import { validSize } from "./Sidebar"
-import Button from '../shared/Button'
+import Button from '../../shared/Button'
 import _map from 'lodash/map'
 import _forEach from 'lodash/forEach'
 

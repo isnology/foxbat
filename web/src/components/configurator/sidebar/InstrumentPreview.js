@@ -1,5 +1,5 @@
 import React, { useGlobal } from 'reactn'
-import Button from '../shared/Button';
+import Button from '../../shared/Button';
 import numeral from "numeral";
 import { useUpdateSlots } from './Sidebar'
 

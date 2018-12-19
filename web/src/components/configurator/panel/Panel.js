@@ -6,11 +6,11 @@ import A32back from './a32back'
 import Slot from './Slot'
 import numeral from "numeral";
 import _forEach from 'lodash/forEach'
-import Save from '../modalWindows/Save'
+import Save from '../../modalWindows/Save'
 // import video1 from 'file-loader!../../img/Up.mp4'
 // import video2 from 'file-loader!../../img/Up.webm'
-import video1 from '../../img/Up.mp4'
-import video2 from '../../img/Up.webm'
+import video1 from '../../../img/Up.mp4'
+import video2 from '../../../img/Up.webm'
 
 
 export default function Panel() {

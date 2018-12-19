@@ -1,9 +1,9 @@
 import React, { useGlobal, Fragment } from 'reactn'
-import ExitButton from '../shared/ExitButton'
+import ExitButton from '../../shared/ExitButton'
 import BackButton from './BackButton'
 import SidebarText from './SidebarText'
 import InstrumentPreview from './InstrumentPreview'
-import { sideBarHeadings } from '../../constants/messages'
+import { sideBarHeadings } from '../../../constants/messages'
 import InstrumentList from './InstrumentList'
 import InstrumentClassList from './InstrumentClassList'
 
