@@ -2,6 +2,7 @@ import React, { useGlobal, useState, useEffect } from 'reactn'
 import BasePopUp from './BasePopUp'
 import { loadPanels } from "../../api/panels";
 import { useExit, useMessage } from '../../App'
+import { useSelectTemplate } from '../selection/Selection'
 
 
 export default function MyPanels () {
@@ -63,25 +64,6 @@ function useSelectPanel() {
     setPanelName(panelObj.name)
     setPanelId(panelObj.id)
     setSlots(panelObj.slots)
-    setPanelSaved(true)
-  }
-}
-
-export function useSelectTemplate() {
-  const [template, setTemplate] = useGlobal('template')
-  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
-
-  return (templateVal) => {
-    let templateSlotsVal
-    if (templateVal === 'a22' || templateVal === 'a32') {
-      templateSlotsVal = require('../../data').analogSlots
-    }
-    else {
-      templateSlotsVal = require('../../data').digitalSlots
-    }
-    setTemplate(templateVal)
-    setTemplateSlots(templateSlotsVal)
     setPanelSaved(true)
   }
 }

@@ -1,8 +1,7 @@
 import React, { useGlobal, useState } from 'reactn'
-import { validSize } from "./Sidebar"
+import { validSize, useUpdateSlots } from "./Sidebar"
 import InstrumentListRow from './InstrumentListRow'
 import _forEach from 'lodash/forEach'
-import { useUpdateSlots } from '../panel/Panel'
 
 
 export default function InstrumentList({ slotSize }) {

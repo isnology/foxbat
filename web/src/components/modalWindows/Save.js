@@ -2,13 +2,13 @@ import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button'
 import BasePopUp from './BasePopUp'
 import { useExit, useMessage } from '../../App'
-import { useSave } from '../panel/Panel'
+import { useDoSave } from '../configurator/Configurator'
 
 
 export default function Save() {
   const onExit = useExit()
   const message = useMessage()
-  const doSave = useSave()
+  const doSave = useDoSave()
 
   return (
     <BasePopUp onExit={ onExit } errMsg={ message }>

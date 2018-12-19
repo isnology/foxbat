@@ -97,3 +97,23 @@ const size = { L: 3, M: 2, S: 1 }
 export function validSize(slotSize, instSize) {
   return (size[slotSize] > size[instSize] || slotSize === instSize)
 }
+
+// exported hooks
+
+export function useUpdateSlots() {
+  const [slots, setSlots] = useGlobal('slots')
+  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+
+  return (instrumentVal) => {
+    let newSlots = slots
+    if (!!newSlots[selectedSlot]) {
+      delete newSlots[selectedSlot]
+    }
+    else {
+      newSlots[selectedSlot] = instrumentVal
+    }
+    setSlots(newSlots)
+    setPanelSaved(false)
+  }
+}

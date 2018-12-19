@@ -1,7 +1,7 @@
 import React, { useGlobal } from 'reactn'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Selection from './components/selection/Selection'
-import Panel from './components/panel/Panel'
+import Configurator from './components/configurator/Configurator'
 import SignIn from './components/modalWindows/SignIn'
 import MyPanels from './components/modalWindows/MyPanels'
 import Admin from './components/admin/Admin'
@@ -17,7 +17,7 @@ export default function Main() {
         <Switch>
           <Route path='/' exact render={ () => (
             !!template ?
-              <Panel />
+              <Configurator />
               :
               <Selection />
           )}/>

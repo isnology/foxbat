@@ -1,7 +1,7 @@
 import React, { useGlobal } from 'reactn'
 import Button from '../shared/Button';
 import numeral from "numeral";
-import { useUpdateSlots } from '../panel/Panel'
+import { useUpdateSlots } from './Sidebar'
 
 
 export default function InstrumentPreview() {

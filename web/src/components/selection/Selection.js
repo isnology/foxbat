@@ -10,7 +10,6 @@ import a22DigitalThumb from '../../img/a22digital.png'
 import a32Thumb from '../../img/a32.png'
 import a32DigitalThumb from '../../img/a32digital.png'
 import { useAdmin, useSignedIn, useEmail, useSignOut } from '../../App'
-import { useSelectTemplate } from '../modalWindows/MyPanels'
 
 
 export default function Selection() {
@@ -103,4 +102,25 @@ export default function Selection() {
       </div>
     </Fragment>
   )
+}
+
+// exported hooks
+
+export function useSelectTemplate() {
+  const [template, setTemplate] = useGlobal('template')
+  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
+  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+
+  return (templateVal) => {
+    let templateSlotsVal
+    if (templateVal === 'a22' || templateVal === 'a32') {
+      templateSlotsVal = require('../../data').analogSlots
+    }
+    else {
+      templateSlotsVal = require('../../data').digitalSlots
+    }
+    setTemplate(templateVal)
+    setTemplateSlots(templateSlotsVal)
+    setPanelSaved(true)
+  }
 }
