@@ -1,4 +1,4 @@
-import React, { useGlobal } from 'reactn'
+import React from 'reactn'
 import Button from '../shared/Button'
 import BasePopUp from './BasePopUp'
 import { useExit, useMessage, useRegister, useSignIn } from '../../App'
