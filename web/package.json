@@ -12,13 +12,13 @@
     "numeral": "^2.0.6",
     "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
-    "react": "^16.7.0-alpha.2",
-    "react-dom": "^16.7.0-alpha.2",
+    "react": "16.7.0-alpha.2",
+    "react-dom": "16.7.0-alpha.2",
     "react-modal": "^3.4.1",
     "react-rangeslider": "^2.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "2.1.1",
-    "reactn": "^0.1.6"
+    "reactn": "^0.1.8"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

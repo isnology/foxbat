@@ -1,7 +1,7 @@
 {
   "name": "foxbat",
   "engines": {
-    "node": "10.9.0"
+    "node": "11.4.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
