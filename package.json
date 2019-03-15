@@ -8,7 +8,6 @@
     "build-js": "react-scripts build",
     "build-web": "cd web && npm install && npm run build-css && npm run build-js && cd ..",
     "deploy": "cp -a web/build/. public/",
-    "postinstall": "npm run build-web && npm run deploy && echo 'Web Client built!'",
     "build": "npm run build-web && npm run deploy && echo 'Web Client built!'"
   }
 }
