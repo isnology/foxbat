@@ -1,5 +1,6 @@
 import React, { useGlobal, useState, useEffect } from 'reactn'
 import BasePopUp from './BasePopUp'
+import _map from 'lodash/map'
 import { loadPanels } from "../../api/panels";
 import { useExit, useMessage } from '../../App'
 import { useSelectTemplate } from '../selection/Selection'
@@ -7,7 +8,7 @@ import { useSelectTemplate } from '../selection/Selection'
 
 export default function MyPanels () {
   const [panelList, setPanelList] = useState(null)
-  const [error, setError] = useGlobal('error')
+  const setError = useGlobal('error')[1]
   const onExit = useExit()
   const message = useMessage()
   const onSelectPanel = useSelectPanel()
@@ -37,7 +38,7 @@ export default function MyPanels () {
         onSelectPanel(event.target.value)
       } } size="5">
         <option key="1" disabled value=""> -- select a saved dashboard --</option>
-        { !!panelList && panelList.map((panel) => (
+        { !!panelList && _map(panelList, (panel) => (
           <option key={ panel.id } value={ JSON.stringify(panel) }>{ panel.name }</option>
         )) }
       </select>
@@ -49,11 +50,11 @@ export default function MyPanels () {
 // hooks
 
 function useSelectPanel() {
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
-  const [panelName, setPanelName] = useGlobal('panelName')
-  const [panelId, setPanelId] = useGlobal('panelId')
-  const [slots, setSlots] = useGlobal('slots')
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const setModalWindow = useGlobal('modalWindow')[1]
+  const setPanelName = useGlobal('panelName')[1]
+  const setPanelId = useGlobal('panelId')[1]
+  const setSlots = useGlobal('slots')[1]
+  const setPanelSaved = useGlobal('panelSaved')[1]
   const onSelectTemplate = useSelectTemplate()
 
   return (panel) => {

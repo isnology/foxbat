@@ -46,8 +46,8 @@ export default function InstrumentForm() {
 
   Modal.setAppElement('#root')
 
-  const [classes, setClasses] = useGlobal('classes')
-  const [instruments, setInstruments] = useGlobal('instruments')
+  const classes = useGlobal('classes')[0]
+  const instruments = useGlobal('instruments')[0]
   const [modalOpen, setModalOpen] = useGlobal('modalOpen')
   const name = useFormInput('name')
   const brand = useFormInput('brand')
@@ -133,8 +133,8 @@ export default function InstrumentForm() {
         {'Instrument Class: '}
         <select style={input} name="klass" {...klass}>
           <option key="x" value=""></option>
-          { !!classes && classes.map((value, index) => (
-            <option key={index} value={value.id}>{value.name}</option>
+          { !!classes && _map(classes, (value, key) => (
+            <option key={key} value={value.id}>{value.name}</option>
           ))}
         </select>
       </label>
@@ -162,7 +162,7 @@ export default function InstrumentForm() {
 // hooks
 
 function useCloseModal() {
-  const [modalOpen, setModalOpen] = useGlobal('modalOpen')
+  const setModalOpen = useGlobal('modalOpen')[1]
   const onAdminClear = useAdminClear()
 
   return () => {

@@ -5,8 +5,9 @@ import _forEach from 'lodash/forEach'
 
 
 export default function InstrumentList({ slotSize }) {
-  const [instruments, setInstruments] = useGlobal('instruments')
-  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+  const instruments = useGlobal('instruments')[0]
+  const classes = useGlobal('classes')[0]
+  const selectedInstrumentClass = useGlobal('selectedInstrumentClass')[0]
   const [overButton, setOverButton] = useState({})
   const [overInfo, setOverInfo] = useState({})
   const doSelectInstrument = useSelectInstrument()
@@ -37,14 +38,16 @@ export default function InstrumentList({ slotSize }) {
   let head = null
   let heading = false
 
+  // accumulate instruments within brand lists
   _forEach(instruments, (value, key) => {
-    if (validSize(slotSize, value.size) && selectedInstrumentClass === value.instrument_class.name) {
+    if (validSize(slotSize, value.size) && selectedInstrumentClass === classes[value.instrument_class_id].name) {
       //list[key] = value
       if (!list[value.brand]) list[value.brand] = {}
       list[value.brand][key] = value
     }
   })
 
+  // put the several brand lists into one array
   _forEach(list, (brand) => {
     _forEach(brand, (value) => {
       list2.push(value)
@@ -82,7 +85,7 @@ export default function InstrumentList({ slotSize }) {
 // hooks
 
 function useSelectInstrument() {
-  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const setSelectedInstrument = useGlobal('selectedInstrument')[1]
   const onUpdateSlots = useUpdateSlots()
 
   return (value) => {

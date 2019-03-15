@@ -11,12 +11,12 @@ import { emailPanelDesign } from "../../api/emailSubmission";
 
 
 export default function Configurator() {
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
-  const [slots, setSlots] = useGlobal('slots')
-  const [template, setTemplate] = useGlobal('template')
-  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
-  const [panelId, setPanelId] = useGlobal('panelId')
+  const setModalWindow = useGlobal('modalWindow')[1]
+  const panelSaved = useGlobal('panelSaved')[0]
+  const slots = useGlobal('slots')[0]
+  const template = useGlobal('template')[0]
+  const templateSlots = useGlobal('templateSlots')[0]
+  const panelId = useGlobal('panelId')[0]
   const signedIn = useSignedIn()
   const email = useEmail()
   const onSaveCheck = useSaveCheck()
@@ -46,23 +46,23 @@ export default function Configurator() {
           <Button onClick={ () => setModalWindow("signIn") } subClass="navbar">Sign In</Button>
         }
         { !signedIn &&
-        <Button onClick={ () => setModalWindow("register") } subClass="navbar">Register</Button>
+          <Button onClick={ () => setModalWindow("register") } subClass="navbar">Register</Button>
         }
         { signedIn &&
-        <Button onClick={ onSave } subClass={ !!panelSaved ? "saved btn--navbar" : "navbar" }>
-          Save
-        </Button>
+          <Button onClick={ onSave } subClass={ !!panelSaved ? "saved btn--navbar" : "navbar" }>
+            Save
+          </Button>
         }
         { signedIn &&
-        <SubmitButton onClick={ onSubmitPanel } subClass="navbar"
-                      email={ email }
-                      slots={ slots }
-                      template={ template }
-                      templateSlots={ templateSlots }
-        />
+          <SubmitButton onClick={ onSubmitPanel } subClass="navbar"
+                        email={ email }
+                        slots={ slots }
+                        template={ template }
+                        templateSlots={ templateSlots }
+          />
         }
         { signedIn && !!panelId &&
-        <Button onClick={ onDelete } subClass="navbar">Delete panel</Button>
+          <Button onClick={ onDelete } subClass="navbar">Delete panel</Button>
         }
         <Button onClick={ onClearCurrent } subClass="navbar">Clear panel</Button>
         <Button onClick={ () => onRefreshApp(true) } subClass="navbar">Back to start</Button>
@@ -76,7 +76,7 @@ export default function Configurator() {
 // hooks
 
 function useSaveCheck() {
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const panelSaved = useGlobal('panelSaved')[0]
 
   return (e) => {
     if (panelSaved === false) {
@@ -86,10 +86,10 @@ function useSaveCheck() {
 }
 
 function useSubmitPanel() {
-  const [user, setUser] = useGlobal('user')
-  const [slots, setSlots] = useGlobal('slots')
-  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
-  const [template, setTemplate] = useGlobal('template')
+  const user = useGlobal('user')[0]
+  const slots = useGlobal('slots')[0]
+  const templateSlots = useGlobal('templateSlots')[0]
+  const template = useGlobal('template')[0]
   const email = useEmail()
 
   return () => {
@@ -113,10 +113,10 @@ function useSubmitPanel() {
 }
 
 function useOnSave() {
-  const [error, setError] = useGlobal('error')
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
-  const [panelName, setPanelName] = useGlobal('panelName')
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const setError = useGlobal('error')[1]
+  const setModalWindow = useGlobal('modalWindow')[1]
+  const panelName = useGlobal('panelName')[0]
+  const panelSaved = useGlobal('panelSaved')[0]
   const signedIn = useSignedIn()
   const doSave = useDoSave()
 
@@ -134,9 +134,9 @@ function useOnSave() {
 }
 
 function useClear() {
-  const [slots, setSlots] = useGlobal('slots')
-  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
-  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const setSlots = useGlobal('slots')[1]
+  const setSelectedSlot = useGlobal('selectedSlot')[1]
+  const setSelectedInstrument = useGlobal('selectedInstrument')[1]
 
   return () => {
     setSlots({})
@@ -146,8 +146,8 @@ function useClear() {
 }
 
 function useClearCurrent() {
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
-  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+  const panelSaved = useGlobal('panelSaved')[0]
+  const setSelectedInstrumentClass = useGlobal('selectedInstrumentClass')[1]
   const onClear = useClear()
 
   return () => {
@@ -174,8 +174,8 @@ function useClearCurrent() {
 }
 
 function useDelete() {
-  const [panelId, setPanelId] = useGlobal('panelId')
-  const [error, setError] = useGlobal('error')
+  const panelId = useGlobal('panelId')[0]
+  const setError = useGlobal('error')[1]
   const onRefreshApp = useRefreshApp()
 
   return () => {
@@ -188,7 +188,7 @@ function useDelete() {
 }
 
 function useRefreshApp() {
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const panelSaved = useGlobal('panelSaved')[0]
   const onRefresh = useRefresh()
 
   return (confirm) => {
@@ -208,12 +208,12 @@ function useRefreshApp() {
 }
 
 function useRefresh() {
-  const [panelName, setPanelName] = useGlobal('panelName')
-  const [panelId, setPanelId] = useGlobal('panelId')
-  const [slots, setSlots] = useGlobal('slots')
-  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
-  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
-  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const setPanelName = useGlobal('panelName')[1]
+  const setPanelId = useGlobal('panelId')[1]
+  const setSlots = useGlobal('slots')[1]
+  const setSelectedSlot = useGlobal('selectedSlot')[1]
+  const setTemplateSlots = useGlobal('templateSlots')[1]
+  const setSelectedInstrument = useGlobal('selectedInstrument')[1]
   const onSelectTemplate = useSelectTemplate()
 
   return () => {
@@ -230,15 +230,15 @@ function useRefresh() {
 // exported hooks
 
 export function useDoSave() {
-  const [user, setUser] = useGlobal('user')
-  const [error, setError] = useGlobal('error')
-  const [template, setTemplate] = useGlobal('template')
-  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
-  const [slots, setSlots] = useGlobal('slots')
+  const user = useGlobal('user')[0]
+  const setError = useGlobal('error')[1]
+  const template = useGlobal('template')[0]
+  const templateSlots = useGlobal('templateSlots')[0]
+  const setPanelSaved = useGlobal('panelSaved')[1]
+  const slots = useGlobal('slots')[0]
   const [panelId, setPanelId] = useGlobal('panelId')
-  const [panelName, setPanelName] = useGlobal('panelName')
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+  const setPanelName = useGlobal('panelName')[1]
+  const setModalWindow = useGlobal('modalWindow')[1]
 
   return ({ name }) => {
     setError(null)

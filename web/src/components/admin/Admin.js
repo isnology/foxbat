@@ -63,21 +63,21 @@ export default function Admin() {
 // hooks
 
 function useAdminSave() {
-  const [size, setSize] = useGlobal('size')
-  const [vOffset, setVOffset] = useGlobal('vOffset')
-  const [hOffset, setHOffset] = useGlobal('hoffset')
-  const [width, setWidth] = useGlobal('width')
-  const [height, setHeight] = useGlobal('height')
-  const [editInstrument, setEditInstrument] = useGlobal('editInstrument')
-  const [klass, setKlass] = useGlobal('Klass')
-  const [name, setName] = useGlobal('name')
-  const [brand, setBrand] = useGlobal('brand')
-  const [model, setModel] = useGlobal('model')
-  const [partNo, setPartNo] = useGlobal('partNo')
-  const [textarea, setTextarea] = useGlobal('textarea')
-  const [pictureUrl, setPictureUrl] = useGlobal('pictureUrl')
-  const [uploaded, setUploaded] = useGlobal('upload')
-  const [price, setPrice] = useGlobal('price')
+  const size = useGlobal('size')[0]
+  const vOffset = useGlobal('vOffset')[0]
+  const hOffset = useGlobal('hoffset')[0]
+  const width = useGlobal('width')[0]
+  const height = useGlobal('height')[0]
+  const editInstrument = useGlobal('editInstrument')[0]
+  const klass = useGlobal('Klass')[0]
+  const name = useGlobal('name')[0]
+  const brand = useGlobal('brand')[0]
+  const model = useGlobal('model')[0]
+  const partNo = useGlobal('partNo')[0]
+  const textarea = useGlobal('textarea')[0]
+  const pictureUrl = useGlobal('pictureUrl')[0]
+  const uploaded = useGlobal('upload')[0]
+  const price = useGlobal('price')[0]
   const onAdminClear = useAdminClear()
 
   return () => {
@@ -166,8 +166,8 @@ export const table = {
 
 export function useFormInput (key) {
   const [value, setValue] = useGlobal(key)
-  const [width, setWidth] = useGlobal('width')
-  const [height, setHeight] = useGlobal('height')
+  const setWidth = useGlobal('width')[1]
+  const setHeight = useGlobal('height')[1]
 
   function doChange(e) {
     const val = e.target.value.split('"').join('')
@@ -185,19 +185,19 @@ export function useFormInput (key) {
 }
 
 export function useAdminClear() {
-  const [size, setSize] = useGlobal('size')
-  const [vOffset, setVOffset] = useGlobal('vOffset')
-  const [hOffset, setHOffset] = useGlobal('hoffset')
-  const [editInstrument, setEditInstrument] = useGlobal('editInstrument')
-  const [klass, setKlass] = useGlobal('Klass')
-  const [name, setName] = useGlobal('name')
-  const [brand, setBrand] = useGlobal('brand')
-  const [model, setModel] = useGlobal('model')
-  const [partNo, setPartNo] = useGlobal('partNo')
-  const [textarea, setTextarea] = useGlobal('textarea')
-  const [pictureUrl, setPictureUrl] = useGlobal('pictureUrl')
-  const [uploaded, setUploaded] = useGlobal('upload')
-  const [price, setPrice] = useGlobal('price')
+  const setSize = useGlobal('size')[1]
+  const setVOffset = useGlobal('vOffset')[1]
+  const setHOffset = useGlobal('hoffset')[1]
+  const setEditInstrument = useGlobal('editInstrument')[1]
+  const setKlass = useGlobal('Klass')[1]
+  const setName = useGlobal('name')[1]
+  const setBrand = useGlobal('brand')[1]
+  const setModel = useGlobal('model')[1]
+  const setPartNo = useGlobal('partNo')[1]
+  const setTextarea = useGlobal('textarea')[1]
+  const setPictureUrl = useGlobal('pictureUrl')[1]
+  const setUploaded = useGlobal('upload')[1]
+  const setPrice = useGlobal('price')[1]
 
   return () => {
     setEditInstrument(null)

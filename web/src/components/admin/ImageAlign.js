@@ -101,11 +101,11 @@ let slot = {
 
 
 export default function ImageAlign() {
-  const [size, setSize] = useGlobal('size')
-  const [vOffset, setVOffset] = useGlobal('vOffset')
-  const [hOffset, setHOffset] = useGlobal('hoffset')
-  const [width, setWidth] = useGlobal('width')
-  const [height, setHeight] = useGlobal('height')
+  const size = useGlobal('size')[0]
+  const vOffset = useGlobal('vOffset')[0]
+  const hOffset = useGlobal('hoffset')[0]
+  const width = useGlobal('width')[0]
+  const height = useGlobal('height')[0]
   const pictureUrl = useFormInput('pictureUrl')
   const onUp = useUp()
   const onDown = useDown()
@@ -243,7 +243,7 @@ function useRight() {
 }
 
 function useFactor() {
-  const [size, setSize] = useGlobal('size')
+  const size = useGlobal('size')[0]
 
   return () => {
     const width = table.slot[size].wide
@@ -275,7 +275,7 @@ function useSmaller() {
 }
 
 function useChangeH() {
-  const [hOffset, setHOffset] = useGlobal('hoffset')
+  const setHOffset = useGlobal('hoffset')[1]
 
   return (value) => {
     setHOffset(value)
@@ -283,7 +283,7 @@ function useChangeH() {
 }
 
 function useChangeV() {
-  const [vOffset, setVOffset] = useGlobal('voffset')
+  const setVOffset = useGlobal('voffset')[1]
 
   return (value) => {
     setVOffset(-value)
@@ -291,7 +291,7 @@ function useChangeV() {
 }
 
 function useChangeS() {
-  const [width, setWidth] = useGlobal('width')
+  const setWidth = useGlobal('width')[1]
 
   return (value) => {
     setWidth(Math.round(value * 1000) / 1000)

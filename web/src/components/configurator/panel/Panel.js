@@ -14,10 +14,10 @@ import video2 from '../../../img/Up.webm'
 
 
 export default function Panel() {
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
-  const [panelName, setPanelName] = useGlobal('panelName')
-  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
-  const [template, setTemplate] = useGlobal('template')
+  const modalWindow = useGlobal('modalWindow')[0]
+  const panelName = useGlobal('panelName')[0]
+  const templateSlots = useGlobal('templateSlots')[0]
+  const template = useGlobal('template')[0]
   const totalCost = useTotalCost()
 
 
@@ -66,8 +66,8 @@ export default function Panel() {
 // hooks
 
 function useTotalCost() {
-  const [slots, setSlots] = useGlobal('slots')
-  const [instruments, setInstruments] = useGlobal('instruments')
+  const slots = useGlobal('slots')[0]
+  const instruments = useGlobal('instruments')[0]
 
   return () => {
     let totalPrices = 0

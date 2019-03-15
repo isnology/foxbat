@@ -1,10 +1,10 @@
 import React, { useGlobal } from 'reactn'
 
 export default function Slot({ slot }){
-  const [instruments, setInstruments] = useGlobal('instruments')
-  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
-  const [slots, setSlots] = useGlobal('slots')
-  const [template, setTemplate] = useGlobal('template')
+  const instruments = useGlobal('instruments')[0]
+  const selectedSlot = useGlobal('selectedSlot')[0]
+  const slots = useGlobal('slots')[0]
+  const template = useGlobal('template')[0]
   const onSelectSlot = useSelectSlot()
 
 
@@ -50,10 +50,10 @@ export default function Slot({ slot }){
 }
 
 function useSelectSlot() {
-  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
-  const [slots, setSlots] = useGlobal('slots')
-  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
-  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+  const setSelectedSlot = useGlobal('selectedSlot')[1]
+  const slots = useGlobal('slots')[0]
+  const setSelectedInstrument = useGlobal('selectedInstrument')[1]
+  const setSelectedInstrumentClass = useGlobal('selectedInstrumentClass')[1]
 
   return (slot) => {
     setSelectedSlot(slot)

@@ -28,7 +28,9 @@ const text = {
 
 
 export default function InstrumentListRow({ value }) {
+  const classes = useGlobal('classes')[0]
   const onSelect = useSelect()
+
 
   return (
       <button className="btn btn--admin-instrument"
@@ -39,7 +41,7 @@ export default function InstrumentListRow({ value }) {
             <p style={label}>Name:</p><div style={text}><p>{value.name}</p></div>
           </div>
           <div style={style}>
-            <p style={label}>Class:</p><p style={text}>{value.instrument_class.name}</p>
+            <p style={label}>Class:</p><p style={text}>{classes[value.instrument_class_id].name}</p>
           </div>
           <div style={style}>
             <p style={label}>Brand:</p><p style={text}>{value.brand}</p>
@@ -53,23 +55,23 @@ export default function InstrumentListRow({ value }) {
 // hooks
 
 function useSelect() {
-  const [instruments, setInstruments] = useGlobal('instruments')
-  const [size, setSize] = useGlobal('size')
-  const [vOffset, setVOffset] = useGlobal('vOffset')
-  const [hOffset, setHOffset] = useGlobal('hoffset')
-  const [width, setWidth] = useGlobal('width')
-  const [height, setHeight] = useGlobal('height')
-  const [modalOpen, setModalOpen] = useGlobal('modalOpen')
-  const [editInstrument, setEditInstrument] = useGlobal('editInstrument')
-  const [klass, setKlass] = useGlobal('Klass')
-  const [name, setName] = useGlobal('name')
-  const [brand, setBrand] = useGlobal('brand')
-  const [model, setModel] = useGlobal('model')
-  const [partNo, setPartNo] = useGlobal('partNo')
-  const [textarea, setTextarea] = useGlobal('textarea')
-  const [pictureUrl, setPictureUrl] = useGlobal('pictureUrl')
-  const [uploaded, setUploaded] = useGlobal('upload')
-  const [price, setPrice] = useGlobal('price')
+  const instruments = useGlobal('instruments')[0]
+  const setSize = useGlobal('size')[1]
+  const setVOffset = useGlobal('vOffset')[1]
+  const setHOffset = useGlobal('hoffset')[1]
+  const setWidth = useGlobal('width')[1]
+  const setHeight = useGlobal('height')[1]
+  const setModalOpen = useGlobal('modalOpen')[1]
+  const setEditInstrument = useGlobal('editInstrument')[1]
+  const setKlass = useGlobal('Klass')[1]
+  const setName = useGlobal('name')[1]
+  const setBrand = useGlobal('brand')[1]
+  const setModel = useGlobal('model')[1]
+  const setPartNo = useGlobal('partNo')[1]
+  const setTextarea = useGlobal('textarea')[1]
+  const setPictureUrl = useGlobal('pictureUrl')[1]
+  const setUploaded = useGlobal('upload')[1]
+  const setPrice = useGlobal('price')[1]
 
   return (id) => {
     const inst = instruments[id]
@@ -82,7 +84,7 @@ function useSelect() {
     setTextarea(inst.text)
     setPrice(inst.price)
     setSize(inst.size)
-    setKlass(inst.instrument_class.id)
+    setKlass(inst.instrument_class_id)
     setPictureUrl(inst.picture_url)
     setUploaded(inst.uploaded)
     setWidth(parseFloat(inst.picture_width))

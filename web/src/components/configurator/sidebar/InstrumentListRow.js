@@ -1,4 +1,4 @@
-import React, {Fragment} from 'reactn'
+import React, { Fragment, useGlobal } from 'reactn'
 import numeral from "numeral";
 import { turnTextToAnkor } from "./InstrumentPreview";
 
@@ -16,6 +16,8 @@ export default function InstrumentListRow({ value,
   const infoStyle = {
     display: style
   }
+
+  const classes = useGlobal('classes')[0]
 
   return (
     <Fragment>
@@ -39,7 +41,7 @@ export default function InstrumentListRow({ value,
           <div className="sidebar_preview_instrument-details">
             <p className="sidebar_preview_instrument-details--price">{ numeral(value.price/100).format('$0,0.00') } USD</p>
             <div className="sidebar_preview_text">
-              <p><strong>Type:</strong> { value.instrument_class.name }</p>
+              <p><strong>Type:</strong> { classes[value.instrument_class_id].name }</p>
               <p><strong>Brand:</strong> { value.brand }</p>
               <p><strong>Model:</strong> { value.model }</p>
               <p><strong>Part no:</strong> { value.part_no }</p>

@@ -171,7 +171,7 @@ namespace :start do
   
   desc 'Start production server'
   task :production do
-    exec 'NPM_CONFIG_PRODUCTION=true npm run postinstall && foreman start'
+    exec 'NPM_CONFIG_PRODUCTION=true npm run build && foreman start'
   end
 end
 task :start => 'start:development'
@@ -184,9 +184,11 @@ task :start => 'start:development'
     "node": "10.9.0"
   },
   "scripts": {
-    "build": "cd web && npm install && npm run build && cd ..",
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "build-js": "react-scripts build",
+    "build-web": "cd web && npm install && npm run build-css && npm run build-js && cd ..",
     "deploy": "cp -a web/build/. public/",
-    "postinstall": "npm run build && npm run deploy && echo 'Web Client built!'"
+    "build": "npm run build-web && npm run deploy && echo 'Web Client built!'"
   }
 }
 ```

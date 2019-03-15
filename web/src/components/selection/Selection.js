@@ -14,8 +14,8 @@ import { useAdmin, useSignedIn, useEmail, useSignOut } from '../../App'
 
 export default function Selection() {
   const [templateType, setTemplateType] = useState("none")
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
-  const [touch, setTouch] = useGlobal('touch')
+  const setModalWindow = useGlobal('modalWindow')[1]
+  const touch = useGlobal('touch')[0]
   const isAdmin = useAdmin()
   const signedIn = useSignedIn()
   const email = useEmail()
@@ -107,9 +107,9 @@ export default function Selection() {
 // exported hooks
 
 export function useSelectTemplate() {
-  const [template, setTemplate] = useGlobal('template')
-  const [templateSlots, setTemplateSlots] = useGlobal('templateSlots')
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const setTemplate = useGlobal('template')[1]
+  const setTemplateSlots = useGlobal('templateSlots')[1]
+  const setPanelSaved = useGlobal('panelSaved')[1]
 
   return (templateVal) => {
     let templateSlotsVal

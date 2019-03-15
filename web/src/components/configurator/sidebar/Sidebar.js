@@ -9,11 +9,11 @@ import InstrumentClassList from './InstrumentClassList'
 
 
 export default function Sidebar() {
-  const [instruments, setInstruments] = useGlobal('instruments')
-  const [template, setTemplate] = useGlobal('template')
-  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
-  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
-  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
+  const instruments = useGlobal('instruments')[0]
+  const template = useGlobal('template')[0]
+  const selectedSlot = useGlobal('selectedSlot')[0]
+  const selectedInstrument = useGlobal('selectedInstrument')[0]
+  const selectedInstrumentClass = useGlobal('selectedInstrumentClass')[0]
   const onBack = useBack()
 
 
@@ -77,7 +77,7 @@ export default function Sidebar() {
 // hooks
 
 function useBack() {
-  const [selectedInstrument, setSelectedInstrument] = useGlobal('selectedInstrument')
+  const selectedInstrument = useGlobal('selectedInstrument')[0]
   const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
 
   return () => {
@@ -102,8 +102,8 @@ export function validSize(slotSize, instSize) {
 
 export function useUpdateSlots() {
   const [slots, setSlots] = useGlobal('slots')
-  const [selectedSlot, setSelectedSlot] = useGlobal('selectedSlot')
-  const [panelSaved, setPanelSaved] = useGlobal('panelSaved')
+  const selectedSlot = useGlobal('selectedSlot')[0]
+  const setPanelSaved = useGlobal('panelSaved')[1]
 
   return (instrumentVal) => {
     let newSlots = slots

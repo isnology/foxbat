@@ -1,19 +1,15 @@
-import React, { setGlobal, useGlobal, useEffect } from 'reactn'
+import React, { useGlobal, useEffect, setGlobal } from 'reactn'
 import { getDecodedToken } from './api/token'
 import { loadInstruments } from './api/instruments'
 import { loadInstrumentClasses } from './api/instrumentClasses'
 import { signIn, signOut, signUp, nextToken } from "./api/auth"
 import './style/App.css';
-import Main from './Main'
-
-export const css = {
-  headerBackground: "white",
-  foxbatBlue: "#0A64CB",
-  offWhite: "#f5f5f5",
-  baseUrl: "https://coder-academy-apps-glenn.s3.amazonaws.com/instruments/",
-  publicUrl: "https://s3-ap-southeast-2.amazonaws.com/coder-academy-apps-glenn/instruments/",
-}
-
+import Selection from './components/selection/Selection'
+import Configurator from './components/configurator/Configurator'
+import SignIn from './components/modalWindows/SignIn'
+import MyPanels from './components/modalWindows/MyPanels'
+import Admin from './components/admin/Admin'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 setGlobal({
   user: getDecodedToken(),
@@ -26,14 +22,14 @@ setGlobal({
 
   // selection
   template: null,
+  templateSlots: null,  // list of slot names in template (array of strings)
+  panelSaved: true,
 
   //panel
   panelName: null, //title user gave their panel
   panelId: null, // db id of users retrieved/saved panel
-  templateSlots: null,  // list of slot names in template (array of strings)
   selectedSlot: null,
   slots: {},
-  panelSaved: true,
 
   // sidebar
   selectedInstrumentClass: null,
@@ -58,6 +54,14 @@ setGlobal({
   price: 0
 })
 
+export const css = {
+  headerBackground: "white",
+  foxbatBlue: "#0A64CB",
+  offWhite: "#f5f5f5",
+  //baseUrl: "https://coder-academy-apps-glenn.s3.amazonaws.com/instruments/",
+  //publicUrl: "https://s3-ap-southeast-2.amazonaws.com/coder-academy-apps-glenn/instruments/",
+}
+
 let renew = {
   timer: null,
   timeout: 0,
@@ -66,11 +70,11 @@ let renew = {
 
 
 export default function App() {
-  const [user, setUser] = useGlobal('user')
-  const [touch, setTouch] = useGlobal('touch')
+  const setUser = useGlobal('user')[1]
+  const setTouch = useGlobal('touch')[1]
+  const modalWindow = useGlobal('modalWindow')[0]
+  const template = useGlobal('template')[0]
   const loadInstruments = useLoadInstruments()
-
-  const once = 1
 
   useEffect(() => {
     loadInstruments()
@@ -96,7 +100,7 @@ export default function App() {
     }, 10000)
 
     return () => clearInterval(renew.timer)
-  }, [once])
+  }, [])
 
   useEffect(() => {
     //window.addEventListener('resize', this.updateWindowDimensions.bind(this))
@@ -109,9 +113,37 @@ export default function App() {
 
     // isSignedIn()
     // .then((res) => this.setState({ user: res.user}))
-  }, [once])
+  }, [])
 
-  return (<Main />)
+  console.log("global:", useGlobal()[0])
+  return (
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path='/' exact render={ () => (
+            !!template ?
+              <Configurator />
+              :
+              <Selection />
+          )}/>
+
+          <Route path='/admin' exact render={ () => (
+            <Admin />
+          )}/>
+        </Switch>
+
+        { modalWindow === "register" &&
+        <SignIn register />
+        }
+        { modalWindow === "signIn" &&
+        <SignIn />
+        }
+        { modalWindow === "selectPanel" &&
+        <MyPanels />
+        }
+      </div>
+    </Router>
+  )
 }
 
 
@@ -125,19 +157,22 @@ function tokenExpiry() {
 // hooks
 
 function useLoadInstruments() {
-  const [instruments, setInstruments] = useGlobal('instruments')
-  const [classes, setClasses] = useGlobal('classes')
+  const setInstruments = useGlobal('instruments')[1]
+  const setClasses = useGlobal('classes')[1]
 
   return () => {
     loadInstruments()
     .then((instruments) => {
-      let list = {}
-      instruments.map((instrument) => {
-        list[instrument.id] = instrument
-      })
-      setInstruments(list)
+      // let list = {}
+      // console.log("instruments:", instruments)
+      // instruments.map((instrument) => {
+      //   list[instrument.attributes.id] = instrument.attributes
+      // })
+      // setInstruments(list)
+      setInstruments(instruments)
     })
-    .catch(() => {
+    .catch((error) => {
+      console.log("error", error)
       setInstruments(null)
     })
 
@@ -151,33 +186,32 @@ function useLoadInstruments() {
 // exported hooks
 
 export function useSignedIn() {
-  const [user, setUser] = useGlobal('user')
-  return !!user
+  return !!useGlobal('user')[0]
 }
 
 export function useEmail() {
-  const [user, setUser] = useGlobal('user')
+  const user = useGlobal('user')[0]
   return (!!user && user.email)
 }
 
 export function useAdmin() {
-  const [user, setUser] = useGlobal('user')
+  const user = useGlobal('user')[0]
   return (!!user && user.admin)
 }
 
 export function useMessage() {
-  const [error, setError] = useGlobal('error')
+  const error = useGlobal('error')[0]
   return (!!error && error.message)
 }
 
 export function useExit() {
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+  const setModalWindow = useGlobal('modalWindow')[1]
   return () => setModalWindow(null)
 }
 
 export function useSignOut() {
-  const [user, setUser] = useGlobal('user')
-  const [error, setError] = useGlobal('error')
+  const setUser = useGlobal('user')[1]
+  const setError = useGlobal('error')[1]
 
   return () => {
     signOut()
@@ -190,9 +224,9 @@ export function useSignOut() {
 }
 
 export function useRegister() {
-  const [gUser, setUser] = useGlobal('user')
-  const [error, setError] = useGlobal('error')
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+  const setUser = useGlobal('user')[1]
+  const setError = useGlobal('error')[1]
+  const setModalWindow = useGlobal('modalWindow')[1]
 
   return (email, password, passwordConfirmation) => {
     const user = {
@@ -218,9 +252,9 @@ export function useRegister() {
 }
 
 export function useSignIn() {
-  const [gUser, setUser] = useGlobal('user')
-  const [error, setError] = useGlobal('error')
-  const [modalWindow, setModalWindow] = useGlobal('modalWindow')
+  const setUser = useGlobal('user')[1]
+  const setError = useGlobal('error')[1]
+  const setModalWindow = useGlobal('modalWindow')[1]
 
   return (email, password) => {
     setError(null)

@@ -6,14 +6,16 @@ import _forEach from 'lodash/forEach'
 
 
 export default function InstrumentClassList({ slotSize, }) {
-  const [selectedInstrumentClass, setSelectedInstrumentClass] = useGlobal('selectedInstrumentClass')
-  const [instruments, setInstruments] = useGlobal('instruments')
+  const setSelectedInstrumentClass = useGlobal('selectedInstrumentClass')[1]
+  const instruments = useGlobal('instruments')[0]
+  const classes = useGlobal('classes')[0]
 
   let list = {}
 
   _forEach(instruments, (value) => {
     if (validSize(slotSize, value.size)) {
-      list[value.instrument_class.name] = value.instrument_class.name
+      //list[value.instrument_class.name] = value.instrument_class.name
+      list[value.instrument_class_id] = classes[value.instrument_class_id].name
     }
   })
   return (

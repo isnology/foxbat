@@ -3,7 +3,7 @@ class Api::V1::PanelsController < ApplicationController
   before_action :set_panel, only: [:show, :update, :destroy]
   
   def index
-    render json: Panel.where(user_id: current_user.id), status: :ok
+    render json: serializer(Panel.where(user_id: current_user.id)), status: :ok
   end
   
   def show
@@ -15,7 +15,7 @@ class Api::V1::PanelsController < ApplicationController
     panel.user = current_user
     
     if panel.save
-      render json: panel, status: :created
+      render json: serializer(panel), status: :created
     else
       render json: panel.errors, status: :unprocessable_entity
     end
@@ -24,7 +24,7 @@ class Api::V1::PanelsController < ApplicationController
   def update
     if params[:user_id] == current_user.id || current_user.admin
       if @panel.update(panel_params)
-        render json: @panel, status: :ok
+        render json: serializer(@panel), status: :ok
       else
         render json: @panel.errors, status: :unprocessable_entity
       end
@@ -36,13 +36,17 @@ class Api::V1::PanelsController < ApplicationController
   def destroy
     if params[:user_id] == current_user.id || current_user.admin
       @panel.destroy
-      render json: @panel, status: :ok
+      render json: serializer(@panel), status: :ok
     else
       render json: {error: "User not authorised to this data"}, status: :unprocessable_entity
     end
   end
   
   private
+
+  def serializer(object)
+    Api::V1::PanelSerializer.new(object).as_json
+  end
   
   # Never trust parameters from the scary internet, only allow the white list through.
   def panel_params
