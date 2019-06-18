@@ -1,7 +1,7 @@
 import React from 'reactn'
 import Button from '../shared/Button'
 import BasePopUp from './BasePopUp'
-import { useExit, useMessage } from '../../App'
+import { useExit, useMessage } from '../app/App'
 import { useDoSave } from '../configurator/Configurator'
 
 

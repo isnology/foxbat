@@ -5,7 +5,7 @@ import Button from '../shared/Button'
 import InstrumentForm from './InstrumentForm'
 import ImageAlign from './ImageAlign'
 import { createInstrument, updateInstrument } from '../../api/instruments'
-import { css, useAdmin } from '../../App'
+import { css, useAdmin } from '../app/App'
 
 
 const subBody = {

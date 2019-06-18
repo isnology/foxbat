@@ -1,14 +1,14 @@
-import React, { useGlobal, useEffect, setGlobal } from 'reactn'
-import { getDecodedToken } from './api/token'
-import { allInstruments } from './api/instruments'
-import { allInstrumentClasses } from './api/instrumentClasses'
-import { signIn, signOut, signUp, nextToken } from "./api/auth"
-import './style/App.css';
-import Selection from './components/selection/Selection'
-import Configurator from './components/configurator/Configurator'
-import SignIn from './components/modalWindows/SignIn'
-import MyPanels from './components/modalWindows/MyPanels'
-import Admin from './components/admin/Admin'
+import React, { useGlobal, useEffect, setGlobal } from 'reactn/index'
+import { getDecodedToken } from '../../api/token'
+import { allInstruments } from '../../api/instruments'
+import { allInstrumentClasses } from '../../api/instrumentClasses'
+import { signIn, signOut, signUp, nextToken } from "../../api/auth"
+import '../../style/App.css';
+import Selection from '../selection/Selection'
+import Configurator from '../configurator/Configurator'
+import SignIn from '../modalWindows/SignIn'
+import MyPanels from '../modalWindows/MyPanels'
+import Admin from '../admin/Admin'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 setGlobal({
@@ -162,24 +162,14 @@ function useLoadInstruments() {
 
   return () => {
     allInstruments()
-    .then((instruments) => {
-      // let list = {}
-      // console.log("instruments:", instruments)
-      // instruments.map((instrument) => {
-      //   list[instrument.attributes.id] = instrument.attributes
-      // })
-      // setInstruments(list)
-      setInstruments(instruments)
-    })
+    .then((instruments) => setInstruments(instruments))
     .catch((error) => {
       console.log("error", error)
       setInstruments(null)
     })
 
     allInstrumentClasses()
-    .then((classesVal) => {
-      setClasses(classesVal)
-    })
+    .then((classesVal) => setClasses(classesVal))
   }
 }
 

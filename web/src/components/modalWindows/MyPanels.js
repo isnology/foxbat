@@ -2,7 +2,7 @@ import React, { useGlobal, useState, useEffect } from 'reactn'
 import BasePopUp from './BasePopUp'
 import _map from 'lodash/map'
 import { loadPanels } from "../../api/panels";
-import { useExit, useMessage } from '../../App'
+import { useExit, useMessage } from '../app/App'
 import { useSelectTemplate } from '../selection/Selection'
 
 

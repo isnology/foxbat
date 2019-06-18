@@ -16,6 +16,7 @@ export default function Header({children}) {
       </div>
 
       <div className="header_nav">
+        {/* eslint-disable-next-line */}
         { list.map((child, index) => {
           if (!!child) {
             return (

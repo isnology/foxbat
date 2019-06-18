@@ -9,7 +9,7 @@ import a22Thumb from '../../img/a22.png'
 import a22DigitalThumb from '../../img/a22digital.png'
 import a32Thumb from '../../img/a32.png'
 import a32DigitalThumb from '../../img/a32digital.png'
-import { useAdmin, useSignedIn, useEmail, useSignOut } from '../../App'
+import { useAdmin, useSignedIn, useEmail, useSignOut } from '../app/App'
 
 
 export default function Selection() {
@@ -114,10 +114,10 @@ export function useSelectTemplate() {
   return (templateVal) => {
     let templateSlotsVal
     if (templateVal === 'a22' || templateVal === 'a32') {
-      templateSlotsVal = require('../../data').analogSlots
+      templateSlotsVal = require('./data').analogSlots
     }
     else {
-      templateSlotsVal = require('../../data').digitalSlots
+      templateSlotsVal = require('./data').digitalSlots
     }
     setTemplate(templateVal)
     setTemplateSlots(templateSlotsVal)

@@ -4,7 +4,7 @@ import Button from '../shared/Button'
 import SubmitButton from '../shared/SubmitButton'
 import Sidebar from './sidebar/Sidebar'
 import Panel from './panel/Panel'
-import { useEmail, useSignedIn, useSignOut } from '../../App'
+import { useEmail, useSignedIn, useSignOut } from '../app/App'
 import { createPanel, deletePanel, updatePanel } from '../../api/panels'
 import { useSelectTemplate } from '../selection/Selection'
 import { emailPanelDesign } from "../../api/emailSubmission";

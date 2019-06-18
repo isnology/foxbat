@@ -1,7 +1,7 @@
 import React from 'reactn'
 import Button from '../shared/Button'
 import BasePopUp from './BasePopUp'
-import { useExit, useMessage, useRegister, useSignIn } from '../../App'
+import { useExit, useMessage, useRegister, useSignIn } from '../app/App'
 
 
 export default function SignIn({ register = false }) {
