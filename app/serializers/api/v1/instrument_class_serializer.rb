@@ -5,8 +5,12 @@ class Api::V1::InstrumentClassSerializer < BaseSerializer
   
   private
   
-  def attributes
-    %w(id name)
+  # def attributes
+  #   %w(id name)
+  # end
+
+  def without
+    %w(created_at updated_at)
   end
 
 end

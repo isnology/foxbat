@@ -4,7 +4,7 @@ class Api::V1::InstrumentsController < ApplicationController
   
   def index
     #render json: Instrument.includes(:instrument_class).all, status: :ok
-    render json: serializer(Instrument.all), status: :ok
+    render json: serialize(Instrument.all, :hash), status: :ok
   end
   
   def create
@@ -13,7 +13,7 @@ class Api::V1::InstrumentsController < ApplicationController
     instrument = Instrument.includes(:instrument_class).new(copy_params)
     if instrument.save
       #render json: instrument, status: :created
-      render json: serializer(instrument), status: :created
+      render json: serialize(instrument), status: :created
     else
       render json: instrument.errors, status: :unprocessable_entity
     end
@@ -25,7 +25,7 @@ class Api::V1::InstrumentsController < ApplicationController
     upload_picture(copy_params) unless instrument.uploaded
     if instrument.update(copy_params)
       #render json: instrument, status: :ok
-      render json: serializer(instrument), status: :ok
+      render json: serialize(instrument), status: :ok
     else
       render json: instrument.errors, status: :unprocessable_entity
     end
@@ -33,8 +33,8 @@ class Api::V1::InstrumentsController < ApplicationController
   
   private
   
-  def serializer(object)
-    Api::V1::InstrumentSerializer.new(object).as_json
+  def serialize(object, as_hash = nil)
+    Api::V1::InstrumentSerializer.new(object, as_hash).as_json
   end
   
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -70,6 +70,7 @@ class Api::V1::InstrumentsController < ApplicationController
     tmp_img = IO.new(myfile,"wb")
     tmp_img.write open(URI.encode(url)).read
     
+    #get the file from the server hard disk to the S3 storage server
     s3 = Aws::S3::Resource.new
     bucket = s3.bucket(ENV.fetch('S3_BUCKET'))
     folder = "instruments/"

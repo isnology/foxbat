@@ -15,7 +15,7 @@ gem 'dotenv-rails', groups: [:development, :test]
 - add gems:-
 ```
 gem 'devise-jwt', '~> 0.5.5'
-gem 'active_model_serializers', '~> 0.10.0'
+#gem 'active_model_serializers', '~> 0.10.0'
 gem 'annotate'
 gem 'foreman'
 ```
@@ -23,7 +23,7 @@ gem 'foreman'
 ```
 class ApplicationController < ActionController::API
   include ActionController::MimeResponds
-  include ::ActionController::Serialization
+  #include ::ActionController::Serialization
   respond_to :json
 end
 ```
@@ -41,9 +41,9 @@ config.consider_all_requests_local = false
 ```
 - create config/initializers/active_model_serializer.rb
 ```
-ActiveModelSerializers.config.default_includes = '**'
-ActiveModelSerializers.config.adapter = :json
-ActiveModelSerializers.config.json_include_toplevel_object = true
+#ActiveModelSerializers.config.default_includes = '**'
+#ActiveModelSerializers.config.adapter = :json
+#ActiveModelSerializers.config.json_include_toplevel_object = true
 ```
 - set up devise, follow online instructions
 - follow instructions for devise-jwt (including seting up devise for API server)
@@ -87,6 +87,7 @@ yarn add http-proxy-middleware axios
     "react-dom": "^16.6.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "2.1.1"
+    "reactn": "^1.0.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

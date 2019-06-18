@@ -5,7 +5,11 @@ class Api::V1::PanelSerializer < BaseSerializer
   
   private
   
-  def attributes
-    %w(id name template slots user_id)
+  # def attributes
+  #   %w(id name template slots user_id)
+  # end
+
+  def without
+    %w(created_at updated_at)
   end
 end

@@ -19,7 +19,7 @@ export function setHeaders() {
 
 export function signIn(data) {
   setHeaders()
-  return api.post('api/users/sign_in', data)
+  return api.post('api/users/sign_in', data, {withCredentials: true})
   .then((res) => {
     rememberToken(extractToken(res))
     return getDecodedToken()

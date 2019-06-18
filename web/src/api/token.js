@@ -1,4 +1,5 @@
 import decodeJWT from 'jwt-decode'
+//import Cookies from 'js-cookie'
 
 const key = 'userToken'
 

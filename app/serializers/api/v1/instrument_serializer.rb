@@ -12,9 +12,13 @@ class Api::V1::InstrumentSerializer < BaseSerializer
   
   private
   
-  def attributes
-    %w(id name brand model part_no text price size picture_url uploaded picture_width picture_height picture_h_offset
-      picture_v_offset instrument_class_id)
+  # def attributes
+  #   %w(id name brand model part_no text price size picture_url uploaded picture_width picture_height picture_h_offset
+  #     picture_v_offset instrument_class_id)
+  # end
+  
+  def without
+    %w(created_at updated_at)
   end
   
   # def includes

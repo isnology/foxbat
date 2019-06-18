@@ -287,6 +287,7 @@ Devise.setup do |config|
   # ActiveSupport.on_load(:devise_failure_app) do
   #   include Turbolinks::Controller
   # end
+  
   config.jwt do |jwt|
     jwt.secret = ENV.fetch('DEVISE_JWT_SECRET_KEY')
     jwt.expiration_time = 1 * 3600 + 300  # 1 hour + 5 minutes (renewed 5 minutes before expiry)

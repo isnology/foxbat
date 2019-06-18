@@ -24,6 +24,8 @@ gem 'puma', '~> 3.11'
 
 #gem 'active_model_serializers', '~> 0.10.0'
 gem 'devise-jwt'
+#gem 'devise'
+#gem 'jwt'
 gem 'annotate'
 gem 'foreman'
 gem 'mailgun-ruby', '~>1.1.6'
