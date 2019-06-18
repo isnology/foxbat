@@ -1,7 +1,7 @@
 import React, { useGlobal, useEffect, setGlobal } from 'reactn'
 import { getDecodedToken } from './api/token'
-import { loadInstruments } from './api/instruments'
-import { loadInstrumentClasses } from './api/instrumentClasses'
+import { allInstruments } from './api/instruments'
+import { allInstrumentClasses } from './api/instrumentClasses'
 import { signIn, signOut, signUp, nextToken } from "./api/auth"
 import './style/App.css';
 import Selection from './components/selection/Selection'
@@ -161,7 +161,7 @@ function useLoadInstruments() {
   const setClasses = useGlobal('classes')[1]
 
   return () => {
-    loadInstruments()
+    allInstruments()
     .then((instruments) => {
       // let list = {}
       // console.log("instruments:", instruments)
@@ -176,7 +176,7 @@ function useLoadInstruments() {
       setInstruments(null)
     })
 
-    loadInstrumentClasses()
+    allInstrumentClasses()
     .then((classesVal) => {
       setClasses(classesVal)
     })

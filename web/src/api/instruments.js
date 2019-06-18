@@ -1,7 +1,7 @@
 import { api, setHeaders } from './auth'
 
 
-export function loadInstruments() {
+export function allInstruments() {
   setHeaders()
   return api.get('/api/v1/instruments')
   .then((res) => res.data.instruments)
