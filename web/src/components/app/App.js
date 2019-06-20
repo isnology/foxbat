@@ -29,7 +29,7 @@ let renew = {
 
 export default function App() {
   const setUser = useGlobal('user')[1]
-  const setTouch = useGlobal('touch')[1]
+  //const setTouch = useGlobal('touch')[1]
   const modalWindow = useGlobal('modalWindow')[0]
   const template = useGlobal('template')[0]
   const loadInstruments = useLoadInstruments()
@@ -62,20 +62,20 @@ export default function App() {
     // eslint-disable-next-line
   }, [])
 
-  useEffect(() => {
-    //window.addEventListener('resize', this.updateWindowDimensions.bind(this))
-    window.addEventListener('touchstart', function onFirstTouch() {
-      setTouch(true)
-
-      // we only need to know once that a human touched the screen, so we can stop listening now
-      window.removeEventListener('touchstart', onFirstTouch, false);
-    }, false)
-
-    // isSignedIn()
-    // .then((res) => this.setState({ user: res.user}))
-
-    // eslint-disable-next-line
-  }, [])
+  // useEffect(() => {
+  //   //window.addEventListener('resize', this.updateWindowDimensions.bind(this))
+  //   window.addEventListener('touchstart', onTouchStart() {
+  //     setTouch(true)
+  //
+  //     // we only need to know once that a human touched the screen, so we can stop listening now
+  //     window.removeEventListener('touchstart', onTouchStart, false);
+  //   }, false)
+  //
+  //   // isSignedIn()
+  //   // .then((res) => this.setState({ user: res.user}))
+  //
+  //   // eslint-disable-next-line
+  // }, [])
 
   console.log("global:", useGlobal()[0])
   return (
@@ -141,9 +141,9 @@ export function useUser() {
   const user = useGlobal('user')[0]
 
   return {signedIn: !!user,
-    email: (!!user && user.email),
-    admin: (!!user && user.admin),
-    id: (!!user && user.sub)
+          email: (!!user && user.email),
+          admin: (!!user && user.admin),
+          id: (!!user && user.sub)
   }
 }
 

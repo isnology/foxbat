@@ -29,6 +29,8 @@ export default function InstrumentListRow({ value,
           onClick={ () => doSelectInstrument(value.id) }
           onMouseOver={ () => onMouseOverButton(index) }
           onMouseOut={ onMouseOutButton }
+          onTouchStart={ () => onMouseOverButton(index) }
+          onTouchEnd={ onMouseOutButton }
         >
           { value.name }
           <img src={ value.picture_url } alt="instrument" className="btn--img"/>
