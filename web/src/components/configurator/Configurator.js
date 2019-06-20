@@ -4,7 +4,7 @@ import Button from '../shared/Button'
 import SubmitButton from '../shared/SubmitButton'
 import Sidebar from './sidebar/Sidebar'
 import Panel from './panel/Panel'
-import { useEmail, useSignedIn, useSignOut } from '../app/App'
+import { useUser, useSignOut } from '../app/App'
 import { createPanel, deletePanel, updatePanel } from '../../api/panels'
 import { useSelectTemplate } from '../selection/Selection'
 import { emailPanelDesign } from "../../api/emailSubmission";
@@ -17,8 +17,7 @@ export default function Configurator() {
   const template = useGlobal('template')[0]
   const templateSlots = useGlobal('templateSlots')[0]
   const panelId = useGlobal('panelId')[0]
-  const signedIn = useSignedIn()
-  const email = useEmail()
+  const user = useUser()
   const onSaveCheck = useSaveCheck()
   const onSignOut = useSignOut()
   const onSave = useOnSave()
@@ -27,41 +26,39 @@ export default function Configurator() {
   const onDelete = useDelete()
   const onRefreshApp = useRefreshApp()
 
-
-  const once = 1
-
   // When this App first appears on screen
   useEffect(() => {
     window.addEventListener("beforeunload", onSaveCheck)
     return () => window.removeEventListener('beforeunload', onSaveCheck)
-  }, [once])
+    // eslint-disable-next-line
+  }, [])
 
 
   return (
     <div className="configurator">
       <Header>
-        { signedIn ?
+        { user.signedIn ?
           <Button onClick={ onSignOut } subClass="navbar">Sign Out</Button>
           :
           <Button onClick={ () => setModalWindow("signIn") } subClass="navbar">Sign In</Button>
         }
-        { !signedIn &&
+        { !user.signedIn &&
           <Button onClick={ () => setModalWindow("register") } subClass="navbar">Register</Button>
         }
-        { signedIn &&
+        { user.signedIn &&
           <Button onClick={ onSave } subClass={ !!panelSaved ? "saved btn--navbar" : "navbar" }>
             Save
           </Button>
         }
-        { signedIn &&
+        { user.signedIn &&
           <SubmitButton onClick={ onSubmitPanel } subClass="navbar"
-                        email={ email }
+                        email={ user.email }
                         slots={ slots }
                         template={ template }
                         templateSlots={ templateSlots }
           />
         }
-        { signedIn && !!panelId &&
+        { user.signedIn && !!panelId &&
           <Button onClick={ onDelete } subClass="navbar">Delete panel</Button>
         }
         <Button onClick={ onClearCurrent } subClass="navbar">Clear panel</Button>
@@ -86,17 +83,16 @@ function useSaveCheck() {
 }
 
 function useSubmitPanel() {
-  const user = useGlobal('user')[0]
+  const user = useUser()
   const slots = useGlobal('slots')[0]
   const templateSlots = useGlobal('templateSlots')[0]
   const template = useGlobal('template')[0]
-  const email = useEmail()
 
   return () => {
     if (window.confirm("Click OK to confirm and send your panel design to Foxbat Australia")) {
       const data = {
-        user_id: user.sub,
-        email: email,
+        user_id: user.id,
+        email: user.email,
         slots: slots,
         template: template,
         templateSlots: templateSlots
@@ -117,12 +113,12 @@ function useOnSave() {
   const setModalWindow = useGlobal('modalWindow')[1]
   const panelName = useGlobal('panelName')[0]
   const panelSaved = useGlobal('panelSaved')[0]
-  const signedIn = useSignedIn()
+  const user = useUser()
   const doSave = useDoSave()
 
   return () => {
     setError(null)
-    if (!signedIn) {
+    if (!user.signedIn) {
       setError({ message: "You must sign in before you can save your panel" })
       return
     }
@@ -230,7 +226,7 @@ function useRefresh() {
 // exported hooks
 
 export function useDoSave() {
-  const user = useGlobal('user')[0]
+  const user = useUser()
   const setError = useGlobal('error')[1]
   const template = useGlobal('template')[0]
   const templateSlots = useGlobal('templateSlots')[0]
@@ -247,7 +243,7 @@ export function useDoSave() {
       name: name,
       slots: slots,
       templateSlots: templateSlots,
-      user_id: user.id,
+      user_id: user.id
     }
     if (!!panelId) {
       updatePanel(panelId, data)

@@ -1,9 +1,9 @@
-import React, { useGlobal, useEffect, setGlobal } from 'reactn/index'
+import React, { useGlobal, useEffect } from 'reactn/index'
+import '../../style/App.css'
 import { getDecodedToken } from '../../api/token'
 import { allInstruments } from '../../api/instruments'
 import { allInstrumentClasses } from '../../api/instrumentClasses'
 import { signIn, signOut, signUp, nextToken } from "../../api/auth"
-import '../../style/App.css';
 import Selection from '../selection/Selection'
 import Configurator from '../configurator/Configurator'
 import SignIn from '../modalWindows/SignIn'
@@ -11,48 +11,6 @@ import MyPanels from '../modalWindows/MyPanels'
 import Admin from '../admin/Admin'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
-setGlobal({
-  user: getDecodedToken(),
-  instruments: null, //hash of all instruments from server (key=id)
-  classes: null,
-  modalWindow: null,
-  touch: false,
-  //pxwFactor: 0.0,  // for adaptive sizing of instruments
-  error: null,
-
-  // selection
-  template: null,
-  templateSlots: null,  // list of slot names in template (array of strings)
-  panelSaved: true,
-
-  //panel
-  panelName: null, //title user gave their panel
-  panelId: null, // db id of users retrieved/saved panel
-  selectedSlot: null,
-  slots: {},
-
-  // sidebar
-  selectedInstrumentClass: null,
-  selectedInstrument: null,
-
-  // admin
-  size: "L",
-  vOffset: 0.0,
-  hOffset: 0.0,
-  width: 9.78,
-  height: 9.78,
-  modalOpen: false,
-  editInstrument: null,
-  klass: '',
-  name: '',
-  brand: '',
-  model: '',
-  partNo: '',
-  textarea: '',
-  pictureUrl: '',
-  uploaded: false,
-  price: 0
-})
 
 export const css = {
   headerBackground: "white",
@@ -77,6 +35,7 @@ export default function App() {
   const loadInstruments = useLoadInstruments()
 
   useEffect(() => {
+    setUser(getDecodedToken())
     loadInstruments()
     tokenExpiry()
     let now
@@ -100,6 +59,7 @@ export default function App() {
     }, 10000)
 
     return () => clearInterval(renew.timer)
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
@@ -113,6 +73,8 @@ export default function App() {
 
     // isSignedIn()
     // .then((res) => this.setState({ user: res.user}))
+
+    // eslint-disable-next-line
   }, [])
 
   console.log("global:", useGlobal()[0])
@@ -175,18 +137,14 @@ function useLoadInstruments() {
 
 // exported hooks
 
-export function useSignedIn() {
-  return !!useGlobal('user')[0]
-}
-
-export function useEmail() {
+export function useUser() {
   const user = useGlobal('user')[0]
-  return (!!user && user.email)
-}
 
-export function useAdmin() {
-  const user = useGlobal('user')[0]
-  return (!!user && user.admin)
+  return {signedIn: !!user,
+    email: (!!user && user.email),
+    admin: (!!user && user.admin),
+    id: (!!user && user.sub)
+  }
 }
 
 export function useMessage() {

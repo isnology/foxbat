@@ -5,7 +5,7 @@ import Button from '../shared/Button'
 import InstrumentForm from './InstrumentForm'
 import ImageAlign from './ImageAlign'
 import { createInstrument, updateInstrument } from '../../api/instruments'
-import { css, useAdmin } from '../app/App'
+import { css, useUser } from '../app/App'
 
 
 const subBody = {
@@ -19,10 +19,10 @@ const subBody = {
 
 
 export default function Admin() {
-  const isAdmin = useAdmin()
+  const user = useUser()
   const onAdminSave = useAdminSave()
 
-  if (!isAdmin) {return <Redirect to="/" />}
+  if (!user.admin) {return <Redirect to="/" />}
 
   const mainBody = {
     margin: "5.5rem auto 0 auto",
